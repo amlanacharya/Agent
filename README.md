@@ -3,12 +3,12 @@
 ## Introduction
 Welcome to your self-guided journey into Agentic AI! This comprehensive study plan covers the fundamentals of AI agents, multi-agent systems, and AI-powered automation. Whether you're an AI developer, machine learning engineer, data scientist, or software engineer looking to build expertise in this emerging field, this guide provides a structured path to develop, deploy, and manage AI agents at scale.
 
-## Study Plan Overview
+## Study Plan
 - **Estimated Time Commitment**: 4 months (6 hours/week)
 - **Difficulty Level**: Intermediate
 - **Prerequisites**: Working knowledge of Python, basic understanding of NLP and generative AI concepts
 
-## What You'll Learn
+## What We'll Learn
 - ✅ **Build with AI Agent Frameworks**: Master LangChain, LangGraph, CrewAI, Agno, AutoGen, and LangFlow
 - ✅ **Create Multi-Agent Systems**: Design collaborative AI agents that work together on complex tasks
 - ✅ **Implement Advanced RAG Systems**: Build retrieval-augmented generation with vector databases
@@ -147,7 +147,7 @@ This guide is structured to support independent learning. Each module builds upo
 - **Model Serving**: Deploying with BentoML
 - **Capstone Project**: Build and deploy a complete agentic AI application
 
-## Tools & Technologies You'll Master
+## Tools & Technologies We'll Master
 
 ### Frameworks & Libraries
 - **LangChain & LangGraph**: For composable AI applications and graph-based workflows
@@ -182,7 +182,7 @@ This guide is structured to support independent learning. Each module builds upo
 
 3. Set up API keys
    ```python
-   # In your .env file
+   # In our .env file
    OPENAI_API_KEY=your_key_here
    HUGGINGFACE_API_KEY=your_key_here
    GROQ_API_KEY=your_key_here
