@@ -7,18 +7,19 @@
 ## 📋 **Map Overview**
 
 ![Learning Path](https://media.giphy.com/media/3o7abKhOpu0NwenH3O/giphy.gif)
+
 *(Imagine this as your progress chart coming to life!)*
 
 ---
 
 ## 🧠 **Learning Philosophy** 🌈
 
-| **Approach**       | **Emoji Essence** | **Description** |
-|---------------------|-------------------|-----------------|
-| **Implementation-First** | 🛠️⚡ | "Learn by *doing* - code first, theory follows!" |
-| **Spiral Learning** | 🌀📈 | "Circle back to core concepts with *increasing power*" |
-| **Project-Driven**  | 🎮🏗️ | "Build *real stuff* from Day 1 - no toy examples!" |
-| **Tool-Agnostic**   | 🔄🧩 | "Master *transferable superpowers* while wielding specific tools" |
+| **Approach**       |  **Description** |
+|---------------------|-----------------|
+| **Implementation-First** | 🛠️⚡ - "Learn by *doing* - code first, theory follows!" |
+| **Spiral Learning** | 🌀📈 - "Circle back to core concepts with *increasing power*" |
+| **Project-Driven**  | 🎮🏗️ - "Build *real stuff* from Day 1 - no toy examples!" |
+| **Tool-Agnostic**   | 🔄🧩 - "Master *transferable superpowers* while wielding specific tools" |
 
 ---
 
