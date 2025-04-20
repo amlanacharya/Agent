@@ -30,7 +30,7 @@ This structured learning path breaks down the journey to mastering agentic AI. E
 
 ### Module 1: Agent Fundamentals
 
-[test](https://media.giphy.com/gifs/work-it-hugo-weaving-yiss-nbpvCPsFLItHO)
+[test]![Image](https://github.com/user-attachments/assets/4db54827-006b-45f7-85b9-0347bfea2cce)
 
 **Learning Objectives:**
 - Understand the core agent loop (sense-think-act)
