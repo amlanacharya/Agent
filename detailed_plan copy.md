@@ -26,9 +26,7 @@ This structured learning path breaks down the journey to mastering agentic AI.Ea
 | **Project-Driven** 🚀 | Learn through creating real-world applications |
 | **Tool-Agnostic Foundation** 🛠️ | Master transferable concepts while getting hands-on with specific tools |
 
-![Learning Philosophy](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExcWJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3oKIPEqDGUULpEU0aQ/giphy.gif)
 
----
 
 ## 🏗️ Foundation Building 🧱
 
