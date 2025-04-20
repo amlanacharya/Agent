@@ -141,7 +141,7 @@ Build an agent that can:
 - 📊 Generate completed forms in various formats (JSON, PDF, etc.)
 - 🧩 Handle edge cases and ambiguous inputs gracefully
 
-![Form Filling](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMnJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xTiTnqUn8gKGGRUiHK/giphy.gif)
+<img src="https://github.com/user-attachments/assets/cb3f2aa6-3859-4007-ac07-5cbc2d93e895" width="50%" height="50%"/>
 
 ---
 ### Module 4: Document Processing & RAG Foundations
