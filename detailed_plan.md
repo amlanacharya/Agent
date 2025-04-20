@@ -68,7 +68,7 @@ Build an agent that can:
 
 ### Module 2: Memory Systems 🧠
 
-<img src="https://github.com/user-attachments/assets/4db54827-006b-45f7-85b9-0347bfea2cce](https://github.com/user-attachments/assets/12202a4c-9dfa-4f42-8e40-8f69923d777f" width="50%" height="50%"/>
+<img src="https://github.com/user-attachments/assets/81fdd5b3-d446-4d9c-b6e7-bde02e7006c6" width="50%" height="50%"/>
 
 **Learning Objectives:**
 - 🧩 Understand different memory types (working, short-term, long-term)
