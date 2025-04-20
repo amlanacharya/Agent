@@ -1,7 +1,3 @@
-Here's a more vibrant, emoji-powered version of your learning journey! 🚀
-
----
-
 # 🚀 **Accelerated Agentic AI Mastery** 🌟
 
 ## A **Module-Based Odyssey** to AI Expertise 🧭
