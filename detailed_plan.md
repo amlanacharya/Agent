@@ -30,7 +30,7 @@ This structured learning path breaks down the journey to mastering agentic AI. E
 
 ### Module 1: Agent Fundamentals
 
-(https://media.gifdb.com/neo-hand-choke-agent-smith-in-matrix-lh2p8qvw5osehl7x.gif)
+[test](https://media.gifdb.com/neo-hand-choke-agent-smith-in-matrix-lh2p8qvw5osehl7x.gif)
 
 **Learning Objectives:**
 - Understand the core agent loop (sense-think-act)
