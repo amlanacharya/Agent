@@ -128,7 +128,7 @@ _"Swiss Army knife AI - weather, math, search, ALL THE THINGS! 🌦️🧮🔍"_
 ---
 
 ### **Module 7: Planning & Goal Decomposition** 🧩🎯
-![Planning](https://media.giphy.com/media/3o7TKT6gL5B7Lzq3re/giphy.gif)
+![Planning](https://media3.giphy.com/media/v1.Y2lkPTc5MGI3NjExOTk2aTk2aGJ3bTlrYzAyd3psdmJzcXB3MjltZ21zend5eTd2M3ExaSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/usz0fqhUiVxSs6IUKB/giphy.gif)
 
 **🎯 Objectives:**
 - Master 🧠 **Strategic Planning Algorithms**
