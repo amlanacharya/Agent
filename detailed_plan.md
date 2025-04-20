@@ -106,18 +106,20 @@ Build an agent that can:
 
 ---
 
-### Module 3: Data Validation & Structured Outputs
+### Module 3: Data Validation & Structured Outputs 📊
+<img src="https://github.com/user-attachments/assets/25117f1e-d4cf-40df-8103-2afb4c4ff69a" width="50%" height="50%"/>
+
 **Learning Objectives:**
-- Understand type safety in agent systems
-- Learn structured output parsing
-- Master validation patterns for robust agents
+- 🔒 Understand type safety in agent systems
+- 🔄 Learn structured output parsing
+- ✅ Master validation patterns for robust agents
 
 **Implementation Tasks:**
-1. Create Pydantic models for common data structures
-2. Implement output parsers for structured LLM responses
-3. Build validation layers for agent inputs and outputs
-4. Develop error handling for parsing failures
-5. Create a schema management system for evolving data needs
+1. 📋 Create Pydantic models for common data structures
+2. 🔄 Implement output parsers for structured LLM responses
+3. 🛡️ Build validation layers for agent inputs and outputs
+4. ⚠️ Develop error handling for parsing failures
+5. 📈 Create a schema management system for evolving data needs
 
 **Tools & Technologies:**
 - Pydantic for data modeling and validation
@@ -131,16 +133,17 @@ Build an agent that can:
 - Error handling and recovery
 - Data transformation pipelines
 
-**Mini-Project: Form-Filling Assistant**
+**Mini-Project: Form-Filling Assistant** 📝
 Build an agent that can:
-- Parse unstructured documents to extract structured information
-- Validate extracted information against defined schemas
-- Request missing information from users
-- Generate completed forms in various formats (JSON, PDF, etc.)
-- Handle edge cases and ambiguous inputs gracefully
+- 📄 Parse unstructured documents to extract structured information
+- ✅ Validate extracted information against defined schemas
+- 🔍 Request missing information from users
+- 📊 Generate completed forms in various formats (JSON, PDF, etc.)
+- 🧩 Handle edge cases and ambiguous inputs gracefully
+
+![Form Filling](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMnJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/xTiTnqUn8gKGGRUiHK/giphy.gif)
 
 ---
-
 ### Module 4: Document Processing & RAG Foundations
 **Learning Objectives:**
 - Understand document processing pipelines
