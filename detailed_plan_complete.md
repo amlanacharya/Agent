@@ -45,7 +45,7 @@ _"Your first AI sidekick! Manages todos through natural language 🗣️→📅"
 ---
 
 ### **Module 2: Memory Systems** 🧠💾
-![Memory](https://tenor.com/view/marinating-in-memories-catherine-ohara-moira-moira-rose-schitts-creek-gif-20775600)
+![Memory](https://tenor.com/bzkQu.gif)
 
 **🎯 Objectives:**
 - Master 🧠 **Memory Types** (RAM vs HDD for AI)
