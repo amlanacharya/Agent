@@ -27,6 +27,7 @@
 
 ### **Module 1: Agent Fundamentals** 🧩
 ![Agent Loop](https://media.giphy.com/media/LMcB8XospGZO8UQq87/giphy.gif)
+
 **🎯 Objectives:**
 - Master 🔄 **Sense-Think-Act** loop
 - Become a 🤖 **Prompt Engineering Wizard**
@@ -45,6 +46,7 @@ _"Your first AI sidekick! Manages todos through natural language 🗣️→📅"
 
 ### **Module 2: Memory Systems** 🧠💾
 ![Memory](https://media.giphy.com/media/3o6Zt6KHxJTZvJ6vDa/giphy.gif)
+
 **🎯 Objectives:**
 - Master 🧠 **Memory Types** (RAM vs HDD for AI)
 - Become a 🕵️ **Vector DB Detective**
@@ -62,6 +64,7 @@ _"Never forgets a fact - like your AI elephant friend! 🐘"_
 
 ### **Module 3: Data Validation & Structured Outputs** 📊✅
 ![Data Validation](https://media.giphy.com/media/26uf5YvN8Td27IrFm/giphy.gif)
+
 **🎯 Objectives:**
 - Master 🧩 **Type Safety** for bulletproof agents
 - Become a 🔄 **Parsing Wizard**
@@ -80,6 +83,7 @@ _"Your AI paperwork ninja! Transforms chaos into structured data 📄→📊"_
 
 ### **Module 4: Document Processing & RAG Foundations** 📚🔍
 ![Document Processing](https://media.giphy.com/media/l0HlQXlQ3nHyLMvte/giphy.gif)
+
 **🎯 Objectives:**
 - Master 📄 **Document Pipeline Sorcery**
 - Become a ✂️ **Chunking Strategist**
@@ -100,6 +104,7 @@ _"Your AI document whisperer! Finds needles in document haystacks 🔍📚"_
 
 ### **Module 5: Advanced RAG Systems** 🔍🚀
 ![RAG](https://media.giphy.com/media/3o7TKSjRrfIPjeiVyM/giphy.gif)
+
 **🔥 Hot Features:**
 - Query **shape-shifting** 🔄
 - Hybrid **search ninja skills** 🥷
@@ -111,6 +116,7 @@ _"Your AI research buddy - reads 1000 papers so you don't have to! 📚➡️�
 ---
 
 ### **Module 6: Tool Integration** 🧰⚡
+
 **🛠️ Become Tony Stark of AI:**
 - 🔧 Build **J.A.R.V.I.S.-style toolbelt**
 - 🤖 **Function calling** like a pro
@@ -123,6 +129,7 @@ _"Swiss Army knife AI - weather, math, search, ALL THE THINGS! 🌦️🧮🔍"_
 
 ### **Module 7: Planning & Goal Decomposition** 🧩🎯
 ![Planning](https://media.giphy.com/media/3o7TKT6gL5B7Lzq3re/giphy.gif)
+
 **🎯 Objectives:**
 - Master 🧠 **Strategic Planning Algorithms**
 - Become a 🧩 **Goal Decomposition Expert**
@@ -141,6 +148,7 @@ _"Your AI project manager! Turns big dreams into actionable steps 💭→📝"_
 
 ### **Module 8: Graph-Based Workflows** 📊🔄
 ![Graph Workflows](https://media.giphy.com/media/l0HlHFVhEtJFYEcrK/giphy.gif)
+
 **🎯 Objectives:**
 - Master 🤖 **State Machine Wizardry**
 - Become a 📊 **Graph Programming Guru**
@@ -159,6 +167,7 @@ _"Your AI support team! Routes, responds, and resolves issues 🙋→😊"_
 
 ### **Module 9: Self-Reflection & Verification** 🔍🤔
 ![Self-Reflection](https://media.giphy.com/media/TPl5N4Ci49ZQY/giphy.gif)
+
 **🎯 Objectives:**
 - Master 🧐 **Self-Critique Patterns**
 - Become a 🕵️ **Verification Expert**
@@ -177,6 +186,7 @@ _"Your AI fact-checker! Verifies its own work before you see it 🧐✅"_
 
 ### **Module 10: Human-in-the-Loop Interaction** 👤🤖
 ![Human-in-the-Loop](https://media.giphy.com/media/3o7bu3XilJ5BOiSGic/giphy.gif)
+
 **🎯 Objectives:**
 - Master 🔄 **Feedback Incorporation**
 - Become a 🎨 **UI/UX Interaction Designer**
@@ -197,6 +207,7 @@ _"Your AI writing partner! Adapts to your style and preferences 📝🔄"_
 
 ### **Module 11: Multi-Agent Systems** 🤖👥🤖
 ![Agents](https://media.giphy.com/media/l0HlNaQ6gWfllcjDO/giphy.gif)
+
 **🎭 Roles to Create:**
 - 🧠 **Brain Agent**
 - 💼 **Executive Agent**
@@ -210,6 +221,7 @@ _"AI philosophers' cafe - watch ideas clash and merge! ☕🧠"_
 
 ### **Module 12: Specialized Agent Development** 🧪🔬
 ![Specialized Agents](https://media.giphy.com/media/l0MYt5jPR6QX5pnqM/giphy.gif)
+
 **🎯 Objectives:**
 - Master 🧠 **Domain-Specific Optimization**
 - Become a 📚 **Knowledge Integration Expert**
@@ -228,6 +240,7 @@ _"Your AI financial advisor! Turns numbers into insights and predictions 📈�
 
 ### **Module 13: Visual Programming & Low-Code** 🎨🧩
 ![Visual Programming](https://media.giphy.com/media/26tn33aiTi1jkl6H6/giphy.gif)
+
 **🎯 Objectives:**
 - Master 🎨 **Visual Programming Paradigms**
 - Become a 🧩 **Component Design Architect**
@@ -246,6 +259,7 @@ _"Your AI content studio! Create workflows anyone can use - no code required! �
 
 ### **Module 14: Workflow Automation & Integration** ⚙️🔄
 ![Workflow Automation](https://media.giphy.com/media/3oKIPnAiaMCws8nOsE/giphy.gif)
+
 **🎯 Objectives:**
 - Master ⚙️ **Workflow Automation Principles**
 - Become a 🔌 **System Integration Architect**
@@ -264,6 +278,7 @@ _"Your AI social media team! Monitors trends, creates content, posts, and analyz
 
 ### **Module 15: Monitoring & Performance Tracking** 📊🔍
 ![Monitoring](https://media.giphy.com/media/3oKIPnbKgN3bXeVpvy/giphy.gif)
+
 **🎯 Objectives:**
 - Master 📊 **Performance Metrics Design**
 - Become a 🔍 **Tracing & Logging Expert**
@@ -282,6 +297,7 @@ _"Your AI performance coach! Tracks, tests, and turbocharges your agents! 🔍�
 
 ### **Module 16: Deployment & Production** 🚢☁️
 ![Deployment](https://media.giphy.com/media/3oKIPweZSPwAiuVqJG/giphy.gif)
+
 **🎯 Objectives:**
 - Master 🔄 **CI/CD for Agent Systems**
 - Become a 📦 **Containerization Expert**
