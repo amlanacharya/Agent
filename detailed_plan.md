@@ -66,11 +66,14 @@ Build an agent that can:
 
 ---
 
-### Module 2: Memory Systems
+### Module 2: Memory Systems 🧠
+
+<img src="[https://github.com/user-attachments/assets/4db54827-006b-45f7-85b9-0347bfea2cce](https://github.com/user-attachments/assets/12202a4c-9dfa-4f42-8e40-8f69923d777f)" width="50%" height="50%"/>
+
 **Learning Objectives:**
-- Understand different memory types (working, short-term, long-term)
-- Learn vector database fundamentals
-- Master retrieval patterns for contextual memory
+- 🧩 Understand different memory types (working, short-term, long-term)
+- 🗄️ Learn vector database fundamentals
+- 🔍 Master retrieval patterns for contextual memory
 
 **Implementation Tasks:**
 1. Implement conversation buffer memory to store recent interactions
@@ -91,13 +94,15 @@ Build an agent that can:
 - Semantic search implementation
 - Memory architecture design
 
-**Mini-Project: Knowledge Base Assistant**
+**Mini-Project: Knowledge Base Assistant** 📚
 Build an agent that can:
-- Ingest and remember facts from conversations
-- Store information in a vector database
-- Retrieve relevant information based on user queries
-- Combine recent conversation context with long-term knowledge
-- Update its knowledge when corrections are provided
+- 🧠 Ingest and remember facts from conversations
+- 💾 Store information in a vector database
+- 🔍 Retrieve relevant information based on user queries
+- 🔄 Combine recent conversation context with long-term knowledge
+- 📝 Update its knowledge when corrections are provided
+
+![Knowledge Base](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExNXo1ZWJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l0IylOPCNkiqOgMyA/giphy.gif)
 
 ---
 
