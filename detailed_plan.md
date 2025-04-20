@@ -29,9 +29,7 @@ This structured learning path breaks down the journey to mastering agentic AI. E
 ## 🏗️ Foundation Building
 
 ### Module 1: Agent Fundamentals
-
-![Image]
-<img src="https://github.com/user-attachments/assets/4db54827-006b-45f7-85b9-0347bfea2cce" width="300" height="200"/>
+<img src="https://github.com/user-attachments/assets/4db54827-006b-45f7-85b9-0347bfea2cce" width="50%" height="50%"/>
 
 **Learning Objectives:**
 - Understand the core agent loop (sense-think-act)
