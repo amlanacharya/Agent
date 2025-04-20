@@ -45,7 +45,7 @@ _"Your first AI sidekick! Manages todos through natural language 🗣️→📅"
 ---
 
 ### **Module 2: Memory Systems** 🧠💾
-![Memory](https://tenor.com/bzkQu.gif)
+![Memory](https://media.tenor.com/bzkQu.gif)
 
 **🎯 Objectives:**
 - Master 🧠 **Memory Types** (RAM vs HDD for AI)
