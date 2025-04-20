@@ -45,7 +45,7 @@ _"Your first AI sidekick! Manages todos through natural language 🗣️→📅"
 ---
 
 ### **Module 2: Memory Systems** 🧠💾
-![Memory]([https://media.giphy.com/media/3o6Zt6KHxJTZvJ6vDa/giphy.gif](https://media4.giphy.com/media/v1.Y2lkPTc5MGI3NjExZzBxZ3g5cDcwa2I2ZGMxOTI2bDZla3RmZ3RxZW9sbTgyeHEwazRwcSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/QSSVcSKeQYJpu/giphy.gif))
+![Memory](https://media.tenor.com/bzkQu.gif)
 
 **🎯 Objectives:**
 - Master 🧠 **Memory Types** (RAM vs HDD for AI)
