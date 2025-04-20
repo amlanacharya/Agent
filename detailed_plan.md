@@ -32,15 +32,15 @@ This structured learning path breaks down the journey to mastering agentic AI. E
 <img src="https://github.com/user-attachments/assets/4db54827-006b-45f7-85b9-0347bfea2cce" width="50%" height="50%"/>
 
 **Learning Objectives:**
-- Understand the core agent loop (sense-think-act)
-- Master prompt engineering fundamentals
-- Learn basic state management patterns
+- 🔄 Understand the core agent loop (sense-think-act)
+- ✨ Master prompt engineering fundamentals
+- 📊 Learn basic state management patterns
 
 **Implementation Tasks:**
-1. Create a basic agent that accepts natural language input, processes it, and returns structured responses
-2. Implement different prompt templates to guide agent behavior
-3. Build a simple state tracking system to maintain conversation context
-4. Develop a testing framework to evaluate agent responses
+1. 🤖 Create a basic agent that accepts natural language input, processes it, and returns structured responses
+2. 📝 Implement different prompt templates to guide agent behavior
+3. 🧠 Build a simple state tracking system to maintain conversation context
+4. 🧪 Develop a testing framework to evaluate agent responses
 
 **Tools & Technologies:**
 - LangChain for basic agent structure and LLM integration
@@ -54,13 +54,15 @@ This structured learning path breaks down the journey to mastering agentic AI. E
 - Input/output processing
 - Conversation flow management
 
-**Mini-Project: Personal Task Manager**
+**Mini-Project: Personal Task Manager** ✅
 Build an agent that can:
-- Accept natural language commands to create, update, and delete tasks
-- Store tasks with priority levels and due dates
-- Respond to queries about task status
-- Provide daily summaries of pending tasks
-- Remember user preferences for task organization
+- 💬 Accept natural language commands to create, update, and delete tasks
+- 📋 Store tasks with priority levels and due dates
+- 🔍 Respond to queries about task status
+- 📊 Provide daily summaries of pending tasks
+- 🧠 Remember user preferences for task organization
+
+![Task Manager](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExMXo1ZWJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/3oKIPrc2ngFZ6BTyww/giphy.gif)
 
 ---
 
