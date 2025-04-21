@@ -144,18 +144,20 @@ Build an agent that can:
 <img src="https://github.com/user-attachments/assets/cb3f2aa6-3859-4007-ac07-5cbc2d93e895" width="50%" height="50%"/>
 
 ---
-### Module 4: Document Processing & RAG Foundations
+### Module 4: Document Processing & RAG Foundations 📚
+
+
 **Learning Objectives:**
-- Understand document processing pipelines
-- Learn chunking strategies for optimal retrieval
-- Master embedding selection for different content types
+- 📄 Understand document processing pipelines
+- 🧩 Learn chunking strategies for optimal retrieval
+- 🔍 Master embedding selection for different content types
 
 **Implementation Tasks:**
-1. Implement document loaders for various file formats (PDF, TXT, DOCX)
-2. Create text splitting strategies based on content structure
-3. Build embedding pipelines for document chunks
-4. Develop metadata extraction systems for improved retrieval
-5. Create a simple RAG system combining retrieval and generation
+1. 📁 Implement document loaders for various file formats (PDF, TXT, DOCX)
+2. ✂️ Create text splitting strategies based on content structure
+3. 🔢 Build embedding pipelines for document chunks
+4. 🏷️ Develop metadata extraction systems for improved retrieval
+5. 🔄 Create a simple RAG system combining retrieval and generation
 
 **Tools & Technologies:**
 - LangChain document loaders
@@ -169,13 +171,15 @@ Build an agent that can:
 - Chunking strategy optimization
 - Metadata management for documents
 
-**Mini-Project: Document Q&A System**
+**Mini-Project: Document Q&A System** 🔍
 Build an agent that can:
-- Process multiple documents in different formats
-- Create an optimized vector index of document content
-- Answer questions with direct references to document sections
-- Combine information from multiple documents when needed
-- Handle queries about document metadata (author, date, etc.)
+- 📄 Process multiple documents in different formats
+- 📊 Create an optimized vector index of document content
+- 💬 Answer questions with direct references to document sections
+- 🔄 Combine information from multiple documents when needed
+- 🏷️ Handle queries about document metadata (author, date, etc.)
+
+![Document Q&A](https://media.giphy.com/media/v1.Y2lkPTc5MGI3NjExM3JtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZWJtZSZlcD12MV9pbnRlcm5hbF9naWZfYnlfaWQmY3Q9Zw/l0HlQXlQ3nHyLMvte/giphy.gif)
 
 ---
 
