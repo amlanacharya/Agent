@@ -4,5 +4,6 @@ Module 1 Exercises
 This package contains exercise solutions for Module 1.
 """
 
-# Make EnhancedAgent available at the package level
+# Make solution classes available at the package level
 from .exercise_solutions import EnhancedAgent
+from .prompt_exercises import TaskParserExercise, RoleBasedPromptsExercise, ChainOfThoughtExercise
