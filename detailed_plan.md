@@ -106,39 +106,53 @@ Build an agent that can:
 
 ---
 
-### Module 3: Data Validation & Structured Outputs 📊
+### Module 3: Data Validation & Structured Outputs with Pydantic 📊
 <img src="https://github.com/user-attachments/assets/25117f1e-d4cf-40df-8103-2afb4c4ff69a" width="50%" height="50%"/>
 
 **Learning Objectives:**
-- 🔒 Understand type safety in agent systems
-- 🔄 Learn structured output parsing
-- ✅ Master validation patterns for robust agents
+- 🔒 Master Pydantic fundamentals and architecture
+- 📋 Understand schema definition and evolution for structured data
+- 🔄 Learn structured output parsing and validation
+- ✅ Implement robust validation patterns for agent systems
+- 🛠️ Apply advanced Pydantic features for complex data scenarios
 
 **Implementation Tasks:**
-1. 📋 Create Pydantic models for common data structures
-2. 🔄 Implement output parsers for structured LLM responses
-3. 🛡️ Build validation layers for agent inputs and outputs
-4. ⚠️ Develop error handling for parsing failures
-5. 📈 Create a schema management system for evolving data needs
+1. 📋 Create Pydantic models for common agent data structures
+2. 🧩 Implement field types, validators, and config settings
+3. 🔄 Build output parsers for structured LLM responses
+4. 🛡️ Develop validation layers for agent inputs and outputs
+5. ⚠️ Create error handling systems for parsing failures
+6. 📈 Implement a schema management system for evolving data needs
+7. 🔗 Design Pydantic model inheritance and composition patterns
+8. 🔁 Build JSON schema generation for API documentation
 
 **Tools & Technologies:**
 - Pydantic for data modeling and validation
-- LangChain output parsers
+- Pydantic validators and field types
+- LangChain output parsers and structured output techniques
 - JSON Schema for structure definition
 - Error handling patterns in Python
+- Dataclass integration with Pydantic
 
 **Skills Developed:**
 - Type-safe programming with Python
-- Schema design and evolution
-- Error handling and recovery
+- Robust schema design and evolution
+- Custom validator implementation
+- Inheritance patterns for data models
+- Error handling and recovery strategies
 - Data transformation pipelines
+- Schema documentation techniques
+- Type annotation best practices
 
 **Mini-Project: Form-Filling Assistant** 📝
 Build an agent that can:
 - 📄 Parse unstructured documents to extract structured information
+- 🧩 Define Pydantic models for various form types (applications, surveys, etc.)
 - ✅ Validate extracted information against defined schemas
-- 🔍 Request missing information from users
+- 🔍 Request missing information from users with specific validation rules
 - 📊 Generate completed forms in various formats (JSON, PDF, etc.)
+- 🛡️ Implement robust error handling for invalid inputs
+- 🔄 Support evolving form schemas as requirements change
 - 🧩 Handle edge cases and ambiguous inputs gracefully
 
 <img src="https://github.com/user-attachments/assets/cb3f2aa6-3859-4007-ac07-5cbc2d93e895" width="50%" height="50%"/>
