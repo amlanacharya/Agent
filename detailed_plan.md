@@ -106,39 +106,53 @@ Build an agent that can:
 
 ---
 
-### Module 3: Data Validation & Structured Outputs 📊
+### Module 3: Data Validation & Structured Outputs with Pydantic 📊
 <img src="https://github.com/user-attachments/assets/25117f1e-d4cf-40df-8103-2afb4c4ff69a" width="50%" height="50%"/>
 
 **Learning Objectives:**
-- 🔒 Understand type safety in agent systems
-- 🔄 Learn structured output parsing
-- ✅ Master validation patterns for robust agents
+- 🔒 Master Pydantic fundamentals and architecture
+- 📋 Understand schema definition and evolution for structured data
+- 🔄 Learn structured output parsing and validation
+- ✅ Implement robust validation patterns for agent systems
+- 🛠️ Apply advanced Pydantic features for complex data scenarios
 
 **Implementation Tasks:**
-1. 📋 Create Pydantic models for common data structures
-2. 🔄 Implement output parsers for structured LLM responses
-3. 🛡️ Build validation layers for agent inputs and outputs
-4. ⚠️ Develop error handling for parsing failures
-5. 📈 Create a schema management system for evolving data needs
+1. 📋 Create Pydantic models for common agent data structures
+2. 🧩 Implement field types, validators, and config settings
+3. 🔄 Build output parsers for structured LLM responses
+4. 🛡️ Develop validation layers for agent inputs and outputs
+5. ⚠️ Create error handling systems for parsing failures
+6. 📈 Implement a schema management system for evolving data needs
+7. 🔗 Design Pydantic model inheritance and composition patterns
+8. 🔁 Build JSON schema generation for API documentation
 
 **Tools & Technologies:**
 - Pydantic for data modeling and validation
-- LangChain output parsers
+- Pydantic validators and field types
+- LangChain output parsers and structured output techniques
 - JSON Schema for structure definition
 - Error handling patterns in Python
+- Dataclass integration with Pydantic
 
 **Skills Developed:**
 - Type-safe programming with Python
-- Schema design and evolution
-- Error handling and recovery
+- Robust schema design and evolution
+- Custom validator implementation
+- Inheritance patterns for data models
+- Error handling and recovery strategies
 - Data transformation pipelines
+- Schema documentation techniques
+- Type annotation best practices
 
 **Mini-Project: Form-Filling Assistant** 📝
 Build an agent that can:
 - 📄 Parse unstructured documents to extract structured information
+- 🧩 Define Pydantic models for various form types (applications, surveys, etc.)
 - ✅ Validate extracted information against defined schemas
-- 🔍 Request missing information from users
+- 🔍 Request missing information from users with specific validation rules
 - 📊 Generate completed forms in various formats (JSON, PDF, etc.)
+- 🛡️ Implement robust error handling for invalid inputs
+- 🔄 Support evolving form schemas as requirements change
 - 🧩 Handle edge cases and ambiguous inputs gracefully
 
 <img src="https://github.com/user-attachments/assets/cb3f2aa6-3859-4007-ac07-5cbc2d93e895" width="50%" height="50%"/>
@@ -190,6 +204,7 @@ Build an agent that can:
 - Understand advanced retrieval strategies
 - Learn query transformation techniques
 - Master result ranking and reranking
+- Implement adaptive retrieval based on query analysis
 
 **Implementation Tasks:**
 1. Implement query expansion and reformulation techniques
@@ -197,18 +212,24 @@ Build an agent that can:
 3. Build reranking systems to improve retrieval quality
 4. Develop source attribution and citation mechanisms
 5. Implement self-querying retrieval systems
+6. Build Adaptive RAG systems that modify retrieval strategy based on context
+7. Implement controlled RAG approaches like C-RAG for improved accuracy
 
 **Tools & Technologies:**
 - LangChain query transformers
 - BM25 or other keyword search algorithms
 - Cross-encoders for reranking
 - LangChain retrievers and retrieval chains
+- Cohere for Adaptive RAG implementations
+- Vector databases with metadata filtering
 
 **Skills Developed:**
 - Query optimization techniques
 - Hybrid search implementation
 - Result ranking and filtering
 - Source attribution methods
+- Adaptive retrieval strategy design
+- Context-aware retrieval patterns
 
 **Mini-Project: Research Literature Assistant**
 Build an agent that can:
@@ -218,6 +239,7 @@ Build an agent that can:
 - Rerank results based on relevance and importance
 - Generate summaries with proper citations and references
 - Answer complex questions requiring synthesis across papers
+- Adapt retrieval strategies based on query complexity
 
 ---
 
@@ -226,6 +248,7 @@ Build an agent that can:
 - Understand tool use patterns for agents
 - Learn function calling implementation
 - Master tool selection and routing strategies
+- Build dynamic tool registration systems
 
 **Implementation Tasks:**
 1. Create a tool registry system for managing available tools
@@ -233,18 +256,24 @@ Build an agent that can:
 3. Build response parsers for structured tool outputs
 4. Develop tool chains for multi-step operations
 5. Create tool verification systems to validate outputs
+6. Implement dynamic tool discovery and registration
+7. Build a tool mapping system for multi-provider compatibility
 
 **Tools & Technologies:**
 - OpenAI function calling API
 - LangChain tools and tool executors
 - JSON Schema for function definitions
 - Python libraries for specific tools (web search, calculators, etc.)
+- Anthropic and Claude for alternative function calling implementations
+- Tool validation frameworks
 
 **Skills Developed:**
 - Tool interface design
 - Function schema creation
 - Tool selection logic
 - Error handling for external tools
+- Dynamic tool registration
+- Cross-provider tool compatibility
 
 **Mini-Project: Multi-Tool Assistant**
 Build an agent that can:
@@ -254,6 +283,7 @@ Build an agent that can:
 - Chain multiple tools together for complex operations
 - Explain its tool selection reasoning to users
 - Handle tool failures gracefully
+- Dynamically discover and register new tools at runtime
 
 ---
 
@@ -262,6 +292,7 @@ Build an agent that can:
 - Understand planning algorithms for agents
 - Learn goal decomposition strategies
 - Master plan execution and monitoring
+- Implement adaptive planning techniques
 
 **Implementation Tasks:**
 1. Implement goal decomposition into subgoals and tasks
@@ -269,18 +300,24 @@ Build an agent that can:
 3. Build execution monitoring for plan progress
 4. Develop replanning mechanisms for handling failures
 5. Create a task prioritization system based on dependencies
+6. Implement tree-based planning structures for complex goals
+7. Build plan visualization tools for debugging and explanation
 
 **Tools & Technologies:**
 - LangChain planners and executors
 - Tree structures for goal decomposition
 - State management systems for tracking progress
 - ReAct patterns for reasoning and acting
+- LangGraph for planning workflows
+- Visualization libraries for plan representation
 
 **Skills Developed:**
 - Strategic planning algorithms
 - Task decomposition techniques
 - Progress monitoring systems
 - Adaptive replanning methods
+- Tree-based planning structures
+- Plan visualization and explanation
 
 **Mini-Project: Project Planning Assistant**
 Build an agent that can:
@@ -290,14 +327,17 @@ Build an agent that can:
 - Monitor progress and update plans accordingly
 - Identify and mitigate potential bottlenecks
 - Adapt plans when circumstances change
+- Visualize planning structures for user understanding
+- Explain reasoning behind planning decisions
 
 ---
 
-### Module 8: Graph-Based Workflows
+### Module 8: Graph-Based Workflows with LangGraph
 **Learning Objectives:**
 - Understand state machines for agent workflows
 - Learn graph-based programming patterns
 - Master conditional routing and branching
+- Implement advanced LangGraph techniques
 
 **Implementation Tasks:**
 1. Implement basic LangGraph nodes and edges
@@ -305,18 +345,26 @@ Build an agent that can:
 3. Build conditional routing based on agent decisions
 4. Develop composite nodes for reusable components
 5. Create visualization tools for workflow debugging
+6. Implement state reducers for memory optimization
+7. Build message filtering techniques for focused workflows
+8. Create deployment configurations for LangGraph applications
 
 **Tools & Technologies:**
 - LangGraph for workflow implementation
 - Pydantic for state schemas
 - Python typing for interface definitions
 - Visualization libraries for graph representation
+- LangGraph Studio for visual design
+- LangServe for deployment
 
 **Skills Developed:**
 - Graph-based programming
 - State management design
 - Conditional logic implementation
 - Workflow visualization techniques
+- Memory optimization strategies
+- Deployment configuration
+- Graph-based debugging
 
 **Mini-Project: Customer Support Workflow**
 Build an agent system that can:
@@ -326,6 +374,8 @@ Build an agent system that can:
 - Escalate complex issues to human operators when needed
 - Visualize the customer journey through the support system
 - Generate analytics on workflow performance
+- Optimize memory usage for long-running conversations
+- Deploy the workflow as a scalable API service
 
 ---
 
@@ -334,6 +384,7 @@ Build an agent system that can:
 - Understand self-critique patterns for agents
 - Learn verification techniques for outputs
 - Master confidence scoring methods
+- Implement hallucination detection strategies
 
 **Implementation Tasks:**
 1. Implement self-critique chains for agent outputs
@@ -341,18 +392,26 @@ Build an agent system that can:
 3. Build confidence scoring mechanisms for answers
 4. Develop hallucination detection patterns
 5. Create refinement loops for improving outputs
+6. Implement source citation and attribution systems
+7. Build explanation generation for verification decisions
+8. Develop factuality metrics for output evaluation
 
 **Tools & Technologies:**
 - LangChain for verification chains
 - Evaluation metrics for output quality
 - JSON schemas for structured verification
 - Confidence scoring algorithms
+- Source tracking systems
+- Ragas or other evaluation frameworks
 
 **Skills Developed:**
 - Self-verification techniques
 - Output quality assessment
 - Hallucination detection methods
 - Iterative refinement processes
+- Source attribution systems
+- Confidence estimation
+- Explanation generation
 
 **Mini-Project: Self-Correcting Researcher**
 Build an agent that can:
@@ -362,6 +421,8 @@ Build an agent that can:
 - Identify and correct potential hallucinations
 - Provide explanations for its verification process
 - Generate final outputs with verified information only
+- Cite sources for all factual claims
+- Explain limitations and uncertainties in its findings
 
 ---
 
@@ -370,6 +431,7 @@ Build an agent that can:
 - Understand human feedback incorporation
 - Learn effective UI/UX for agent interaction
 - Master feedback collection and utilization
+- Implement real-time collaboration patterns
 
 **Implementation Tasks:**
 1. Implement streaming responses for real-time interaction
@@ -377,18 +439,27 @@ Build an agent that can:
 3. Build feedback collection mechanisms
 4. Develop preference learning from human input
 5. Create adaptive interfaces based on user behavior
+6. Implement dynamic breakpoints based on confidence levels
+7. Build time travel debugging for reviewing past states
+8. Create state editing interfaces for human correction
 
 **Tools & Technologies:**
 - LangGraph for interactive workflows
 - Streaming APIs for real-time responses
 - Feedback storage and processing systems
 - User preference modeling techniques
+- LangGraph breakpoint systems
+- Time travel debugging tools
+- State editing interfaces
 
 **Skills Developed:**
 - Interactive system design
 - Streaming implementation
 - Feedback collection methods
 - Preference-based learning
+- Dynamic intervention points
+- State editing patterns
+- Debugging techniques
 
 **Mini-Project: Collaborative Writing Assistant**
 Build an agent that can:
@@ -398,16 +469,19 @@ Build an agent that can:
 - Learn user preferences over time
 - Adapt writing style based on feedback
 - Maintain a history of revisions with explanations
+- Allow humans to edit past decisions and regenerate content
+- Explain its reasoning at critical decision points
 
 ---
 
-## 🔧 Specialized Development
+## 🔧 Specialized Frameworks & Development
 
-### Module 11: Multi-Agent Communication
+### Module 11: Multi-Agent Communication with LangGraph
 **Learning Objectives:**
 - Understand agent-to-agent communication patterns
 - Learn role-based architectures
 - Master coordination protocols
+- Implement advanced multi-agent patterns in LangGraph
 
 **Implementation Tasks:**
 1. Create a communication protocol between agents
@@ -415,18 +489,26 @@ Build an agent that can:
 3. Build a coordinator agent for task delegation
 4. Develop message passing systems between agents
 5. Create evaluation mechanisms for team performance
+6. Implement agent memory sharing and coordination
+7. Build conflict resolution patterns for disagreements
+8. Create visualization tools for agent interactions
 
 **Tools & Technologies:**
 - LangGraph for agent orchestration
-- CrewAI for team structures
 - Message passing protocols
 - Role definition frameworks
+- Agent coordination patterns
+- Visualization tools for multi-agent systems
+- Evaluation metrics for team performance
 
 **Skills Developed:**
 - Multi-agent architecture design
 - Communication protocol implementation
 - Role-based programming
 - Team coordination strategies
+- Conflict resolution techniques
+- Performance evaluation for agent teams
+- Visualization of agent interactions
 
 **Mini-Project: Collaborative Problem-Solving System**
 Build a multi-agent system that can:
@@ -436,50 +518,112 @@ Build a multi-agent system that can:
 - Coordinate solution integration from multiple agents
 - Resolve conflicts between agent perspectives
 - Generate unified responses from collective intelligence
+- Visualize the collaborative process for users
+- Evaluate team performance and identify bottlenecks
 
 ---
 
-### Module 12: Specialized Agent Development
+### Module 12: Agno Framework & Specialized Agents
 **Learning Objectives:**
-- Understand domain-specific optimization
+- Understand Agno's architecture and capabilities
 - Learn specialized knowledge integration
 - Master expert system design patterns
+- Implement domain-specific agents with Agno
 
 **Implementation Tasks:**
-1. Create domain-specific knowledge bases for agents
-2. Implement specialized tools for specific domains
-3. Build prompt libraries for domain expertise
-4. Develop evaluation frameworks for domain performance
-5. Create adaptive systems based on domain feedback
+1. Set up Agno environment and configuration
+2. Implement agents, teams, models, and tools in Agno
+3. Create domain-specific knowledge bases for agents
+4. Build specialized workflows for specific domains
+5. Develop evaluation frameworks for domain performance
+6. Create agent observability and monitoring systems
+7. Implement data handling with chunking and VectorDBs
+8. Build specialized agents for web search, finance, and RAG
 
 **Tools & Technologies:**
+- Agno framework for agent development
 - Domain-specific databases and APIs
-- Specialized tools for target domains
-- Evaluation metrics for domain expertise
-- Adaptation mechanisms for specialization
+- Agent observability tools
+- Agno playground and UI
+- Vector databases for knowledge storage
+- Domain-specific evaluation metrics
 
 **Skills Developed:**
+- Agno framework implementation
 - Domain knowledge integration
-- Specialized tool development
-- Expert prompt engineering
+- Specialized agent development
+- Agent monitoring and observability
+- Team coordination with Agno
 - Domain-specific evaluation
+- Data handling with Agno
 
 **Mini-Project: Financial Analysis Expert**
-Build a specialized agent that can:
+Build a specialized agent using Agno that can:
 - Process financial statements and reports
 - Apply domain-specific financial analysis methods
 - Use specialized tools for financial calculations
 - Generate investment recommendations
 - Explain complex financial concepts in layman's terms
 - Continuously improve based on accuracy metrics
+- Monitor its own performance and accuracy
+- Integrate with financial data sources and APIs
 
 ---
 
-### Module 13: Visual Programming & Low-Code
+### Module 13: CrewAI Multi-Agent Platform
+**Learning Objectives:**
+- Understand CrewAI's architecture and capabilities
+- Learn crew collaboration patterns
+- Master role-playing and delegation in CrewAI
+- Implement advanced CrewAI features
+
+**Implementation Tasks:**
+1. Set up CrewAI environment and configuration
+2. Implement crews, agents, and tasks
+3. Create role definitions and hierarchies
+4. Build communication protocols between crew members
+5. Develop workflow automation with CrewAI
+6. Implement memory and data sharing between agents
+7. Create focus and guardrail systems
+8. Integrate LangChain tools and Opik monitoring
+
+**Tools & Technologies:**
+- CrewAI framework
+- Agent role definition systems
+- Communication protocols
+- Workflow automation tools
+- Memory management systems
+- Opik for monitoring
+- LangChain tool integration
+
+**Skills Developed:**
+- CrewAI implementation
+- Role-based agent design
+- Team collaboration patterns
+- Workflow automation
+- Agent guardrails and focus
+- Performance monitoring
+- Tool integration
+
+**Mini-Project: Content Production Team**
+Build a multi-agent system with CrewAI that can:
+- Plan and create content across multiple formats
+- Assign specialized roles (researcher, writer, editor, etc.)
+- Coordinate the content creation workflow
+- Ensure quality through review processes
+- Adapt content strategy based on feedback
+- Monitor team performance with Opik
+- Generate reports on team efficiency
+- Implement guardrails for content guidelines
+
+---
+
+### Module 14: LangFlow Visual Development
 **Learning Objectives:**
 - Understand visual programming for agents
 - Learn component-based design
 - Master workflow automation patterns
+- Implement LangFlow best practices
 
 **Implementation Tasks:**
 1. Set up LangFlow for visual agent development
@@ -487,18 +631,27 @@ Build a specialized agent that can:
 3. Build custom node types for specialized functionality
 4. Develop template workflows for common use cases
 5. Create export/import systems for sharing workflows
+6. Implement LLM and prompt integration
+7. Build vector database connections
+8. Create workflow customization patterns
 
 **Tools & Technologies:**
 - LangFlow for visual development
 - Custom node development
 - Component design patterns
 - Template management systems
+- LangChain integration
+- Vector database connectors
+- Workflow sharing mechanisms
 
 **Skills Developed:**
 - Visual programming techniques
 - Component-based design
 - Template creation and management
 - Low-code development patterns
+- Custom node implementation
+- LangFlow-LangChain integration
+- Workflow optimization
 
 **Mini-Project: Visual Content Creation System**
 Build in LangFlow:
@@ -507,15 +660,18 @@ Build in LangFlow:
 - Custom nodes for specialized formatting tasks
 - Template workflows for common content needs
 - Export functionality for sharing workflows with others
+- Vector database integration for knowledge retrieval
+- LLM integration for content generation
 - A comprehensive user guide for non-technical users
 
 ---
 
-### Module 14: Workflow Automation & Integration
+### Module 15: n8n Workflow Automation
 **Learning Objectives:**
 - Understand workflow automation principles
 - Learn system integration patterns
 - Master event-driven architecture
+- Implement AI-powered automation with n8n
 
 **Implementation Tasks:**
 1. Set up n8n for workflow automation
@@ -523,99 +679,184 @@ Build in LangFlow:
 3. Build integration nodes for external systems
 4. Develop data transformation workflows
 5. Create error handling and retry mechanisms
+6. Implement AI agent chatbots
+7. Build LLM automation workflows
+8. Create specialized RAG chatbots and content generation systems
 
 **Tools & Technologies:**
 - n8n for workflow automation
 - Webhook integrations for triggers
 - API clients for external systems
 - Data transformation tools
+- Error handling mechanisms
+- AI integration nodes
+- LLM connectors
+- External tool integrations (WhatsApp, Telegram, calendar)
 
 **Skills Developed:**
 - Workflow automation design
 - Integration pattern implementation
 - Event-driven programming
 - Error handling for workflows
+- AI-powered automation
+- External system integration
+- Data transformation techniques
 
 **Mini-Project: Social Media Content Automation**
-Build an automated workflow that:
+Build an automated workflow with n8n that:
 - Monitors social media platforms for relevant trends
 - Triggers content generation based on trending topics
 - Transforms generated content into platform-specific formats
 - Schedules posts across multiple platforms
 - Collects engagement metrics for performance analysis
 - Adjusts content strategy based on performance data
+- Implements AI-driven transcription and summarization
+- Creates automated RAG chatbots for customer interaction
 
 ---
 
-### Module 15: Monitoring & Performance Tracking
+### Module 16: AutoGen Multi-Agent Framework
 **Learning Objectives:**
-- Understand agent performance metrics
-- Learn tracing and logging systems
-- Master optimization based on performance data
+- Understand AutoGen's architecture and capabilities
+- Learn agent-based system design with AutoGen
+- Master communication protocols between agents
+- Implement feedback loops and learning systems
 
 **Implementation Tasks:**
-1. Implement LangSmith for agent tracing
-2. Create custom dashboards for performance metrics
-3. Build feedback collection systems
-4. Develop A/B testing frameworks for agent versions
-5. Create optimization strategies based on metrics
+1. Set up AutoGen environment and configuration
+2. Create agents, goals, environments, and actions
+3. Implement multi-agent communication protocols
+4. Build decision-making frameworks for agents
+5. Develop feedback loops for agent learning
+6. Create deployment and monitoring systems
+7. Implement adaptive behaviors based on feedback
+8. Build collaborative problem-solving systems
+
+**Tools & Technologies:**
+- AutoGen framework
+- Agent communication protocols
+- Decision-making frameworks
+- Feedback collection systems
+- Learning adaptation mechanisms
+- Deployment and monitoring tools
+- Collaboration patterns
+
+**Skills Developed:**
+- AutoGen implementation
+- Agent goal definition
+- Environment modeling
+- Action implementation
+- Feedback-based learning
+- Multi-agent collaboration
+- Deployment configuration
+
+**Mini-Project: Collaborative Code Development System**
+Build a multi-agent system with AutoGen that can:
+- Decompose coding tasks into manageable components
+- Assign specialized agents for different aspects (architecture, implementation, testing)
+- Facilitate information exchange between coding agents
+- Review and debug code collaboratively
+- Adapt coding approaches based on feedback
+- Monitor system performance during development
+- Generate documentation for the developed code
+- Explain reasoning behind architectural and implementation decisions
+
+---
+
+### Module 17: LangSmith Monitoring & Optimization
+**Learning Objectives:**
+- Understand LangSmith's capabilities and architecture
+- Learn tracing and logging techniques for agents
+- Master performance analysis and optimization
+- Implement comprehensive monitoring systems
+
+**Implementation Tasks:**
+1. Set up LangSmith environment and configuration
+2. Implement tracing for agent workflows
+3. Create custom dashboards for performance metrics
+4. Build feedback collection systems
+5. Develop A/B testing frameworks for agent versions
+6. Create optimization strategies based on metrics
+7. Implement workflow pipelines for monitoring
+8. Build data integration and preprocessing systems
 
 **Tools & Technologies:**
 - LangSmith for tracing and evaluation
 - Dashboard creation tools
 - A/B testing frameworks
 - Performance metric analysis
+- Workflow pipeline tools
+- Data integration mechanisms
+- Visualization libraries
 
 **Skills Developed:**
 - Performance monitoring design
 - Trace analysis techniques
 - A/B testing methodology
 - Data-driven optimization
+- Dashboard creation
+- Metric definition and tracking
+- Workflow visualization
 
 **Mini-Project: Agent Optimization System**
-Build a comprehensive monitoring system that:
+Build a comprehensive monitoring system with LangSmith that:
 - Tracks agent performance across multiple metrics
 - Creates visual dashboards for performance analysis
 - Implements A/B testing for different agent versions
 - Collects and analyzes user feedback
 - Identifies bottlenecks and failure points
 - Recommends specific optimizations based on data
+- Provides detailed traces for debugging
+- Generates performance reports for stakeholders
 
 ---
 
-### Module 16: Deployment & Production
+### Module 18: Cloud Deployment & CI/CD
 **Learning Objectives:**
 - Understand CI/CD for agent systems
 - Learn containerization principles
 - Master cloud deployment strategies
+- Implement AWS-specific deployment patterns
 
 **Implementation Tasks:**
 1. Create Docker containers for agent components
 2. Implement GitHub Actions for CI/CD
-3. Build deployment pipelines for cloud platforms
+3. Build deployment pipelines for AWS
 4. Develop scaling mechanisms for high load
 5. Create backup and recovery systems
+6. Implement AWS S3 for storage
+7. Build AWS ECR for container registry management
+8. Create AWS EC2 instances for deployment
+9. Implement AWS Bedrock for model integration
+10. Build BentoML configurations for model serving
 
 **Tools & Technologies:**
 - Docker for containerization
 - GitHub Actions for CI/CD
-- AWS/Azure/GCP for cloud deployment
+- AWS services (S3, ECR, EC2, Bedrock)
 - BentoML for model serving
+- Terraform or CloudFormation for infrastructure as code
+- Monitoring services (CloudWatch, Prometheus)
 
 **Skills Developed:**
 - Containerization techniques
 - CI/CD pipeline design
-- Cloud infrastructure management
+- AWS infrastructure management
 - Scaling and reliability patterns
+- Infrastructure as code
+- Model serving configuration
+- Monitoring and alerting
 
 **Mini-Project: Production Agent Deployment**
 Deploy a complete agent system with:
 - Containerized components in Docker
 - Automated testing and deployment via GitHub Actions
-- Cloud-based infrastructure on AWS/Azure/GCP
+- Cloud-based infrastructure on AWS
 - Scalable architecture for handling variable load
 - Monitoring and alerting systems
 - Secure API endpoints for client applications
+- BentoML-based model serving
+- Infrastructure as code for reproducible deployments
 
 ---
 
@@ -632,8 +873,8 @@ Deploy a complete agent system with:
 - Self-verification system for factual accuracy (Module 9)
 - Report generation with proper citations (Module 5)
 - User feedback incorporation (Module 10)
-- Performance monitoring dashboard (Module 15)
-- Deployment pipeline for production use (Module 16)
+- Performance monitoring dashboard (Module 17)
+- Deployment pipeline for production use (Module 18)
 
 **Skills Integration:**
 - Document processing from Module 4
@@ -642,8 +883,8 @@ Deploy a complete agent system with:
 - Planning from Module 7
 - Self-verification from Module 9
 - User feedback from Module 10
-- Monitoring from Module 15
-- Deployment from Module 16
+- Monitoring from Module 17
+- Deployment from Module 18
 
 ---
 
@@ -656,9 +897,11 @@ Deploy a complete agent system with:
 - Graph-based workflow for debate structure (Module 8)
 - Argument evaluation and critique systems (Module 9)
 - Moderator agent for discussion management (Module 11)
-- Visual interface for workflow design (Module 13)
+- Visual interface for workflow design (Module 14)
 - Summary generation with key points and disagreements (Module 12)
 - User interface for topic submission and debate observation (Module 10)
+- CrewAI integration for role definition and coordination (Module 13)
+- AutoGen implementation for decision-making (Module 16)
 
 **Skills Integration:**
 - Multi-agent communication from Module 11
@@ -666,7 +909,9 @@ Deploy a complete agent system with:
 - Graph-based workflows from Module 8
 - Self-reflection and verification from Module 9
 - Human-in-the-loop interaction from Module 10
-- Visual programming from Module 13
+- Visual programming from Module 14
+- CrewAI implementation from Module 13
+- AutoGen techniques from Module 16
 
 ---
 
@@ -674,25 +919,44 @@ Deploy a complete agent system with:
 **Objective:** Create an end-to-end system that automatically collects business data, performs analysis, generates reports, and distributes insights to stakeholders.
 
 **Components to Implement:**
-- Data collection integrations with various sources (Module 14)
-- Specialized analysis agents for different metrics (Module 12)
+- Data collection integrations with various sources (Module 15)
+- Financial analysis specialists using Agno (Module 12)
 - Planning system for analysis strategy (Module 7)
 - Self-verification for data accuracy (Module 9)
 - Visualization generation for data presentation (Module 6)
 - Report creation with executive summaries (Module 5)
-- Workflow automation for regular updates (Module 14)
-- Performance monitoring and optimization (Module 15)
-- Deployment system for production use (Module 16)
+- Workflow automation for regular updates (Module 15)
+- Performance monitoring and optimization (Module 17)
+- Deployment system for production use (Module 18)
+- Multi-agent collaboration for specialized analysis (Module 11)
+- AWS integration for data storage and processing (Module 18)
+- Financial modeling using specialized tools (Module 12)
+- Interactive dashboards for stakeholder review (Module 10)
 
 **Skills Integration:**
-- Workflow automation from Module 14
+- Workflow automation from Module 15
 - Specialized agent development from Module 12
 - Planning from Module 7
 - Self-verification from Module 9
 - Tool use from Module 6
 - Advanced content generation from Module 5
-- Monitoring from Module 15
-- Deployment from Module 16
+- Monitoring from Module 17
+- Deployment from Module 18
+- AWS infrastructure from Module 18
+- n8n workflow automation from Module 15
+- Financial analysis tools from Module 12
+
+**Implementation Details:**
+- Set up automated data collection pipelines from databases, CRMs, ERPs, and APIs
+- Create specialized analysis agents for different business metrics
+- Implement natural language querying of business data
+- Build automated report generation and distribution
+- Develop interactive dashboards for different stakeholders
+- Create alert systems for anomaly detection
+- Implement scheduled analysis and reporting workflows
+- Set up secure data handling with proper access controls
+- Create visualization components for key metrics
+- Build trend analysis and forecasting capabilities
 
 ---
 
@@ -706,18 +970,30 @@ Deploy a complete agent system with:
 - Pydantic: [https://docs.pydantic.dev/](https://docs.pydantic.dev/)
 - LangFlow: [https://github.com/logspace-ai/langflow](https://github.com/logspace-ai/langflow)
 - n8n: [https://docs.n8n.io/](https://docs.n8n.io/)
+- Agno: [https://docs.agno.ai/](https://docs.agno.ai/)
+- AWS Documentation: [https://docs.aws.amazon.com/](https://docs.aws.amazon.com/)
+- LangSmith: [https://docs.smith.langchain.com/](https://docs.smith.langchain.com/)
+- BentoML: [https://docs.bentoml.org/](https://docs.bentoml.org/)
+- Docker: [https://docs.docker.com/](https://docs.docker.com/)
+- GitHub Actions: [https://docs.github.com/en/actions](https://docs.github.com/en/actions)
 
 ### Communities
 - LangChain Discord: [https://discord.gg/langchain](https://discord.gg/langchain)
 - Hugging Face Forums: [https://discuss.huggingface.co/](https://discuss.huggingface.co/)
 - Reddit r/MachineLearning and r/AITech
 - GitHub Discussions for relevant repositories
+- AWS Community: [https://aws.amazon.com/developer/community/](https://aws.amazon.com/developer/community/)
+- Docker Community: [https://www.docker.com/community/](https://www.docker.com/community/)
 
 ### Books & Articles
 - "Building LLM Powered Applications" (various online resources)
 - "Designing Data-Intensive Applications" by Martin Kleppmann
 - "Prompt Engineering Guide" by DAIR.AI
 - "LangChain Cookbook" (community resources)
+- "Docker for Developers" by Richard Bullington-McGuire
+- "AWS Lambda for Serverless Applications" by Markus Klems
+- "Multi-agent Systems: Algorithmic, Game-Theoretic, and Logical Foundations" by Yoav Shoham
+- "Business Intelligence Guidebook" by Rick Sherman
 
 ---
 
@@ -753,17 +1029,19 @@ Use this checklist to track module and project completion:
 - [ ] Module 5: Advanced RAG Systems + Research Literature Assistant
 - [ ] Module 6: Tool Integration & Function Calling + Multi-Tool Assistant
 - [ ] Module 7: Planning & Goal Decomposition + Project Planning Assistant
-- [ ] Module 8: Graph-Based Workflows + Customer Support Workflow
+- [ ] Module 8: Graph-Based Workflows with LangGraph + Customer Support Workflow
 - [ ] Module 9: Self-Reflection & Verification + Self-Correcting Researcher
 - [ ] Module 10: Human-in-the-Loop Interaction + Collaborative Writing Assistant
 
-### Specialized Development
-- [ ] Module 11: Multi-Agent Communication + Collaborative Problem-Solving System
-- [ ] Module 12: Specialized Agent Development + Financial Analysis Expert
-- [ ] Module 13: Visual Programming & Low-Code + Visual Content Creation System
-- [ ] Module 14: Workflow Automation & Integration + Social Media Content Automation
-- [ ] Module 15: Monitoring & Performance Tracking + Agent Optimization System
-- [ ] Module 16: Deployment & Production + Production Agent Deployment
+### Specialized Frameworks & Development
+- [ ] Module 11: Multi-Agent Communication with LangGraph + Collaborative Problem-Solving System
+- [ ] Module 12: Agno Framework & Specialized Agents + Financial Analysis Expert
+- [ ] Module 13: CrewAI Multi-Agent Platform + Content Production Team
+- [ ] Module 14: LangFlow Visual Development + Visual Content Creation System
+- [ ] Module 15: n8n Workflow Automation + Social Media Content Automation
+- [ ] Module 16: AutoGen Multi-Agent Framework + Collaborative Code Development System
+- [ ] Module 17: LangSmith Monitoring & Optimization + Agent Optimization System
+- [ ] Module 18: Cloud Deployment & CI/CD + Production Agent Deployment
 
 ### Capstone Projects
 - [ ] Comprehensive Research Assistant
