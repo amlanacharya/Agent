@@ -12,3 +12,12 @@ try:
     from .validation_patterns import DateRange, PasswordReset, Payment
 except ImportError:
     pass
+# Import error handling if the module exists
+try:
+    from .error_handling import (
+        validate_user_input, validate_multiple_items,
+        safe_parse_with_defaults, attempt_error_correction,
+        user_friendly_errors, FormValidator
+    )
+except ImportError:
+    pass
