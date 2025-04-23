@@ -5,6 +5,22 @@ This package contains exercise solutions for Module 3: Data Validation & Structu
 """
 
 # Make solution classes available at the package level
-from .lesson1_exercises import UserProfile, UserProfileWithSkills, validate_user_data
-from .lesson2_exercises import SchemaEvolution, ConfigModel, NestedModel
-from .lesson3_exercises import OutputParser, JobApplicationParser
+try:
+    from .lesson1_exercises import UserProfile, UserProfileWithSkills, validate_user_data
+except ImportError:
+    pass
+
+try:
+    from .lesson2_exercises import SchemaEvolution, ConfigModel, NestedModel
+except ImportError:
+    pass
+
+try:
+    from .lesson3_exercises import OutputParser, JobApplicationParser
+except ImportError:
+    pass
+
+try:
+    from .lesson4_1_exercises import PaymentSystem, TravelBooking, ProductInventory, SurveyForm
+except ImportError:
+    pass
