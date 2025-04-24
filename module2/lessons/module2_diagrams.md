@@ -1,6 +1,6 @@
 # 📊 Module 2: Memory Systems - Explanatory Diagrams
 
-This document provides visual explanations of the key concepts in Module 2 through sequence diagrams, flowcharts, and class diagrams.
+Visual explanations of the key concepts in Module 2 through sequence diagrams, flowcharts, and class diagrams.
 
 ## 🧠 Memory System Architecture
 
@@ -226,4 +226,3 @@ sequenceDiagram
     end
 ```
 
-These diagrams provide visual explanations of the key concepts and architectures in Module 2, helping to clarify how the different memory systems interact and how the knowledge base assistant processes and responds to queries.

@@ -1,6 +1,6 @@
 # 📊 Module 1: Agent Fundamentals - Explanatory Diagrams
 
-This document provides visual explanations of the key concepts in Module 1 through sequence diagrams, flowcharts, and class diagrams.
+Visual explanations of the key concepts in Module 1 through sequence diagrams, flowcharts, and class diagrams.
 
 ## 🔄 Sense-Think-Act Loop
 
@@ -194,4 +194,3 @@ flowchart TD
     C1 --> A2
 ```
 
-These diagrams provide visual explanations of the key concepts and architectures in Module 1, helping to clarify how the different components interact and how data flows through the system.

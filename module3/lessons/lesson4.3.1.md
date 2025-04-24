@@ -1,7 +1,5 @@
 # E-Commerce System Using the Model Adapter Pattern
 
-## Imaginary System: "ShopSmart" E-Commerce Platform
-
 ShopSmart is an e-commerce platform that connects merchants with customers. The platform manages products, orders, user accounts, and payment processing.
 
 ## Core Models in the System

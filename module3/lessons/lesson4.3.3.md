@@ -1,6 +1,6 @@
 # Real-World API Flows with the Model Adapter Pattern
 
-This lesson demonstrates how the Model Adapter pattern works in real-world API scenarios through sequence diagrams.
+How the Model Adapter pattern works in real-world API scenarios through sequence diagrams.
 
 ## Common API Flows
 
