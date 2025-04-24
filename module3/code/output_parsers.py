@@ -2,13 +2,30 @@
 Output Parsers - Structured Output Parsing for LLMs
 ------------------------------------------------
 This module demonstrates techniques for parsing and validating LLM outputs using Pydantic.
+It includes both simulated LLM calls for testing and real LLM integration using the Groq API.
 """
 
 import json
 import re
+import os
 from typing import List, Optional, Dict, Any, Union, Callable, TypeVar
 from pydantic import BaseModel, Field, field_validator
 from datetime import datetime
+
+# Try to import GroqClient for real LLM integration
+try:
+    # When running from the module3/code directory
+    from groq_client import GroqClient
+except ImportError:
+    try:
+        # When running from the project root
+        from module3.code.groq_client import GroqClient
+    except ImportError:
+        # If GroqClient is not available, define a placeholder
+        class GroqClient:
+            def __init__(self, *args, **kwargs):
+                print("WARNING: GroqClient not available. Using simulated LLM calls only.")
+                self.available = False
 
 
 # Basic Pydantic models for parsing LLM outputs
@@ -30,14 +47,14 @@ class ContactForm(BaseModel):
     address: Optional[str] = Field(None, description="The person's physical address")
     inquiry_type: str = Field(description="The type of inquiry (e.g., support, sales, information)")
     message: str = Field(description="The content of the inquiry message")
-    
+
     @field_validator('email')
     def validate_email(cls, v):
         """Validate email format."""
         if not re.match(r"[^@]+@[^@]+\.[^@]+", v):
             raise ValueError("Invalid email format")
         return v
-    
+
     @field_validator('phone')
     def validate_phone(cls, v):
         """Validate phone number format if provided."""
@@ -52,13 +69,13 @@ class ContactForm(BaseModel):
 def parse_json_output(output_text: str) -> Dict[str, Any]:
     """
     Parse JSON from LLM output text.
-    
+
     Args:
         output_text: Text output from an LLM
-        
+
     Returns:
         Parsed JSON as a dictionary
-        
+
     Raises:
         ValueError: If JSON cannot be parsed
     """
@@ -67,7 +84,7 @@ def parse_json_output(output_text: str) -> Dict[str, Any]:
         # Look for JSON-like structure
         start_idx = output_text.find('{')
         end_idx = output_text.rfind('}')
-        
+
         if start_idx != -1 and end_idx != -1:
             json_str = output_text[start_idx:end_idx+1]
             return json.loads(json_str)
@@ -78,13 +95,13 @@ def parse_json_output(output_text: str) -> Dict[str, Any]:
             fixed_json = output_text.replace("'", '"')
             start_idx = fixed_json.find('{')
             end_idx = fixed_json.rfind('}')
-            
+
             if start_idx != -1 and end_idx != -1:
                 json_str = fixed_json[start_idx:end_idx+1]
                 return json.loads(json_str)
         except:
             pass
-    
+
     # Try to find JSON in code blocks
     code_block_match = re.search(r'```(?:json)?\s*(.*?)\s*```', output_text, re.DOTALL)
     if code_block_match:
@@ -92,7 +109,7 @@ def parse_json_output(output_text: str) -> Dict[str, Any]:
             return json.loads(code_block_match.group(1))
         except:
             pass
-    
+
     # If all parsing attempts fail
     raise ValueError("Could not parse JSON from LLM output")
 
@@ -100,21 +117,21 @@ def parse_json_output(output_text: str) -> Dict[str, Any]:
 def parse_llm_output(output_text: str, model_class: type) -> BaseModel:
     """
     Parse LLM output into a Pydantic model, handling common errors.
-    
+
     Args:
         output_text: Text output from an LLM
         model_class: Pydantic model class to parse into
-        
+
     Returns:
         Instance of the model_class
-        
+
     Raises:
         ValueError: If output cannot be parsed into the model
     """
     try:
         # Try to parse JSON from the output
         data = parse_json_output(output_text)
-        
+
         # Validate with Pydantic model
         return model_class(**data)
     except Exception as e:
@@ -129,46 +146,46 @@ class PydanticOutputParser:
     Parser for converting LLM outputs to Pydantic models.
     Similar to LangChain's PydanticOutputParser but simplified.
     """
-    
+
     def __init__(self, pydantic_object: type):
         """
         Initialize the parser with a Pydantic model class.
-        
+
         Args:
             pydantic_object: Pydantic model class to parse into
         """
         self.pydantic_object = pydantic_object
-    
+
     def parse(self, text: str) -> BaseModel:
         """
         Parse text into the Pydantic model.
-        
+
         Args:
             text: Text to parse
-            
+
         Returns:
             Instance of the Pydantic model
-            
+
         Raises:
             ValueError: If text cannot be parsed into the model
         """
         return parse_llm_output(text, self.pydantic_object)
-    
+
     def get_format_instructions(self) -> str:
         """
         Get instructions for the LLM on how to format its output.
-        
+
         Returns:
             Formatting instructions as a string
         """
         schema = self.pydantic_object.model_json_schema()
         schema_str = json.dumps(schema, indent=2)
-        
+
         return f"""
         You must format your output as a JSON instance that conforms to the JSON schema below.
 
         {schema_str}
-        
+
         The JSON output should contain only the required fields and should be valid JSON.
         """
 
@@ -178,39 +195,39 @@ class StructuredOutputParser:
     Parser for structured outputs with custom schemas.
     Similar to LangChain's StructuredOutputParser but simplified.
     """
-    
+
     def __init__(self, response_schemas: List[Dict[str, str]]):
         """
         Initialize the parser with response schemas.
-        
+
         Args:
             response_schemas: List of schema dictionaries with 'name' and 'description' keys
         """
         self.response_schemas = response_schemas
-    
+
     @classmethod
     def from_response_schemas(cls, response_schemas: List[Dict[str, str]]):
         """
         Create a parser from response schemas.
-        
+
         Args:
             response_schemas: List of schema dictionaries with 'name' and 'description' keys
-            
+
         Returns:
             StructuredOutputParser instance
         """
         return cls(response_schemas)
-    
+
     def parse(self, text: str) -> Dict[str, Any]:
         """
         Parse text into a dictionary based on the response schemas.
-        
+
         Args:
             text: Text to parse
-            
+
         Returns:
             Dictionary with parsed values
-            
+
         Raises:
             ValueError: If text cannot be parsed
         """
@@ -218,21 +235,21 @@ class StructuredOutputParser:
             return parse_json_output(text)
         except ValueError as e:
             raise ValueError(f"Could not parse structured output: {str(e)}")
-    
+
     def get_format_instructions(self) -> str:
         """
         Get instructions for the LLM on how to format its output.
-        
+
         Returns:
             Formatting instructions as a string
         """
         schema_str = json.dumps({s["name"]: s["description"] for s in self.response_schemas}, indent=2)
-        
+
         return f"""
         You must format your output as a JSON object with the following keys:
-        
+
         {schema_str}
-        
+
         The JSON output should contain only these keys and should be valid JSON.
         """
 
@@ -250,31 +267,31 @@ def parse_with_retry(
 ) -> T:
     """
     Try to parse LLM output, retrying with more explicit instructions if it fails.
-    
+
     Args:
         llm_call: Function that calls the LLM with a prompt
         parser: Parser to use for parsing the output
         text: Text to process
         max_retries: Maximum number of retry attempts
-        
+
     Returns:
         Parsed output
-        
+
     Raises:
         ValueError: If parsing fails after all retries
     """
     prompt_template = """
     Extract information from the text below:
-    
+
     {text}
-    
+
     {format_instructions}
-    
+
     {retry_instructions}
     """
-    
+
     retry_instructions = ""
-    
+
     for attempt in range(max_retries):
         # Format the prompt
         prompt = prompt_template.format(
@@ -282,10 +299,10 @@ def parse_with_retry(
             format_instructions=parser.get_format_instructions(),
             retry_instructions=retry_instructions
         )
-        
+
         # Call the LLM
         output = llm_call(prompt)
-        
+
         try:
             return parser.parse(output)
         except Exception as e:
@@ -293,7 +310,7 @@ def parse_with_retry(
                 # Add more explicit instructions for the next attempt
                 retry_instructions = f"""
                 The previous response could not be parsed correctly. Error: {e}
-                
+
                 Please make sure your response strictly follows the format instructions.
                 Double-check that:
                 1. All required fields are included
@@ -312,46 +329,46 @@ def two_stage_parsing(
     """
     First extract structured data, then validate with Pydantic.
     This approach gives the LLM more flexibility in the initial extraction.
-    
+
     Args:
         llm_call: Function that calls the LLM with a prompt
         text: Text to process
         model_class: Pydantic model class to parse into
-        
+
     Returns:
         Instance of the model_class
-        
+
     Raises:
         ValueError: If parsing fails
     """
     # Stage 1: Extract information in a flexible format
     extraction_prompt = f"""
     Extract the following information from the text:
-    
+
     {model_class.model_json_schema()}
-    
+
     Text: {text}
-    
+
     Provide the information in JSON format.
     """
-    
+
     initial_output = llm_call(extraction_prompt)
-    
+
     # Stage 2: Refine and validate the extracted information
     validation_prompt = f"""
     I've extracted the following information:
-    
+
     {initial_output}
-    
+
     Please format this as valid JSON that conforms to the following schema:
-    
+
     {model_class.model_json_schema()}
-    
+
     Ensure all required fields are present and correctly typed.
     """
-    
+
     refined_output = llm_call(validation_prompt)
-    
+
     # Parse with Pydantic
     try:
         data = parse_json_output(refined_output)
@@ -367,23 +384,23 @@ def parse_with_fallbacks(
 ) -> Union[T, Dict[str, Any]]:
     """
     Try multiple parsing strategies in sequence.
-    
+
     Args:
         llm_call: Function that calls the LLM with a prompt
         text: Text to process
         parsers: Dictionary mapping parser names to parser functions
-        
+
     Returns:
         Parsed output or error information
     """
     errors = []
-    
+
     for parser_name, parser_func in parsers.items():
         try:
             return parser_func(llm_call, text)
         except Exception as e:
             errors.append(f"{parser_name}: {str(e)}")
-    
+
     # If all parsers fail, return a structured error
     return {
         "success": False,
@@ -400,33 +417,33 @@ def parse_with_human_fallback(
 ) -> Optional[Union[T, Dict[str, Any]]]:
     """
     Try to parse automatically, but fall back to human review if needed.
-    
+
     Args:
         llm_call: Function that calls the LLM with a prompt
         text: Text to process
         parser: Parser to use for parsing the output
         human_input_func: Function to get input from a human
-        
+
     Returns:
         Parsed output or None if skipped
     """
     prompt = f"""
     Extract information from the text below:
-    
+
     {text}
-    
+
     {parser.get_format_instructions()}
     """
-    
+
     try:
         llm_output = llm_call(prompt)
         return parser.parse(llm_output)
     except Exception as e:
         error_message = f"Automatic parsing failed: {e}"
-        
+
         if human_input_func:
             human_input = human_input_func(text, llm_output, error_message)
-            
+
             if human_input is None or human_input.lower() == 'skip':
                 return None
             else:
@@ -441,9 +458,9 @@ def parse_with_human_fallback(
             print(error_message)
             print(f"Original text: {text}")
             print(f"LLM output: {llm_output}")
-            
+
             human_input = input("Please correct the parsing issue or type 'skip' to ignore: ")
-            
+
             if human_input.lower() == 'skip':
                 return None
             else:
@@ -459,11 +476,11 @@ def parse_with_human_fallback(
 
 class FormExtractor:
     """Extract structured form data from unstructured text."""
-    
+
     def __init__(self, llm_call: Callable[[str], str], form_model: type):
         """
         Initialize the form extractor.
-        
+
         Args:
             llm_call: Function that calls the LLM with a prompt
             form_model: Pydantic model class for the form
@@ -471,15 +488,15 @@ class FormExtractor:
         self.llm_call = llm_call
         self.form_model = form_model
         self.parser = PydanticOutputParser(pydantic_object=form_model)
-    
+
     def extract(self, text: str, max_retries: int = 2) -> Union[BaseModel, Dict[str, Any]]:
         """
         Extract form data from text.
-        
+
         Args:
             text: Text to extract form data from
             max_retries: Maximum number of retry attempts
-            
+
         Returns:
             Extracted form data or error information
         """
@@ -506,22 +523,85 @@ class FormExtractor:
                 }
 
 
+# LLM Integration
+# --------------
+
+# Initialize Groq client if available
+try:
+    groq_client = GroqClient()
+    GROQ_AVAILABLE = True
+except Exception as e:
+    print(f"Warning: Could not initialize Groq client: {e}")
+    GROQ_AVAILABLE = False
+
+def real_llm_call(prompt: str, temperature: float = 0.2) -> str:
+    """
+    Make a real LLM call using the Groq API.
+
+    Args:
+        prompt: Prompt to send to the LLM
+        temperature: Temperature parameter for controlling randomness
+
+    Returns:
+        LLM response as a string
+
+    Raises:
+        ValueError: If Groq client is not available
+    """
+    if not GROQ_AVAILABLE:
+        raise ValueError("Groq client is not available. Please check your API key and connection.")
+
+    try:
+        # Make the API call
+        response = groq_client.generate_text(
+            prompt=prompt,
+            temperature=temperature,
+            max_tokens=1024
+        )
+
+        # Extract the text from the response
+        return groq_client.extract_text_from_response(response)
+    except Exception as e:
+        raise ValueError(f"Error calling Groq API: {e}")
+
+def llm_call(prompt: str, use_real_llm: bool = False, temperature: float = 0.2) -> str:
+    """
+    Call an LLM, either real or simulated.
+
+    Args:
+        prompt: Prompt to send to the LLM
+        use_real_llm: Whether to use a real LLM (if available)
+        temperature: Temperature parameter for controlling randomness
+
+    Returns:
+        LLM response as a string
+    """
+    if use_real_llm and GROQ_AVAILABLE:
+        try:
+            return real_llm_call(prompt, temperature)
+        except Exception as e:
+            print(f"Warning: Real LLM call failed, falling back to simulation: {e}")
+            # Fall back to simulation
+            return simulate_llm_call(prompt)
+    else:
+        return simulate_llm_call(prompt)
+
 # Simulated LLM for testing
 # -----------------------
 
 def simulate_llm_call(prompt: str) -> str:
     """
     Simulate an LLM call for testing purposes.
-    
+
     Args:
         prompt: Prompt to send to the LLM
-        
+
     Returns:
         Simulated LLM response
     """
     # This is a very simple simulation that just returns predefined responses
     # In a real application, this would call an actual LLM API
-    
+
     if "person" in prompt.lower() and "john" in prompt.lower():
         return """
         ```json
@@ -533,7 +613,7 @@ def simulate_llm_call(prompt: str) -> str:
         }
         ```
         """
-    
+
     if "contact form" in prompt.lower() and "sarah" in prompt.lower():
         return """
         {
@@ -545,7 +625,7 @@ def simulate_llm_call(prompt: str) -> str:
           "message": "I'd like to inquire about your premium support package. I'm specifically interested in the data export capabilities and API integration options."
         }
         """
-    
+
     # Default response for unknown prompts
     return """
     {
@@ -562,7 +642,7 @@ def demonstrate_basic_parsing():
     # Simulate LLM output
     llm_output = """
     Based on the text, here's the information:
-    
+
     ```json
     {
       "name": "John Doe",
@@ -572,12 +652,12 @@ def demonstrate_basic_parsing():
     }
     ```
     """
-    
+
     # Parse with basic function
     try:
         data = parse_json_output(llm_output)
         print(f"Parsed JSON: {data}")
-        
+
         # Parse into Pydantic model
         person = Person(**data)
         print(f"Parsed Person: {person}")
@@ -585,27 +665,33 @@ def demonstrate_basic_parsing():
         print(f"Parsing error: {e}")
 
 
-def demonstrate_pydantic_parser():
-    """Demonstrate PydanticOutputParser."""
+def demonstrate_pydantic_parser(use_real_llm: bool = False):
+    """
+    Demonstrate PydanticOutputParser.
+
+    Args:
+        use_real_llm: Whether to use a real LLM (if available)
+    """
     # Create parser
     parser = PydanticOutputParser(pydantic_object=Person)
-    
+
     # Get format instructions
     instructions = parser.get_format_instructions()
     print(f"Format instructions:\n{instructions}\n")
-    
-    # Simulate LLM call with instructions
+
+    # Create prompt
     prompt = f"""
     Extract information about the person from this text:
-    
+
     John Doe is a 35-year-old software engineer who knows Python, JavaScript, and SQL.
-    
+
     {instructions}
     """
-    
-    llm_output = simulate_llm_call(prompt)
+
+    # Call LLM (real or simulated)
+    llm_output = llm_call(prompt, use_real_llm=use_real_llm)
     print(f"LLM output:\n{llm_output}\n")
-    
+
     # Parse the output
     try:
         person = parser.parse(llm_output)
@@ -614,42 +700,117 @@ def demonstrate_pydantic_parser():
         print(f"Parsing error: {e}")
 
 
-def demonstrate_form_extraction():
-    """Demonstrate form extraction."""
+def demonstrate_form_extraction(use_real_llm: bool = False):
+    """
+    Demonstrate form extraction.
+
+    Args:
+        use_real_llm: Whether to use a real LLM (if available)
+    """
+    # Create the LLM call function
+    def custom_llm_call(prompt: str) -> str:
+        return llm_call(prompt, use_real_llm=use_real_llm)
+
     # Create form extractor
     extractor = FormExtractor(
-        llm_call=simulate_llm_call,
+        llm_call=custom_llm_call,
         form_model=ContactForm
     )
-    
+
     # Example text
     text = """
     Hello,
-    
-    My name is Sarah Johnson and I'd like to inquire about your premium support package. 
+
+    My name is Sarah Johnson and I'd like to inquire about your premium support package.
     I've been using your product for about 6 months and have some questions about advanced features.
-    
+
     You can reach me at sarah.johnson@example.com or call me at (555) 123-4567.
     My address is 123 Main St, Apt 4B, Boston, MA 02108.
-    
+
     I'm specifically interested in the data export capabilities and API integration options.
     Could someone from your technical team contact me to discuss these features in detail?
-    
+
     Thanks,
     Sarah
     """
-    
+
     # Extract form data
     result = extractor.extract(text)
     print(f"Extracted form data: {result}")
 
 
+def demonstrate_real_vs_simulated():
+    """Demonstrate the difference between real and simulated LLM calls."""
+    if not GROQ_AVAILABLE:
+        print("Groq API is not available. Cannot demonstrate real LLM calls.")
+        return
+
+    prompt = """
+    Extract information about the person from this text:
+
+    Jane Smith is a 42-year-old data scientist who specializes in machine learning,
+    statistical analysis, and data visualization. She has worked in the field for 15 years.
+
+    Provide the information in JSON format with the following fields:
+    - name (string)
+    - age (number)
+    - occupation (string)
+    - skills (array of strings)
+    - experience_years (number)
+    """
+
+    print("=== Simulated LLM Call ===")
+    simulated_output = simulate_llm_call(prompt)
+    print(f"Output:\n{simulated_output}\n")
+
+    print("=== Real LLM Call (Groq API) ===")
+    try:
+        real_output = real_llm_call(prompt)
+        print(f"Output:\n{real_output}\n")
+
+        # Try to parse both outputs
+        print("=== Parsing Results ===")
+        try:
+            simulated_data = parse_json_output(simulated_output)
+            print(f"Simulated data: {simulated_data}")
+        except Exception as e:
+            print(f"Error parsing simulated output: {e}")
+
+        try:
+            real_data = parse_json_output(real_output)
+            print(f"Real data: {real_data}")
+        except Exception as e:
+            print(f"Error parsing real output: {e}")
+    except Exception as e:
+        print(f"Error with real LLM call: {e}")
+
+
 if __name__ == "__main__":
-    print("=== Basic Parsing ===")
+    # Parse command line arguments
+    import argparse
+    parser = argparse.ArgumentParser(description="Demonstrate output parsing techniques")
+    parser.add_argument("--real", action="store_true", help="Use real LLM calls (requires Groq API key)")
+    args = parser.parse_args()
+
+    use_real_llm = args.real
+
+    if use_real_llm:
+        print("Using real LLM calls (Groq API)")
+        if not GROQ_AVAILABLE:
+            print("WARNING: Groq API is not available. Falling back to simulated calls.")
+            use_real_llm = False
+    else:
+        print("Using simulated LLM calls")
+
+    print("\n=== Basic Parsing ===")
     demonstrate_basic_parsing()
-    
+
     print("\n=== Pydantic Parser ===")
-    demonstrate_pydantic_parser()
-    
+    demonstrate_pydantic_parser(use_real_llm=use_real_llm)
+
     print("\n=== Form Extraction ===")
-    demonstrate_form_extraction()
+    demonstrate_form_extraction(use_real_llm=use_real_llm)
+
+    if use_real_llm and GROQ_AVAILABLE:
+        print("\n=== Real vs. Simulated Comparison ===")
+        demonstrate_real_vs_simulated()
