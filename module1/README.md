@@ -18,18 +18,26 @@ module1/
 │   ├── lesson3.md            # Lesson 3: State Management Patterns
 │   └── lesson4.md            # Lesson 4: Building the Personal Task Manager
 ├── code/                     # Code examples and implementations
+│   ├── README.md             # Code directory documentation
 │   ├── simple_agent.py       # Basic agent implementation
 │   ├── test_simple_agent.py  # Test script for the simple agent
 │   ├── prompt_template.py    # Prompt template implementation
 │   ├── prompt_driven_agent.py # Agent using prompt templates
+│   ├── test_prompt_driven_agent.py # Test script for the prompt-driven agent
 │   ├── state_management.py   # State management implementations
 │   ├── stateful_agent.py     # Agent with state management
+│   ├── test_state_management.py # Test script for state management
 │   ├── task_manager_agent.py # Complete task manager implementation
 │   └── test_task_manager.py  # Test script for the task manager
-└── exercises/               # Practice exercises and solutions
-    ├── exercise_solutions.py # Solutions for lesson 1 exercises
-    ├── prompt_exercises.py   # Solutions for lesson 2 exercises
-    └── state_exercises.py    # Solutions for lesson 3 exercises
+├── exercises/                # Practice exercises and solutions
+│   ├── README.md             # Exercises directory documentation
+│   ├── exercise_solutions.py # Solutions for lesson 1 exercises
+│   ├── test_exercise_solutions.py # Test script for lesson 1 solutions
+│   ├── prompt_exercises.py   # Solutions for lesson 2 exercises
+│   ├── test_prompt_exercises.py # Test script for lesson 2 solutions
+│   ├── state_exercises.py    # Solutions for lesson 3 exercises
+│   └── test_state_exercises.py # Test script for lesson 3 solutions
+└── demo_agents.py            # Demo script for all agent implementations
 ```
 
 ## 🚀 Getting Started
@@ -49,13 +57,23 @@ module1/
 3. Run the test scripts to see the agents in action:
    ```
    python module1/code/test_simple_agent.py
-   python module1/code/test_prompt_agent.py
+   python module1/code/test_prompt_driven_agent.py
    python module1/code/test_state_management.py
    python module1/code/test_task_manager.py
    ```
 
 4. Try the interactive demos by running:
    ```
+   # Run the unified demo with a menu of all agents
+   python module1/demo_agents.py
+
+   # Or run a specific agent demo directly
+   python module1/demo_agents.py simple    # Simple Agent
+   python module1/demo_agents.py prompt    # Prompt-Driven Agent
+   python module1/demo_agents.py stateful  # Stateful Agent
+   python module1/demo_agents.py task      # Task Manager Agent
+
+   # You can also run individual agent files directly
    python module1/code/simple_agent.py
    python module1/code/prompt_driven_agent.py
    python module1/code/stateful_agent.py
@@ -68,6 +86,13 @@ module1/
    - Lesson 1: **exercises/exercise_solutions.py**
    - Lesson 2: **exercises/prompt_exercises.py**
    - Lesson 3: **exercises/state_exercises.py**
+
+7. Run the test scripts for the exercise solutions:
+   ```
+   python module1/exercises/test_exercise_solutions.py
+   python module1/exercises/test_prompt_exercises.py
+   python module1/exercises/test_state_exercises.py
+   ```
 
 ## 🎯 Learning Objectives
 
