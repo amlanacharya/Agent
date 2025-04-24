@@ -6,6 +6,8 @@ __pycache__/
 # C extensions
 *.so
 *_for_lessons_4.7_4.8.md
+*prompt_for_diagrams.md
+
 # Distribution / packaging
 .Python
 build/
