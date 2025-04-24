@@ -194,4 +194,3 @@ flowchart TD
     C1 --> A2
 ```
 
-These diagrams provide visual explanations of the key concepts and architectures in Module 1, helping to clarify how the different components interact and how data flows through the system.
