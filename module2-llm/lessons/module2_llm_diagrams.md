@@ -1,6 +1,6 @@
 # 📊 Module 2-LLM: Memory Systems with Groq API - Explanatory Diagrams
 
-This document provides visual explanations of the key concepts in Module 2-LLM through sequence diagrams, flowcharts, and class diagrams, highlighting the integration with real LLMs via the Groq API.
+Visual explanations of the key concepts in Module 2-LLM through sequence diagrams, flowcharts, and class diagrams, highlighting the integration with real LLMs via the Groq API.
 
 ## 🧠 LLM-Enhanced Memory System Architecture
 
@@ -340,4 +340,3 @@ flowchart TD
     L5 --> |"Enables"| B5[Responsible AI Behavior]
 ```
 
-These diagrams provide visual explanations of the key concepts and architectures in Module 2-LLM, highlighting how real LLM integration enhances the memory systems and knowledge base assistant compared to the simulated approach in the standard Module 2.
