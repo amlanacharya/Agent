@@ -1,7 +1,5 @@
 # 🧠 Module 2: Memory Systems
 
-![Memory Banner](https://media.giphy.com/media/l0HlQXlQ3nHyLMvte/giphy.gif)
-
 ## 📚 Overview
 
 Welcome to Module 2 of the Accelerated Agentic AI Mastery course! This module covers memory systems for AI agents, focusing on different memory types (working, short-term, long-term), vector database fundamentals, and retrieval patterns for contextual memory.
@@ -16,20 +14,38 @@ module2/
 │   ├── lesson1.md            # Lesson 1: Memory Types for AI Agents
 │   ├── lesson2.md            # Lesson 2: Vector Database Fundamentals
 │   ├── lesson3.md            # Lesson 3: Retrieval Patterns for Contextual Memory
-│   └── lesson4.md            # Lesson 4: Building the Knowledge Base Assistant
+│   ├── lesson4.md            # Lesson 4: Building the Knowledge Base Assistant
+│   └── module2_diagrams.md   # Diagrams for Module 2 concepts
 ├── code/                     # Code examples and implementations
+│   ├── README.md             # Code directory documentation
 │   ├── memory_types.py       # Implementation of different memory types
 │   ├── test_memory_types.py  # Test script for memory implementations
 │   ├── vector_store.py       # Simple vector database implementation
+│   ├── test_vector_store.py  # Test script for vector store
 │   ├── retrieval_agent.py    # Agent with retrieval capabilities
+│   ├── test_retrieval_agent.py # Test script for retrieval agent
 │   ├── knowledge_base.py     # Knowledge base implementation
 │   ├── kb_agent.py           # Knowledge base assistant implementation
 │   └── test_kb_agent.py      # Test script for the knowledge base assistant
-└── exercises/                # Practice exercises and solutions
-    ├── memory_exercises.py   # Solutions for lesson 1 exercises
-    ├── vector_exercises.py   # Solutions for lesson 2 exercises
-    └── retrieval_exercises.py # Solutions for lesson 3 exercises
+├── exercises/                # Practice exercises and solutions
+│   ├── README.md             # Exercises directory documentation
+│   ├── memory_exercises.py   # Solutions for lesson 1 exercises
+│   ├── test_memory_exercises.py # Tests for lesson 1 solutions
+│   ├── vector_exercises.py   # Solutions for lesson 2 exercises
+│   ├── test_vector_exercises.py # Tests for lesson 2 solutions
+│   ├── retrieval_exercises.py # Solutions for lesson 3 exercises
+│   └── test_retrieval_exercises.py # Tests for lesson 3 solutions
+└── implementation_notes.md   # Detailed implementation notes for the module
 ```
+
+## 🎯 Learning Objectives
+
+By the end of this module, you will:
+- 🧠 Understand different memory types for AI agents
+- 🔢 Learn vector database fundamentals and embedding spaces
+- 🔍 Master retrieval patterns for contextual memory
+- 📚 Build a knowledge base assistant with information storage and retrieval
+- 🔄 Implement memory persistence across agent sessions
 
 ## 🚀 Getting Started
 
@@ -43,7 +59,7 @@ module2/
    - Lesson 1: **code/memory_types.py**
    - Lesson 2: **code/vector_store.py**
    - Lesson 3: **code/retrieval_agent.py**
-   - Lesson 4: **code/kb_agent.py**
+   - Lesson 4: **code/kb_agent.py** and **code/knowledge_base.py**
 
 3. Run the test scripts to see the memory systems in action:
    ```
@@ -61,29 +77,38 @@ module2/
    python module2/code/kb_agent.py
    ```
 
-## 🎯 Learning Objectives
-
-By the end of this module, you will:
-- Understand different memory types for AI agents
-- Learn vector database fundamentals
-- Master retrieval patterns for contextual memory
-- Build a knowledge base assistant
-
 ## 🧪 Practice Exercises
 
 The lessons include several practice exercises to help reinforce your learning:
-1. Implementing different memory types
-2. Creating a simple vector database
-3. Designing effective retrieval patterns
+1. 🧠 Implementing different memory types (working, short-term, long-term)
+2. 🔢 Creating a simple vector database with similarity search
+3. 🔍 Designing effective retrieval patterns for contextual information
+4. 📚 Building components for the knowledge base assistant
 
 ## 📝 Mini-Project: Knowledge Base Assistant
 
 Throughout this module, you'll be building a Knowledge Base Assistant that can:
-- Store and retrieve information from a knowledge base
-- Answer questions based on stored knowledge
-- Learn new information from conversations
-- Identify when it doesn't know something
-- Provide citations for its answers
+- 📄 Store and retrieve information from a knowledge base
+- 🧩 Answer questions based on stored knowledge
+- ✅ Learn new information from conversations
+- 🔍 Identify when it doesn't know something
+- 📊 Provide citations for its answers
+
+## 🔧 Tools & Technologies
+
+- Python for implementing memory systems
+- Vector representations for semantic similarity
+- Simple vector databases for information storage
+- Retrieval algorithms for finding relevant information
+- Knowledge base structures for organized data
+
+## 🧠 Skills You'll Develop
+
+- Memory system design for agents
+- Vector database implementation
+- Retrieval-augmented generation techniques
+- Knowledge base architecture
+- Semantic search implementation
 
 ## 📚 Additional Resources
 

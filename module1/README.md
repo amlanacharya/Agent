@@ -1,7 +1,5 @@
 # 🤖 Module 1: Agent Fundamentals
 
-![Agent Banner](https://media.giphy.com/media/3o7TKsQ8Xb3gcGEgZW/giphy.gif)
-
 ## 📚 Overview
 
 Welcome to Module 1 of the Accelerated Agentic AI Mastery course! This module covers the fundamental concepts of AI agents, focusing on the core agent loop (sense-think-act), prompt engineering basics, and state management patterns.
@@ -16,7 +14,8 @@ module1/
 │   ├── lesson1.md            # Lesson 1: The Sense-Think-Act Loop
 │   ├── lesson2.md            # Lesson 2: Prompt Engineering Fundamentals
 │   ├── lesson3.md            # Lesson 3: State Management Patterns
-│   └── lesson4.md            # Lesson 4: Building the Personal Task Manager
+│   ├── lesson4.md            # Lesson 4: Building the Personal Task Manager
+│   └── module1_diagrams.md   # Diagrams for Module 1 concepts
 ├── code/                     # Code examples and implementations
 │   ├── README.md             # Code directory documentation
 │   ├── simple_agent.py       # Basic agent implementation
@@ -39,6 +38,15 @@ module1/
 │   └── test_state_exercises.py # Test script for lesson 3 solutions
 └── demo_agents.py            # Demo script for all agent implementations
 ```
+
+## 🎯 Learning Objectives
+
+By the end of this module, you will:
+- 🔄 Understand the core agent loop (sense-think-act)
+- 📝 Master prompt engineering fundamentals
+- 🧠 Learn basic state management patterns
+- 📋 Build a simple personal task manager agent
+- 🔍 Implement basic agent testing strategies
 
 ## 🚀 Getting Started
 
@@ -80,42 +88,38 @@ module1/
    python module1/code/task_manager_agent.py
    ```
 
-5. Complete the practice exercises at the end of each lesson
-
-6. Check your solutions against the exercise files (but try to solve them yourself first!):
-   - Lesson 1: **exercises/exercise_solutions.py**
-   - Lesson 2: **exercises/prompt_exercises.py**
-   - Lesson 3: **exercises/state_exercises.py**
-
-7. Run the test scripts for the exercise solutions:
-   ```
-   python module1/exercises/test_exercise_solutions.py
-   python module1/exercises/test_prompt_exercises.py
-   python module1/exercises/test_state_exercises.py
-   ```
-
-## 🎯 Learning Objectives
-
-By the end of this module, you will:
-- Understand the core agent loop (sense-think-act)
-- Master prompt engineering fundamentals
-- Learn basic state management patterns
-- Build a simple personal task manager agent
-
 ## 🧪 Practice Exercises
 
-The lesson includes several practice exercises to help reinforce your learning:
-1. Extending the SimpleAgent with new capabilities
-2. Implementing conversation history tracking
-3. Enhancing input processing with basic intent recognition
+The lessons include several practice exercises to help reinforce your learning:
+1. 🤖 Extending the SimpleAgent with new capabilities
+2. 💬 Implementing conversation history tracking
+3. 🧠 Enhancing input processing with basic intent recognition
+4. 📋 Building components for the task manager agent
 
 ## 📝 Mini-Project: Personal Task Manager
 
 Throughout this module, you'll be building a Personal Task Manager agent that can:
-- Accept natural language commands to create, update, and delete tasks
-- Store tasks with priority levels and due dates
-- Respond to queries about task status
-- Provide daily summaries of pending tasks
+- 📄 Accept natural language commands to create, update, and delete tasks
+- 🧩 Store tasks with priority levels and due dates
+- ✅ Respond to queries about task status
+- 🔍 Provide daily summaries of pending tasks
+- 📊 Organize tasks by category and priority
+
+## 🔧 Tools & Technologies
+
+- Python for implementing agent logic
+- Object-oriented programming for agent architecture
+- String templating for prompt engineering
+- Data structures for state management
+- Unit testing for agent validation
+
+## 🧠 Skills You'll Develop
+
+- Agent architecture design
+- Prompt engineering techniques
+- State management patterns
+- Natural language processing basics
+- Test-driven development for agents
 
 ## 📚 Additional Resources
 
