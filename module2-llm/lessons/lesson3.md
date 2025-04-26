@@ -1,6 +1,4 @@
-# 🧠 Module 2 LLM Version: Memory Systems - Lesson 3 🔍
-
-![Retrieval Patterns](https://media.giphy.com/media/l0HlQXlQ3nHyLMvte/giphy.gif)
+# 🚀 Module 2-LLM: Memory Systems - Lesson 3: Advanced Retrieval with Groq 🔍
 
 ## 🎯 Lesson Objectives
 
@@ -14,8 +12,6 @@ By the end of this lesson, you will:
 ---
 
 ## 📚 Introduction to Retrieval Patterns with LLM Enhancement
-
-![Retrieval](https://media.giphy.com/media/3o7TKsQ8Xb3gcGEgZW/giphy.gif)
 
 Retrieval patterns are strategies for finding and retrieving relevant information from memory systems. In this lesson, we'll explore how to enhance these patterns with real LLM integration using the Groq API, enabling much more sophisticated and context-aware retrieval.
 
@@ -44,16 +40,16 @@ def retrieve_with_context(self, query, top_k=5):
     """Retrieve knowledge with conversation context for better relevance"""
     # Get recent conversation turns
     recent_turns = self.conversation_memory.get_recent(5)
-    
+
     # Extract conversation context using LLM
     conversation_context = self._extract_conversation_context(recent_turns)
-    
+
     # Enhance query with context using LLM
     enhanced_query = self._enhance_query_with_context(query, conversation_context)
-    
+
     # Retrieve with enhanced query
     results = self.vector_db.search_with_expansion(enhanced_query, top_k=top_k)
-    
+
     # Add context information to results
     for result in results:
         result['context_info'] = {
@@ -61,7 +57,7 @@ def retrieve_with_context(self, query, top_k=5):
             'enhanced_query': enhanced_query,
             'conversation_context': conversation_context
         }
-    
+
     return results
 ```
 
@@ -86,30 +82,30 @@ def _extract_conversation_context(self, conversation_turns):
             'user_interests': [],
             'open_questions': []
         }
-    
+
     # Format conversation for the LLM
     conversation_text = "\n".join([
         f"{turn['content']['role']}: {turn['content']['content']}"
         for turn in conversation_turns
     ])
-    
+
     prompt = f"""
     Analyze this conversation history:
-    
+
     {conversation_text}
-    
+
     Extract the following information:
     - topics: Main topics discussed in the conversation
     - entities: Named entities mentioned (people, organizations, places, etc.)
     - user_interests: What the user seems interested in
     - open_questions: Any questions that haven't been fully answered
-    
+
     Return a JSON object with these fields. Return only the JSON object, without additional text.
     """
-    
+
     response = self.groq_client.generate_text(prompt, max_tokens=300)
     result = self.groq_client.extract_text_from_response(response)
-    
+
     # Parse the JSON response
     try:
         return json.loads(result)
@@ -144,26 +140,26 @@ def _enhance_query_with_context(self, query, context):
     """Enhance a query with conversation context using LLM"""
     # Format context for the LLM
     context_text = json.dumps(context, indent=2)
-    
+
     prompt = f"""
     Original query: "{query}"
-    
+
     Conversation context:
     {context_text}
-    
+
     Enhance the original query to make it more specific and relevant based on the conversation context.
     The enhanced query should help retrieve more relevant information.
-    
+
     Return only the enhanced query, without quotes or additional text.
     """
-    
+
     response = self.groq_client.generate_text(prompt, max_tokens=150)
     enhanced_query = self.groq_client.extract_text_from_response(response).strip()
-    
+
     # If the enhancement failed or returned nothing, use the original query
     if not enhanced_query:
         return query
-    
+
     return enhanced_query
 ```
 
@@ -208,10 +204,10 @@ def process_user_input(self, user_input):
         'content': user_input,
         'timestamp': datetime.now().isoformat()
     })
-    
+
     # Extract key information using LLM
     key_info = self._extract_key_information(user_input)
-    
+
     return {
         'text': user_input,
         'key_information': key_info,
@@ -228,36 +224,36 @@ def generate_response(self, query, retrieved_items):
     """Generate a response based on retrieved items using LLM"""
     if not retrieved_items:
         return "I don't have any information about that."
-    
+
     # Format retrieved items for the LLM
     retrieved_text = "\n\n".join([
         f"Item {i+1}:\n{item['text']}"
         for i, item in enumerate(retrieved_items)
     ])
-    
+
     # Get recent conversation for context
     recent_turns = self.conversation_memory.get_recent(3)
     conversation_text = "\n".join([
         f"{turn['content']['role']}: {turn['content']['content']}"
         for turn in recent_turns
     ])
-    
+
     prompt = f"""
     User query: "{query}"
-    
+
     Recent conversation:
     {conversation_text}
-    
+
     Retrieved information:
     {retrieved_text}
-    
+
     Based on the user's query and the retrieved information, generate a helpful and informative response.
     If the retrieved information doesn't fully answer the query, acknowledge that.
     If there are multiple relevant pieces of information, synthesize them into a coherent response.
-    
+
     Response:
     """
-    
+
     response = self.groq_client.generate_text(prompt, max_tokens=500)
     return self.groq_client.extract_text_from_response(response)
 ```
@@ -273,16 +269,16 @@ def answer_question(self, question):
     """Answer a question using the retrieval agent"""
     # Process the question
     processed_input = self.process_user_input(question)
-    
+
     # Retrieve relevant knowledge with context
     retrieved_items = self.retrieve_with_context(question, top_k=5)
-    
+
     # Generate a response
     response = self.generate_response(question, retrieved_items)
-    
+
     # Store the response
     self.store_response(response)
-    
+
     return response
 ```
 
@@ -307,17 +303,17 @@ def explain_retrieval(self, query):
     """Explain the retrieval process for a query"""
     # Process the query
     processed_input = self.process_user_input(query)
-    
+
     # Get conversation context
     recent_turns = self.conversation_memory.get_recent(5)
     conversation_context = self._extract_conversation_context(recent_turns)
-    
+
     # Enhance query with context
     enhanced_query = self._enhance_query_with_context(query, conversation_context)
-    
+
     # Expand the enhanced query
     expanded_queries = self.vector_db.expand_query(enhanced_query)
-    
+
     # Retrieve with each expanded query
     all_results = []
     for expanded_query in expanded_queries:
@@ -325,7 +321,7 @@ def explain_retrieval(self, query):
         for result in results:
             result['expanded_query'] = expanded_query
         all_results.extend(results)
-    
+
     # Remove duplicates and sort
     seen_ids = set()
     unique_results = []
@@ -333,19 +329,19 @@ def explain_retrieval(self, query):
         if result['id'] not in seen_ids:
             seen_ids.add(result['id'])
             unique_results.append(result)
-    
+
     unique_results.sort(key=lambda x: x['similarity'], reverse=True)
     top_results = unique_results[:5]
-    
+
     # Generate explanation
     explanation = self._generate_retrieval_explanation(
-        query, 
-        enhanced_query, 
-        expanded_queries, 
-        top_results, 
+        query,
+        enhanced_query,
+        expanded_queries,
+        top_results,
         conversation_context
     )
-    
+
     return {
         'original_query': query,
         'enhanced_query': enhanced_query,
@@ -372,40 +368,40 @@ def _generate_retrieval_explanation(self, original_query, enhanced_query, expand
     """Generate an explanation of the retrieval process using LLM"""
     # Format inputs for the LLM
     expanded_text = "\n".join([f"- {q}" for q in expanded_queries])
-    
+
     results_text = "\n\n".join([
         f"Result {i+1} (Similarity: {result['similarity']:.4f}):\n{result['text'][:100]}..."
         for i, result in enumerate(results)
     ])
-    
+
     context_text = json.dumps(context, indent=2)
-    
+
     prompt = f"""
     Explain the retrieval process for this query:
-    
+
     Original query: "{original_query}"
-    
+
     Step 1: The query was enhanced with conversation context:
     Enhanced query: "{enhanced_query}"
-    
+
     Step 2: The enhanced query was expanded to improve recall:
     {expanded_text}
-    
+
     Step 3: The system searched for relevant information using these queries and found:
     {results_text}
-    
+
     Conversation context used:
     {context_text}
-    
+
     Provide a clear explanation of how the retrieval process worked, including:
     - How the conversation context influenced the query enhancement
     - How query expansion helped find relevant information
     - Why the top results were selected
     - Any challenges or limitations in the retrieval process
-    
+
     Explanation:
     """
-    
+
     response = self.groq_client.generate_text(prompt, max_tokens=500)
     return self.groq_client.extract_text_from_response(response)
 ```
@@ -415,8 +411,6 @@ This function uses the LLM to generate a clear explanation of the retrieval proc
 ---
 
 ## 💪 Practice Exercises
-
-![Practice](https://media.giphy.com/media/3oKIPrc2ngFZ6BTyww/giphy.gif)
 
 1. **Implement a Multi-Strategy Retrieval System**:
    - Create a system that uses different retrieval strategies based on the query type
@@ -435,9 +429,17 @@ This function uses the LLM to generate a clear explanation of the retrieval proc
 
 ---
 
-## 🎯 Mini-Project Progress: Knowledge Base Assistant with Groq
+## 🔍 Key Concepts to Remember
 
-![Knowledge Base](https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy.gif)
+1. **Context-Aware Retrieval**: Using conversation history to improve retrieval relevance
+2. **LLM-Enhanced Queries**: Leveraging LLMs to improve and expand search queries
+3. **Retrieval Agents**: Combining multiple retrieval patterns into cohesive systems
+4. **Explainable Retrieval**: Helping users understand how information was found
+5. **Response Generation**: Creating coherent responses from retrieved information
+
+---
+
+## 🎯 Mini-Project Progress: Knowledge Base Assistant with Groq
 
 In this lesson, we've learned how to implement retrieval patterns with LLM enhancement. These components will be crucial for our Knowledge Base Assistant:
 
@@ -450,6 +452,17 @@ In the next lesson, we'll bring everything together to build the complete Knowle
 
 ---
 
+## 🚀 Next Steps
+
+In the next lesson, we'll explore:
+- Building a complete Knowledge Base Assistant
+- Integrating all the memory and retrieval components
+- Implementing knowledge acquisition from conversations
+- Creating a citation system for knowledge sources
+- Developing uncertainty handling for unknown information
+
+---
+
 ## 📚 Resources
 
 - [Groq API Documentation](https://console.groq.com/docs/quickstart)
@@ -457,3 +470,11 @@ In the next lesson, we'll bring everything together to build the complete Knowle
 - [LangChain Retrieval](https://python.langchain.com/docs/modules/data_connection/)
 - [Explainable AI Techniques](https://christophm.github.io/interpretable-ml-book/)
 - [Context-Aware NLP Systems](https://aclanthology.org/2020.acl-main.740/)
+
+---
+
+> 💡 **Note on LLM Integration**: This lesson demonstrates real integration with the Groq API for enhancing retrieval capabilities. The code examples show how to use LLMs to understand context, enhance queries, and generate explanations for more effective information retrieval.
+
+---
+
+Happy coding! 🚀
