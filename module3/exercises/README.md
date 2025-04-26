@@ -6,13 +6,28 @@ This directory contains solutions for the exercises in Module 3: Data Validation
 
 ```
 exercises/
-├── lesson1_exercises.py         # Solutions for Lesson 1 exercises
-├── test_lesson1_exercises.py    # Tests for Lesson 1 solutions
-├── demo_lesson1_exercises.py    # Demonstration script for Lesson 1 solutions
-├── lesson2_exercises.py         # Solutions for Lesson 2 exercises (Schema Design)
-├── lesson3_exercises.py         # Solutions for Lesson 3 exercises (Output Parsing)
-├── lesson4_exercises.py         # Solutions for Lesson 4 exercises (Advanced Validation)
-└── README.md                    # This file
+├── lesson1_exercises.py                      # Solutions for Lesson 1 exercises
+├── test_lesson1_exercises.py                 # Tests for Lesson 1 solutions
+├── demo_lesson1_exercises.py                 # Demonstration script for Lesson 1 solutions
+├── lesson2_exercises.py                      # Solutions for Lesson 2 exercises (Schema Design)
+├── test_lesson2_exercises.py                 # Tests for Lesson 2 solutions
+├── lesson3_exercises.py                      # Solutions for Lesson 3 exercises (Output Parsing)
+├── test_lesson3_exercises.py                 # Tests for Lesson 3 solutions
+├── lesson4_1_exercises.py                    # Solutions for Lesson 4.1 exercises (Cross-Field Validation)
+├── test_lesson4_1_exercises.py               # Tests for Lesson 4.1 solutions
+├── lesson4_2_exercises.py                    # Solutions for Lesson 4.2 exercises (Error Handling)
+├── test_lesson4_2_exercises.py               # Tests for Lesson 4.2 solutions
+├── exercise4.3.1_user_hierarchy.py           # Exercise 4.3.1: User Hierarchy with Inheritance
+├── test_exercise4.3.1_user_hierarchy.py      # Tests for Exercise 4.3.1
+├── exercise4.3.2_change_tracking_mixin.py    # Exercise 4.3.2: Change Tracking Mixin
+├── test_exercise4.3.2_change_tracking_mixin.py # Tests for Exercise 4.3.2
+├── exercise4.3.3_db_model_generator.py       # Exercise 4.3.3: Database Model Generator
+├── test_exercise4.3.3_db_model_generator.py  # Tests for Exercise 4.3.3
+├── exercise4.3.4_model_adapter_system.py     # Exercise 4.3.4: Model Adapter System
+├── test_exercise4.3.4_model_adapter_system.py # Tests for Exercise 4.3.4
+├── exercise4.3.5_form_builder.py             # Exercise 4.3.5: Form Builder
+├── README.md                                 # This file
+└── README_exercises4.3.md                    # Detailed README for Lesson 4.3 exercises
 ```
 
 ## 🚀 Getting Started
@@ -76,11 +91,49 @@ python -m unittest module3.exercises.test_lesson1_exercises
 
 ### Lesson 4: Advanced Validation Patterns
 
-- `lesson4_exercises.py`: Solutions for exercises on advanced validation:
+#### Lesson 4.1: Cross-Field Validation
+
+- `lesson4_1_exercises.py`: Solutions for exercises on cross-field validation:
   - Implementing dependent field validation
   - Creating conditional validation rules
   - Handling complex validation scenarios
   - Implementing custom error messages
+
+#### Lesson 4.2: Error Handling and Recovery
+
+- `lesson4_2_exercises.py`: Solutions for exercises on error handling:
+  - Implementing multi-step form validation
+  - Creating suggestion systems for common errors
+  - Building validation error logging
+  - Implementing validation middleware
+  - Creating partial submission forms with draft management
+
+#### Lesson 4.3: Advanced Model Composition
+
+- `exercise4.3.1_user_hierarchy.py`: User hierarchy with inheritance
+  - Creating a model hierarchy for different types of users
+  - Implementing type-specific functionality
+  - Adding field validation with field_validator
+
+- `exercise4.3.2_change_tracking_mixin.py`: Change tracking mixin
+  - Implementing a mixin for tracking model changes
+  - Recording previous and new values of fields
+  - Adding reversion capabilities
+
+- `exercise4.3.3_db_model_generator.py`: Database model generator
+  - Creating Pydantic models from database table schemas
+  - Mapping database types to Python types
+  - Generating field constraints
+
+- `exercise4.3.4_model_adapter_system.py`: Model adapter system
+  - Converting between API request models, database models, and API response models
+  - Implementing field mapping and transformation
+  - Creating an adapter registry
+
+- `exercise4.3.5_form_builder.py`: Form builder
+  - Generating both Pydantic models and HTML form elements
+  - Creating field type mapping and constraints
+  - Implementing validator generation
 
 ## 🔍 Key Concepts
 

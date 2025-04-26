@@ -8,6 +8,10 @@ __pycache__/
 *_for_lessons_4.7_4.8.md
 *prompt_for_diagrams.md
 
+# Template files for organization
+templates/
+templates/*
+
 # Distribution / packaging
 .Python
 build/
