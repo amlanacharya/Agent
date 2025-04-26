@@ -28,14 +28,15 @@ module2-llm/
 │   ├── knowledge_base.py     # Knowledge base with LLM integration
 │   ├── kb_agent.py           # Knowledge base assistant with Groq
 │   └── test_kb_agent.py      # Test script for the knowledge base assistant
-└── exercises/                # Practice exercises and solutions
-    ├── README.md             # Exercises directory documentation
-    ├── memory_exercises.py   # Solutions for lesson 1 exercises
-    ├── test_memory_exercises.py # Tests for lesson 1 solutions
-    ├── vector_exercises.py   # Solutions for lesson 2 exercises
-    ├── test_vector_exercises.py # Tests for lesson 2 solutions
-    ├── retrieval_exercises.py # Solutions for lesson 3 exercises
-    └── test_retrieval_exercises.py # Tests for lesson 3 solutions
+├── exercises/                # Practice exercises and solutions
+│   ├── README.md             # Exercises directory documentation
+│   ├── memory_exercises.py   # Solutions for lesson 1 exercises
+│   ├── test_memory_exercises.py # Tests for lesson 1 solutions
+│   ├── vector_exercises.py   # Solutions for lesson 2 exercises
+│   ├── test_vector_exercises.py # Tests for lesson 2 solutions
+│   ├── retrieval_exercises.py # Solutions for lesson 3 exercises
+│   └── test_retrieval_exercises.py # Tests for lesson 3 solutions
+└── demo_memory_systems_llm.py # Interactive demonstration for all LLM-enhanced memory systems
 ```
 
 ## 🎯 Learning Objectives
@@ -92,6 +93,24 @@ Before starting this module, you'll need:
    python module2-llm/code/test_vector_store.py
    python module2-llm/code/test_retrieval_agent.py
    python module2-llm/code/test_kb_agent.py
+   ```
+
+6. Try the interactive demos by running:
+   ```
+   # Run the unified demo with a menu of all LLM-enhanced memory systems
+   python module2-llm/demo_memory_systems_llm.py
+
+   # Or run a specific component demo directly
+   python module2-llm/demo_memory_systems_llm.py groq       # Groq Client
+   python module2-llm/demo_memory_systems_llm.py working    # LLM-Enhanced Working Memory
+   python module2-llm/demo_memory_systems_llm.py short      # LLM-Enhanced Short-Term Memory
+   python module2-llm/demo_memory_systems_llm.py long       # LLM-Enhanced Long-Term Memory
+   python module2-llm/demo_memory_systems_llm.py episodic   # LLM-Enhanced Episodic Memory
+   python module2-llm/demo_memory_systems_llm.py system     # LLM-Enhanced Agent Memory System
+   python module2-llm/demo_memory_systems_llm.py vector     # LLM-Enhanced Vector Store
+   python module2-llm/demo_memory_systems_llm.py retrieval  # LLM-Enhanced Retrieval Agent
+   python module2-llm/demo_memory_systems_llm.py kb         # LLM-Enhanced Knowledge Base
+   python module2-llm/demo_memory_systems_llm.py assistant  # LLM-Enhanced Knowledge Base Assistant
    ```
 
 ## 🧪 Practice Exercises

@@ -124,8 +124,8 @@ python -m unittest test_model_composition.py
 
 For practical exercises related to model composition, see the exercises directory:
 
-1. `exercise4.3.1_user_hierarchy.py`: User model hierarchy with inheritance
-2. `exercise4.3.2_change_tracking_mixin.py`: Mixin for tracking model changes
-3. `exercise4.3.3_db_model_generator.py`: Dynamic model generator for database schemas
-4. `exercise4.3.4_model_adapter_system.py`: Adapter system for model conversion
-5. `exercise4.3.5_form_builder.py`: Form builder with HTML generation
+1. `lesson4_3_1_exercises.py`: User model hierarchy with inheritance
+2. `lesson4_3_2_exercises.py`: Mixin for tracking model changes
+3. `lesson4_3_3_exercises.py`: Dynamic model generator for database schemas
+4. `lesson4_3_4_exercises.py`: Adapter system for model conversion
+5. `lesson4_3_5_exercises.py`: Form builder with HTML generation

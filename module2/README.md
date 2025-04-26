@@ -35,6 +35,7 @@ module2/
 │   ├── test_vector_exercises.py # Tests for lesson 2 solutions
 │   ├── retrieval_exercises.py # Solutions for lesson 3 exercises
 │   └── test_retrieval_exercises.py # Tests for lesson 3 solutions
+├── demo_memory_systems.py    # Interactive demonstration for all memory systems
 └── implementation_notes.md   # Detailed implementation notes for the module
 ```
 
@@ -71,6 +72,21 @@ By the end of this module, you will:
 
 4. Try the interactive demos by running:
    ```
+   # Run the unified demo with a menu of all memory systems
+   python module2/demo_memory_systems.py
+
+   # Or run a specific component demo directly
+   python module2/demo_memory_systems.py working    # Working Memory
+   python module2/demo_memory_systems.py short      # Short-Term Memory
+   python module2/demo_memory_systems.py long       # Long-Term Memory
+   python module2/demo_memory_systems.py episodic   # Episodic Memory
+   python module2/demo_memory_systems.py system     # Agent Memory System
+   python module2/demo_memory_systems.py vector     # Vector Store
+   python module2/demo_memory_systems.py retrieval  # Retrieval Agent
+   python module2/demo_memory_systems.py kb         # Knowledge Base
+   python module2/demo_memory_systems.py assistant  # Knowledge Base Assistant
+
+   # You can also run individual implementation files directly
    python module2/code/memory_types.py
    python module2/code/vector_store.py
    python module2/code/retrieval_agent.py

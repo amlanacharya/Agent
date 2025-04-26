@@ -1,5 +1,5 @@
 """
-Exercise 4.3.1: User Hierarchy with Inheritance
+Lesson 4.3.1: User Hierarchy with Inheritance
 
 This exercise demonstrates creating a model hierarchy for different types of users
 (Guest, RegisteredUser, AdminUser) with appropriate inheritance relationships.

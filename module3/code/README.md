@@ -47,7 +47,17 @@ python -m module3.code.test_form_assistant
 To run the interactive demos:
 
 ```bash
-# Run from the project root
+# Run the unified demo with a menu of all Pydantic features
+python -m module3.demo_pydantic_features
+
+# Or run a specific component demo directly
+python -m module3.demo_pydantic_features basics      # Pydantic Basics
+python -m module3.demo_pydantic_features schema      # Schema Design
+python -m module3.demo_pydantic_features parsing     # Output Parsing
+python -m module3.demo_pydantic_features composition # Model Composition
+python -m module3.demo_pydantic_features validation  # Advanced Validation Patterns
+
+# You can also run individual demo files directly
 python -m module3.demo_pydantic_basics
 python -m module3.demo_schema_design
 python -m module3.demo_output_parsing

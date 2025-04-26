@@ -24,3 +24,28 @@ try:
     from .lesson4_1_exercises import PaymentSystem, TravelBooking, ProductInventory, SurveyForm
 except ImportError:
     pass
+
+try:
+    from .lesson4_3_1_exercises import BaseUser, GuestUser, RegisteredUser, AdminUser
+except ImportError:
+    pass
+
+try:
+    from .lesson4_3_2_exercises import ChangeTrackingMixin, ChangeRecord, UserProfile
+except ImportError:
+    pass
+
+try:
+    from .lesson4_3_3_exercises import DBModelGenerator, DBTable, DBColumn
+except ImportError:
+    pass
+
+try:
+    from .lesson4_3_4_exercises import ModelAdapter, AdapterRegistry, CreateUserRequest, UserDB, UserResponse
+except ImportError:
+    pass
+
+try:
+    from .lesson4_3_5_exercises import FormDefinition, StringField, NumberField, BooleanField, SelectField, FieldType
+except ImportError:
+    pass

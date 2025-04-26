@@ -1,5 +1,5 @@
 """
-Tests for Exercise 4.3.1: User Hierarchy with Inheritance
+Tests for Lesson 4.3.1: User Hierarchy with Inheritance
 --------------------------------------------------------
 This module contains tests for the user hierarchy implementation.
 """
@@ -8,7 +8,7 @@ import unittest
 from datetime import datetime, timedelta
 from pydantic import ValidationError
 
-from exercise4.3.1_user_hierarchy import (
+from module3.exercises.lesson4_3_1_exercises import (
     BaseUser,
     GuestUser,
     RegisteredUser,

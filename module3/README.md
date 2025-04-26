@@ -38,6 +38,7 @@ module3/
 │   ├── test_parsing_exercises.py # Tests for lesson 3 solutions
 │   ├── validation_exercises.py # Solutions for lesson 4 exercises
 │   └── test_validation_exercises.py # Tests for lesson 4 solutions
+├── demo_pydantic_features.py # Interactive demonstration for all Pydantic features
 ├── demo_pydantic_basics.py   # Demo for Pydantic basics
 ├── demo_schema_design.py     # Demo for schema design patterns
 ├── demo_output_parsing.py    # Demo for output parsing techniques
@@ -79,6 +80,17 @@ By the end of this module, you will:
 
 4. Try the interactive demos by running:
    ```
+   # Run the unified demo with a menu of all Pydantic features
+   python module3/demo_pydantic_features.py
+
+   # Or run a specific component demo directly
+   python module3/demo_pydantic_features.py basics      # Pydantic Basics
+   python module3/demo_pydantic_features.py schema      # Schema Design
+   python module3/demo_pydantic_features.py parsing     # Output Parsing
+   python module3/demo_pydantic_features.py composition # Model Composition
+   python module3/demo_pydantic_features.py validation  # Advanced Validation Patterns
+
+   # You can also run individual demo files directly
    python module3/demo_pydantic_basics.py
    python module3/demo_schema_design.py
    python module3/demo_output_parsing.py

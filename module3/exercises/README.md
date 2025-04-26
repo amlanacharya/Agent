@@ -19,16 +19,16 @@ exercises/
 ├── test_lesson4_1_exercises.py               # Tests for Lesson 4.1 solutions
 ├── lesson4_2_exercises.py                    # Solutions for Lesson 4.2 exercises (Error Handling)
 ├── test_lesson4_2_exercises.py               # Tests for Lesson 4.2 solutions
-├── exercise4.3.1_user_hierarchy.py           # Exercise 4.3.1: User Hierarchy with Inheritance
-├── test_exercise4.3.1_user_hierarchy.py      # Tests for Exercise 4.3.1
-├── exercise4.3.2_change_tracking_mixin.py    # Exercise 4.3.2: Change Tracking Mixin
-├── test_exercise4.3.2_change_tracking_mixin.py # Tests for Exercise 4.3.2
-├── exercise4.3.3_db_model_generator.py       # Exercise 4.3.3: Database Model Generator
-├── test_exercise4.3.3_db_model_generator.py  # Tests for Exercise 4.3.3
-├── exercise4.3.4_model_adapter_system.py     # Exercise 4.3.4: Model Adapter System
-├── test_exercise4.3.4_model_adapter_system.py # Tests for Exercise 4.3.4
-├── exercise4.3.5_form_builder.py             # Exercise 4.3.5: Form Builder
-└── README_exercises4.3.md                    # Detailed README for Lesson 4.3 exercises
+├── lesson4_3_1_exercises.py                  # Lesson 4.3.1: User Hierarchy with Inheritance
+├── test_lesson4_3_1_exercises.py             # Tests for Lesson 4.3.1
+├── lesson4_3_2_exercises.py                  # Lesson 4.3.2: Change Tracking Mixin
+├── test_lesson4_3_2_exercises.py             # Tests for Lesson 4.3.2
+├── lesson4_3_3_exercises.py                  # Lesson 4.3.3: Database Model Generator
+├── test_lesson4_3_3_exercises.py             # Tests for Lesson 4.3.3
+├── lesson4_3_4_exercises.py                  # Lesson 4.3.4: Model Adapter System
+├── test_lesson4_3_4_exercises.py             # Tests for Lesson 4.3.4
+├── lesson4_3_5_exercises.py                  # Lesson 4.3.5: Form Builder
+└── README_lesson4_3.md                       # Detailed README for Lesson 4.3 exercises
 ```
 
 ## 🔍 Exercise Descriptions
@@ -78,27 +78,27 @@ exercises/
 
 #### Lesson 4.3: Advanced Model Composition
 
-- **exercise4.3.1_user_hierarchy.py**: User hierarchy with inheritance:
+- **lesson4_3_1_exercises.py**: User hierarchy with inheritance:
   - 👤 Creating a model hierarchy for different types of users
   - 🔄 Implementing type-specific functionality
   - ✅ Adding field validation with field_validator
 
-- **exercise4.3.2_change_tracking_mixin.py**: Change tracking mixin:
+- **lesson4_3_2_exercises.py**: Change tracking mixin:
   - 📝 Implementing a mixin for tracking model changes
   - 🔄 Recording previous and new values of fields
   - 🧩 Adding reversion capabilities
 
-- **exercise4.3.3_db_model_generator.py**: Database model generator:
+- **lesson4_3_3_exercises.py**: Database model generator:
   - 🗃️ Creating Pydantic models from database table schemas
   - 🔄 Mapping database types to Python types
   - 🔒 Generating field constraints
 
-- **exercise4.3.4_model_adapter_system.py**: Model adapter system:
+- **lesson4_3_4_exercises.py**: Model adapter system:
   - 🔄 Converting between API request models, database models, and API response models
   - 🧩 Implementing field mapping and transformation
   - 📊 Creating an adapter registry
 
-- **exercise4.3.5_form_builder.py**: Form builder:
+- **lesson4_3_5_exercises.py**: Form builder:
   - 📋 Generating both Pydantic models and HTML form elements
   - 🔄 Creating field type mapping and constraints
   - ✅ Implementing validator generation
