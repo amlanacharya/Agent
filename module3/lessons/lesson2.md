@@ -1,14 +1,47 @@
-# Lesson 2: Schema Design & Evolution 📋
+# 🚀 Module 3: Data Validation with Pydantic - Lesson 2: Schema Design & Evolution 📋
+
+## 🎯 Lesson Objectives
+
+By the end of this lesson, you will:
+- 🔍 Understand advanced schema design principles for maintainable data models
+- 🧩 Implement complex data structures using nested models and generics
+- 🔄 Apply strategies for evolving schemas over time
+- 📊 Generate and utilize JSON Schema for documentation and validation
+- 🛠️ Build a versioned command system for agent interactions
+
+---
+
+## 📚 Introduction to Schema Design & Evolution
 
 <img src="https://github.com/user-attachments/assets/cb3f2aa6-3859-4007-ac07-5cbc2d93e895" width="50%" height="50%"/>
 
-## 📋 Overview
-
 In this lesson, we'll explore advanced schema design patterns using Pydantic and strategies for evolving schemas over time. Well-designed schemas are crucial for building maintainable agent systems that can adapt to changing requirements.
 
-## 🏗️ Schema Design Principles
+As agent systems grow in complexity, their data models need to evolve while maintaining compatibility with existing data and integrations. Proper schema design and evolution strategies help manage this complexity and ensure your system remains robust over time.
 
-### 1. Single Responsibility Principle
+### Key Concepts
+
+#### Schema Design Principles
+
+Good schema design follows several key principles:
+
+1. **Single Responsibility Principle**: Each model should represent a coherent concept
+2. **Composition Over Inheritance**: Prefer composing models from smaller components
+3. **Progressive Disclosure**: Design schemas to reveal complexity progressively
+4. **Explicit Versioning**: Make schema versions explicit when they change
+
+#### Schema Evolution Strategies
+
+When schemas need to change over time, several strategies can help:
+
+1. **Versioning**: Explicitly version your schemas
+2. **Optional Fields**: Add new fields as optional for backward compatibility
+3. **Deprecation Patterns**: Mark fields as deprecated before removing them
+4. **Migration Utilities**: Create utilities to migrate between schema versions
+
+## 🧩 Schema Design Patterns
+
+### Single Responsibility Principle
 
 Each model should have a single responsibility and represent a coherent concept:
 
@@ -38,7 +71,7 @@ class UserWithPosts(BaseModel):
     posts: List[Post]
 ```
 
-### 2. Composition Over Inheritance
+### Composition Over Inheritance
 
 Prefer composing models from smaller components rather than deep inheritance hierarchies:
 
@@ -61,7 +94,7 @@ class User(BaseModel):
     contact_info: ContactInfo
 ```
 
-### 3. Progressive Disclosure
+### Progressive Disclosure
 
 Design schemas to reveal complexity progressively:
 
@@ -84,7 +117,7 @@ class UserComplete(UserDetailed):
     security_settings: dict
 ```
 
-## 🧩 Advanced Model Patterns
+## 🔄 Advanced Model Patterns
 
 ### Nested Models
 
@@ -123,7 +156,7 @@ class Paginated(BaseModel, Generic[T]):
     total: int
     page: int
     page_size: int
-    
+
     @property
     def total_pages(self) -> int:
         return (self.total + self.page_size - 1) // self.page_size
@@ -140,36 +173,6 @@ user_page = Paginated[User](
     page=1,
     page_size=2
 )
-```
-
-### Union Types
-
-Handle multiple possible types with Union:
-
-```python
-from typing import Union
-
-class TextContent(BaseModel):
-    type: Literal["text"] = "text"
-    text: str
-
-class ImageContent(BaseModel):
-    type: Literal["image"] = "image"
-    url: str
-    caption: Optional[str] = None
-
-class VideoContent(BaseModel):
-    type: Literal["video"] = "video"
-    url: str
-    duration: int  # seconds
-    thumbnail: Optional[str] = None
-
-# A message can contain different types of content
-class Message(BaseModel):
-    id: int
-    sender: str
-    content: Union[TextContent, ImageContent, VideoContent]
-    timestamp: datetime
 ```
 
 ### Discriminated Unions
@@ -207,9 +210,9 @@ def process_pet(pet_data: dict):
         print(f"Parrot: {pet.name}, can speak: {pet.can_speak}")
 ```
 
-## 🔄 Schema Evolution Strategies
+## 📊 Schema Evolution Strategies
 
-### 1. Versioning
+### Versioning
 
 Explicitly version your schemas to manage changes:
 
@@ -224,14 +227,14 @@ class UserV2(BaseModel):
     first_name: str  # Split name into first_name and last_name
     last_name: str
     email: str
-    
+
     # Migration function from V1
     @classmethod
     def from_v1(cls, user_v1: UserV1):
         name_parts = user_v1.name.split(" ", 1)
         first_name = name_parts[0]
         last_name = name_parts[1] if len(name_parts) > 1 else ""
-        
+
         return cls(
             id=user_v1.id,
             first_name=first_name,
@@ -240,7 +243,7 @@ class UserV2(BaseModel):
         )
 ```
 
-### 2. Optional Fields for Backward Compatibility
+### Optional Fields for Backward Compatibility
 
 Add new fields as optional to maintain compatibility:
 
@@ -260,7 +263,7 @@ class Product(BaseModel):
     category: Optional[str] = None  # New field, but optional
 ```
 
-### 3. Deprecation Patterns
+### Deprecation Patterns
 
 Mark fields as deprecated before removing them:
 
@@ -271,127 +274,19 @@ from typing import Optional
 class User(BaseModel):
     id: int
     username: str
-    
+
     # Deprecated field
     email: Optional[str] = Field(
         None,
         deprecated=True,
         description="Deprecated: Use contact_info.email instead"
     )
-    
+
     # New field structure
     contact_info: Optional[dict] = None
 ```
 
-### 4. Migration Utilities
-
-Create utilities to migrate between schema versions:
-
-```python
-class SchemaRegistry:
-    """Registry for schema versions and migrations."""
-    
-    def __init__(self):
-        self.schemas = {}
-        self.migrations = {}
-    
-    def register_schema(self, name: str, version: int, schema_class):
-        """Register a schema version."""
-        key = f"{name}_v{version}"
-        self.schemas[key] = schema_class
-    
-    def register_migration(self, name: str, from_version: int, to_version: int, migration_func):
-        """Register a migration between schema versions."""
-        key = f"{name}_v{from_version}_to_v{to_version}"
-        self.migrations[key] = migration_func
-    
-    def get_schema(self, name: str, version: int):
-        """Get a schema by name and version."""
-        key = f"{name}_v{version}"
-        return self.schemas.get(key)
-    
-    def migrate(self, data, name: str, from_version: int, to_version: int):
-        """Migrate data from one schema version to another."""
-        if from_version == to_version:
-            return data
-            
-        # Direct migration
-        key = f"{name}_v{from_version}_to_v{to_version}"
-        if key in self.migrations:
-            return self.migrations[key](data)
-            
-        # Step-by-step migration
-        current_version = from_version
-        current_data = data
-        
-        while current_version < to_version:
-            next_version = current_version + 1
-            key = f"{name}_v{current_version}_to_v{next_version}"
-            
-            if key not in self.migrations:
-                raise ValueError(f"No migration path from v{current_version} to v{next_version}")
-                
-            current_data = self.migrations[key](current_data)
-            current_version = next_version
-            
-        return current_data
-```
-
-## 🔍 JSON Schema Generation
-
-Pydantic can generate JSON Schema from your models, which is useful for documentation and API integration:
-
-```python
-from pydantic import BaseModel
-from typing import List, Optional
-
-class User(BaseModel):
-    id: int
-    name: str
-    email: str
-    tags: List[str] = []
-    
-# Generate JSON Schema
-schema = User.model_json_schema()
-print(schema)
-```
-
-Example output:
-```json
-{
-  "title": "User",
-  "type": "object",
-  "properties": {
-    "id": {
-      "title": "Id",
-      "type": "integer"
-    },
-    "name": {
-      "title": "Name",
-      "type": "string"
-    },
-    "email": {
-      "title": "Email",
-      "type": "string"
-    },
-    "tags": {
-      "title": "Tags",
-      "default": [],
-      "type": "array",
-      "items": {
-        "type": "string"
-      }
-    }
-  },
-  "required": [
-    "id",
-    "name",
-    "email"
-  ]
-}
-```
-
-## 🧪 Practical Example: Agent Command Schema
+## 🛠️ Putting It All Together: Agent Command Schema
 
 Let's design a schema for agent commands that can evolve over time:
 
@@ -434,24 +329,24 @@ class DeleteTaskV2(Command):
 class CommandRegistry:
     def __init__(self):
         self.command_types = {}
-    
+
     def register(self, version: int, command_type: str, model_class):
         key = f"v{version}_{command_type}"
         self.command_types[key] = model_class
-    
+
     def get_command_class(self, version: int, command_type: str):
         key = f"v{version}_{command_type}"
         return self.command_types.get(key)
-    
+
     def parse_command(self, version: int, data: dict):
         command_type = data.get("command_type")
         if not command_type:
             raise ValueError("Missing command_type in data")
-            
+
         command_class = self.get_command_class(version, command_type)
         if not command_class:
             raise ValueError(f"Unknown command type: {command_type} for version {version}")
-            
+
         return command_class(**data)
 
 # Usage
@@ -484,30 +379,80 @@ v2_command = registry.parse_command(2, v2_data)
 print(v2_command)
 ```
 
-## 🧪 Exercises
+---
 
-1. Design a schema for a blog post that includes nested models for author information, comments, and metadata.
+## 💪 Practice Exercises
 
-2. Create a versioned schema for a user profile that evolves from a simple version to a more complex one with additional fields.
+1. **Design a Blog Post Schema**:
+   - Create a schema for a blog post with nested models for author information, comments, and metadata
+   - Include validation rules for each component
+   - Implement at least one discriminated union (e.g., for different content types)
 
-3. Implement a migration function that can convert data from an older schema version to a newer one.
+2. **Create a Versioned User Profile**:
+   - Design a UserProfileV1 with basic fields
+   - Create a UserProfileV2 with additional fields and modified structure
+   - Implement migration functions between versions
+   - Test with sample data
 
-4. Generate JSON Schema for your models and analyze the output.
+3. **Build a Schema Registry**:
+   - Implement a registry system that can store and retrieve different schema versions
+   - Add migration functions between versions
+   - Create a function that can automatically upgrade data from any version to the latest
 
-## 🔍 Key Takeaways
+4. **Generate and Analyze JSON Schema**:
+   - Generate JSON Schema for your models
+   - Analyze the output and identify how different Pydantic features are represented
+   - Create documentation based on the generated schema
 
-- Well-designed schemas follow principles like single responsibility and composition
-- Nested models, generics, and unions enable complex data modeling
-- Schema evolution requires strategies like versioning and migration utilities
-- JSON Schema generation provides documentation and integration capabilities
-- Properly designed schemas make agent systems more maintainable and adaptable
+---
 
-## 📚 Additional Resources
+## 🔍 Key Concepts to Remember
+
+1. **Single Responsibility**: Each model should represent a coherent concept
+2. **Composition**: Prefer composing models from smaller components over deep inheritance
+3. **Versioning**: Explicitly version your schemas when they change significantly
+4. **Backward Compatibility**: Use optional fields and deprecation patterns for smooth transitions
+5. **Migration Utilities**: Create tools to convert between schema versions
+
+---
+
+## 🚀 Next Steps
+
+In the next lesson, we'll explore:
+- Structured output parsing techniques for LLMs
+- Extracting structured data from natural language responses
+- Handling parsing errors and edge cases
+- Building robust parsers for different output formats
+- Integrating parsers with agent systems
+
+---
+
+## 📚 Resources
 
 - [Pydantic Models Documentation](https://docs.pydantic.dev/latest/usage/models/)
 - [JSON Schema Specification](https://json-schema.org/)
 - [API Evolution Best Practices](https://www.mnot.net/blog/2012/12/04/api-evolution)
+- [Type Hints with Generics](https://mypy.readthedocs.io/en/stable/generics.html)
 
-## 🚀 Next Steps
+---
 
-In the next lesson, we'll explore structured output parsing techniques for LLMs, including how to reliably extract structured data from natural language responses.
+## 🎯 Mini-Project Progress: Data Validation System
+
+In this lesson, we've made progress on our data validation system by:
+- Learning how to design complex, nested data models
+- Implementing versioning strategies for evolving schemas
+- Creating a command registry system for handling different command versions
+- Building migration utilities between schema versions
+
+In the next lesson, we'll continue by:
+- Adding structured output parsing capabilities
+- Integrating our validation system with LLM outputs
+- Handling parsing errors and edge cases
+
+---
+
+> 💡 **Note on LLM Integration**: This lesson focuses on schema design and evolution, which applies to both simulated and real LLM-based systems. The command registry pattern is particularly useful when working with LLMs, as it allows for robust handling of different command formats that might be generated.
+
+---
+
+Happy coding! 🚀
