@@ -1,0 +1,49 @@
+{
+  "backup_id": "backup_1745674156_822",
+  "timestamp": "2025-04-26T18:59:16.822953",
+  "conversation_id": "complex-demo",
+  "state_data": {
+    "state": "processing",
+    "state_history": [
+      {
+        "from_state": "init",
+        "to_state": "greeting",
+        "timestamp": "2025-04-26T18:59:16.808958",
+        "reason": null,
+        "metadata": {}
+      },
+      {
+        "from_state": "greeting",
+        "to_state": "collecting_info",
+        "timestamp": "2025-04-26T18:59:16.822953",
+        "reason": "User asked about weather",
+        "metadata": {}
+      },
+      {
+        "from_state": "collecting_info",
+        "to_state": "collecting_info",
+        "timestamp": "2025-04-26T18:59:16.822953",
+        "reason": "Collecting location",
+        "metadata": {}
+      },
+      {
+        "from_state": "collecting_info",
+        "to_state": "processing",
+        "timestamp": "2025-04-26T18:59:16.822953",
+        "reason": "Processing weather query",
+        "metadata": {}
+      }
+    ],
+    "context_data": {
+      "query_type": "weather",
+      "location": "New York"
+    },
+    "last_state_change": "2025-04-26T18:59:16.822953",
+    "conversation_id": "complex-demo",
+    "user_id": null
+  },
+  "metadata": {
+    "type": "automatic",
+    "transition_count": 3
+  }
+}

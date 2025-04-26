@@ -1,0 +1,24 @@
+{
+  "backup_id": "backup_1745674156_809",
+  "timestamp": "2025-04-26T18:59:16.809952",
+  "conversation_id": "complex-demo",
+  "state_data": {
+    "state": "greeting",
+    "state_history": [
+      {
+        "from_state": "init",
+        "to_state": "greeting",
+        "timestamp": "2025-04-26T18:59:16.808958",
+        "reason": null,
+        "metadata": {}
+      }
+    ],
+    "context_data": {},
+    "last_state_change": "2025-04-26T18:59:16.808958",
+    "conversation_id": "complex-demo",
+    "user_id": null
+  },
+  "metadata": {
+    "type": "initial"
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "backup_id": "backup_1745674156_838",
+  "timestamp": "2025-04-26T18:59:16.838952",
+  "conversation_id": "complex-demo",
+  "state_data": {
+    "state": "ending",
+    "state_history": [
+      {
+        "from_state": "init",
+        "to_state": "greeting",
+        "timestamp": "2025-04-26T18:59:16.808958",
+        "reason": null,
+        "metadata": {}
+      },
+      {
+        "from_state": "greeting",
+        "to_state": "collecting_info",
+        "timestamp": "2025-04-26T18:59:16.822953",
+        "reason": "User asked about weather",
+        "metadata": {}
+      },
+      {
+        "from_state": "collecting_info",
+        "to_state": "collecting_info",
+        "timestamp": "2025-04-26T18:59:16.822953",
+        "reason": "Collecting location",
+        "metadata": {}
+      },
+      {
+        "from_state": "collecting_info",
+        "to_state": "processing",
+        "timestamp": "2025-04-26T18:59:16.822953",
+        "reason": "Processing weather query",
+        "metadata": {}
+      },
+      {
+        "from_state": "processing",
+        "to_state": "providing_results",
+        "timestamp": "2025-04-26T18:59:16.835959",
+        "reason": "Providing weather results",
+        "metadata": {}
+      },
+      {
+        "from_state": "providing_results",
+        "to_state": "follow_up",
+        "timestamp": "2025-04-26T18:59:16.838952",
+        "reason": "User asked follow-up",
+        "metadata": {}
+      },
+      {
+        "from_state": "follow_up",
+        "to_state": "ending",
+        "timestamp": "2025-04-26T18:59:16.838952",
+        "reason": "User ended conversation",
+        "metadata": {}
+      }
+    ],
+    "context_data": {
+      "query_type": "weather",
+      "location": "New York",
+      "weather_data": {
+        "temperature": 72,
+        "condition": "Partly Cloudy"
+      }
+    },
+    "last_state_change": "2025-04-26T18:59:16.838952",
+    "conversation_id": "complex-demo",
+    "user_id": null
+  },
+  "metadata": {
+    "type": "automatic",
+    "transition_count": 6
+  }
+}
