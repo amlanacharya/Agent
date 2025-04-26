@@ -8,7 +8,7 @@ import unittest
 from datetime import datetime, timedelta
 from pydantic import ValidationError
 
-from module3.exercises.lesson4_3_1_exercises import (
+from lesson4_3_1_exercises import (
     BaseUser,
     GuestUser,
     RegisteredUser,
@@ -18,7 +18,7 @@ from module3.exercises.lesson4_3_1_exercises import (
 
 class TestUserHierarchy(unittest.TestCase):
     """Test cases for the user hierarchy implementation."""
-    
+
     def test_base_user(self):
         """Test the BaseUser model."""
         # Valid base user
@@ -28,21 +28,21 @@ class TestUserHierarchy(unittest.TestCase):
         )
         self.assertIsNotNone(user.id)
         self.assertEqual(user.ip_address, "192.168.1.1")
-        
+
         # Invalid IP address
         with self.assertRaises(ValidationError):
             BaseUser(
                 ip_address="invalid_ip",
                 user_agent="Mozilla/5.0"
             )
-        
+
         # Invalid IP address with octets out of range
         with self.assertRaises(ValidationError):
             BaseUser(
                 ip_address="192.168.1.300",
                 user_agent="Mozilla/5.0"
             )
-    
+
     def test_guest_user(self):
         """Test the GuestUser model."""
         # Valid guest user
@@ -52,13 +52,13 @@ class TestUserHierarchy(unittest.TestCase):
             session_id="sess_12345"
         )
         self.assertEqual(guest.visit_count, 1)
-        
+
         # Test increment_visit method
         original_time = guest.last_active
         guest.increment_visit()
         self.assertEqual(guest.visit_count, 2)
         self.assertGreaterEqual(guest.last_active, original_time)
-    
+
     def test_registered_user(self):
         """Test the RegisteredUser model."""
         # Valid registered user
@@ -71,7 +71,7 @@ class TestUserHierarchy(unittest.TestCase):
         self.assertEqual(user.username, "johndoe")
         self.assertEqual(user.email, "john@example.com")
         self.assertTrue(user.is_active)
-        
+
         # Invalid username
         with self.assertRaises(ValidationError):
             RegisteredUser(
@@ -80,7 +80,7 @@ class TestUserHierarchy(unittest.TestCase):
                 username="j",  # Too short
                 email="john@example.com"
             )
-        
+
         # Invalid email
         with self.assertRaises(ValidationError):
             RegisteredUser(
@@ -89,13 +89,13 @@ class TestUserHierarchy(unittest.TestCase):
                 username="johndoe",
                 email="invalid-email"
             )
-        
+
         # Test update_login method
         original_login = user.last_login
         # Wait a tiny bit to ensure time difference
         user.update_login()
         self.assertGreaterEqual(user.last_login, original_login)
-    
+
     def test_admin_user(self):
         """Test the AdminUser model."""
         # Valid admin user
@@ -110,7 +110,7 @@ class TestUserHierarchy(unittest.TestCase):
         self.assertEqual(admin.admin_level, 2)
         self.assertEqual(admin.permissions, ["manage_users"])
         self.assertFalse(admin.is_super_admin)
-        
+
         # Invalid admin level
         with self.assertRaises(ValidationError):
             AdminUser(
@@ -120,20 +120,20 @@ class TestUserHierarchy(unittest.TestCase):
                 email="admin@example.com",
                 admin_level=5  # Out of range
             )
-        
+
         # Test grant_permission method
         admin.grant_permission("edit_content")
         self.assertIn("edit_content", admin.permissions)
         # Granting the same permission again shouldn't duplicate it
         admin.grant_permission("edit_content")
         self.assertEqual(admin.permissions.count("edit_content"), 1)
-        
+
         # Test revoke_permission method
         admin.revoke_permission("manage_users")
         self.assertNotIn("manage_users", admin.permissions)
         # Revoking a non-existent permission should not raise an error
         admin.revoke_permission("non_existent")
-        
+
         # Test promote method
         admin.promote()
         self.assertEqual(admin.admin_level, 3)
@@ -141,7 +141,7 @@ class TestUserHierarchy(unittest.TestCase):
         # Cannot promote beyond level 3
         admin.promote()
         self.assertEqual(admin.admin_level, 3)
-        
+
         # Test demote method
         admin.demote()
         self.assertEqual(admin.admin_level, 2)

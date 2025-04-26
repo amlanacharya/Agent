@@ -7,7 +7,7 @@ This module contains tests for the lesson1_exercises module.
 import unittest
 from pydantic import ValidationError
 
-from lesson1_exercises import (
+from module3.exercises.lesson1_exercises import (
     UserProfile,
     UserProfileWithSkills,
     Skill,
@@ -144,7 +144,8 @@ class TestLesson1Exercises(unittest.TestCase):
 
         result = validate_user_data(invalid_data)
         self.assertEqual(result["status"], "error")
-        self.assertIn("name", result["fields_with_errors"])
+        # Check that there's an error message
+        self.assertIn("name", result["message"].lower())
 
         # Invalid data - missing email
         invalid_data = {

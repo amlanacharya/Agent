@@ -30,14 +30,20 @@ module3/
 │   └── test_form_assistant.py # Tests for the form assistant
 ├── exercises/                # Practice exercises and solutions
 │   ├── README.md             # Exercises directory documentation
-│   ├── pydantic_exercises.py # Solutions for lesson 1 exercises
-│   ├── test_pydantic_exercises.py # Tests for lesson 1 solutions
-│   ├── schema_exercises.py   # Solutions for lesson 2 exercises
-│   ├── test_schema_exercises.py # Tests for lesson 2 solutions
-│   ├── parsing_exercises.py  # Solutions for lesson 3 exercises
-│   ├── test_parsing_exercises.py # Tests for lesson 3 solutions
-│   ├── validation_exercises.py # Solutions for lesson 4 exercises
-│   └── test_validation_exercises.py # Tests for lesson 4 solutions
+│   ├── lesson1_exercises.py  # Solutions for lesson 1 exercises (Pydantic Fundamentals)
+│   ├── test_lesson1_exercises.py # Tests for lesson 1 solutions
+│   ├── demo_lesson1_exercises.py # Demo for lesson 1 exercises
+│   ├── lesson2_exercises.py  # Solutions for lesson 2 exercises (Schema Design)
+│   ├── test_lesson2_exercises.py # Tests for lesson 2 solutions
+│   ├── lesson3_exercises.py  # Solutions for lesson 3 exercises (Output Parsing)
+│   ├── test_lesson3_exercises.py # Tests for lesson 3 solutions
+│   ├── lesson4_1_exercises.py # Solutions for lesson 4.1 exercises (Cross-Field Validation)
+│   ├── test_lesson4_1_exercises.py # Tests for lesson 4.1 solutions
+│   ├── lesson4_2_exercises.py # Solutions for lesson 4.2 exercises (Error Handling)
+│   ├── test_lesson4_2_exercises.py # Tests for lesson 4.2 solutions
+│   ├── lesson4_3_1_exercises.py # Solutions for lesson 4.3.1 exercises (User Hierarchy)
+│   ├── test_lesson4_3_1_exercises.py # Tests for lesson 4.3.1 solutions
+│   └── ... # Additional lesson 4.3.x exercise files
 ├── demo_pydantic_features.py # Interactive demonstration for all Pydantic features
 ├── demo_pydantic_basics.py   # Demo for Pydantic basics
 ├── demo_schema_design.py     # Demo for schema design patterns
@@ -76,6 +82,19 @@ By the end of this module, you will:
    python module3/code/test_output_parsing.py
    python module3/code/test_model_composition.py
    python module3/code/test_form_assistant.py
+   ```
+
+   You can also run the exercise tests:
+   ```
+   python module3/exercises/test_lesson1_exercises.py
+   python module3/exercises/test_lesson2_exercises.py
+   python module3/exercises/test_lesson3_exercises.py
+   python module3/exercises/test_lesson4_1_exercises.py
+   python module3/exercises/test_lesson4_2_exercises.py
+   python module3/exercises/test_lesson4_3_1_exercises.py
+   python module3/exercises/test_lesson4_3_2_exercises.py
+   python module3/exercises/test_lesson4_3_3_exercises.py
+   python module3/exercises/test_lesson4_3_4_exercises.py
    ```
 
 4. Try the interactive demos by running:

@@ -8,72 +8,34 @@ from module1.code.prompt_template import PromptTemplate, PromptLibrary
 
 class TaskParserExercise:
     """Solution for Exercise 1: Create a Task Parser Template"""
-    
+
     def __init__(self):
-        # Create a task parser template with examples
-        self.task_parser = PromptTemplate.from_examples(
-            instructions="Extract detailed task information from the user input. Return a JSON object with all relevant fields.",
-            examples=[
-                {
-                    "input": "I need to call John tomorrow at 3pm about the project proposal",
-                    "output": """
-                    {
-                        "action": "call",
-                        "person": "John",
-                        "date": "tomorrow",
-                        "time": "3pm",
-                        "topic": "project proposal",
-                        "priority": "medium"
-                    }
-                    """
-                },
-                {
-                    "input": "Remind me to buy groceries on Friday: milk, eggs, and bread",
-                    "output": """
-                    {
-                        "action": "buy",
-                        "items": ["milk", "eggs", "bread"],
-                        "category": "groceries",
-                        "date": "Friday",
-                        "priority": "medium"
-                    }
-                    """
-                },
-                {
-                    "input": "Schedule an urgent meeting with the marketing team next Monday at 10am in the conference room",
-                    "output": """
-                    {
-                        "action": "schedule",
-                        "event_type": "meeting",
-                        "participants": "marketing team",
-                        "date": "next Monday",
-                        "time": "10am",
-                        "location": "conference room",
-                        "priority": "high"
-                    }
-                    """
-                },
-                {
-                    "input": "I need to submit the quarterly report by the end of the month",
-                    "output": """
-                    {
-                        "action": "submit",
-                        "document": "quarterly report",
-                        "deadline": "end of the month",
-                        "priority": "high"
-                    }
-                    """
-                }
-            ]
+        # Create a task parser template
+        self.task_parser = PromptTemplate(
+            "Extract detailed task information from the user input. Return a JSON object with all relevant fields.\n\n"
+            "Example 1:\n"
+            "Input: I need to call John tomorrow at 3pm about the project proposal\n"
+            "Output: {'action': 'call', 'person': 'John', 'date': 'tomorrow', 'time': '3pm', 'topic': 'project proposal', 'priority': 'medium'}\n\n"
+            "Example 2:\n"
+            "Input: Remind me to buy groceries on Friday: milk, eggs, and bread\n"
+            "Output: {'action': 'buy', 'items': ['milk', 'eggs', 'bread'], 'category': 'groceries', 'date': 'Friday', 'priority': 'medium'}\n\n"
+            "Example 3:\n"
+            "Input: Schedule an urgent meeting with the marketing team next Monday at 10am in the conference room\n"
+            "Output: {'action': 'schedule', 'event_type': 'meeting', 'participants': 'marketing team', 'date': 'next Monday', 'time': '10am', 'location': 'conference room', 'priority': 'high'}\n\n"
+            "Example 4:\n"
+            "Input: I need to submit the quarterly report by the end of the month\n"
+            "Output: {'action': 'submit', 'document': 'quarterly report', 'deadline': 'end of the month', 'priority': 'high'}\n\n"
+            "Input: {input}\n"
+            "Output:"
         )
-    
+
     def parse_task(self, user_input):
         """
         Generate a prompt for task parsing
-        
+
         Args:
             user_input (str): The user's task description
-            
+
         Returns:
             str: The formatted prompt ready to be sent to an LLM
         """
@@ -82,7 +44,7 @@ class TaskParserExercise:
 
 class RoleBasedPromptsExercise:
     """Solution for Exercise 2: Implement Role-Based Prompts"""
-    
+
     def __init__(self):
         self.roles = {
             "professional": {
@@ -110,7 +72,7 @@ class RoleBasedPromptsExercise:
                 ]
             }
         }
-        
+
         # Create role-based templates
         self.role_templates = {}
         for role_name, role_data in self.roles.items():
@@ -123,30 +85,30 @@ class RoleBasedPromptsExercise:
                 f"User request: {{user_request}}\n\n"
                 f"Respond to the user in your {role_name} style:"
             )
-    
+
     def get_role_prompt(self, role_name, user_request):
         """
         Get a prompt for a specific role
-        
+
         Args:
             role_name (str): The name of the role to use
             user_request (str): The user's request
-            
+
         Returns:
             str: The formatted prompt
-            
+
         Raises:
             ValueError: If the role doesn't exist
         """
         if role_name not in self.role_templates:
             raise ValueError(f"Role '{role_name}' not found. Available roles: {', '.join(self.role_templates.keys())}")
-        
+
         return self.role_templates[role_name].format(user_request=user_request)
 
 
 class ChainOfThoughtExercise:
     """Solution for Exercise 3: Chain-of-Thought Implementation"""
-    
+
     def __init__(self):
         self.cot_template = PromptTemplate(
             "# Task Planning\n\n"
@@ -166,7 +128,7 @@ class ChainOfThoughtExercise:
             "## Step-by-Step Plan\n"
             "Based on the thinking process above, create a detailed plan with numbered steps, estimated time for each step, and any resources needed."
         )
-        
+
         self.project_template = PromptTemplate(
             "# Project Planning: {project_name}\n\n"
             "## Project Overview\n"
@@ -187,15 +149,15 @@ class ChainOfThoughtExercise:
             "## Detailed Project Plan\n"
             "Based on the thinking process above, create a comprehensive project plan with phases, tasks, timeline, resource allocation, and risk mitigation strategies."
         )
-    
+
     def generate_task_plan(self, objective, task_description):
         """
         Generate a chain-of-thought prompt for task planning
-        
+
         Args:
             objective (str): The main objective of the task
             task_description (str): Detailed description of the task
-            
+
         Returns:
             str: The formatted prompt
         """
@@ -203,18 +165,18 @@ class ChainOfThoughtExercise:
             objective=objective,
             task_description=task_description
         )
-    
+
     def generate_project_plan(self, project_name, project_description, deadline, budget, team_size):
         """
         Generate a chain-of-thought prompt for project planning
-        
+
         Args:
             project_name (str): The name of the project
             project_description (str): Description of the project
             deadline (str): Project deadline
             budget (str): Project budget
             team_size (str): Size of the team
-            
+
         Returns:
             str: The formatted prompt
         """
@@ -234,7 +196,7 @@ if __name__ == "__main__":
     prompt = task_parser.parse_task("I need to prepare for the client presentation next Thursday at 2pm and gather all the sales data")
     print(prompt)
     print("\n" + "-" * 50 + "\n")
-    
+
     print("=== Role-Based Prompts Exercise ===")
     role_prompts = RoleBasedPromptsExercise()
     for role in ["professional", "friendly", "technical"]:
@@ -243,7 +205,7 @@ if __name__ == "__main__":
         print(prompt)
         print()
     print("-" * 50 + "\n")
-    
+
     print("=== Chain-of-Thought Exercise ===")
     cot = ChainOfThoughtExercise()
     task_prompt = cot.generate_task_plan(

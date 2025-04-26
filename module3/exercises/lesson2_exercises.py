@@ -55,7 +55,7 @@ class Comment(BaseModel):
     created_at: datetime = Field(default_factory=datetime.now)
     updated_at: Optional[datetime] = None
     parent_id: Optional[int] = None  # For nested comments
-    
+
     @field_validator('content')
     def content_not_empty(cls, v):
         """Validate that content is not empty."""
@@ -104,15 +104,12 @@ class BlogPost(BaseModel):
     tags: List[Tag] = []
     comments: List[Comment] = []
     metadata: PostMetadata = Field(default_factory=PostMetadata)
-    
-    @field_validator('excerpt')
-    def generate_excerpt_if_missing(cls, v, info):
+
+    def model_post_init(self, __context):
         """Generate excerpt from content if not provided."""
-        if v is None and 'content' in info.data:
-            content = info.data['content']
+        if self.excerpt is None:
             # Generate a simple excerpt (first 150 chars)
-            return content[:150] + "..." if len(content) > 150 else content
-        return v
+            self.excerpt = self.content[:150] + "..." if len(self.content) > 150 else self.content
 
 
 # Exercise 2: Create a versioned schema for a user profile that evolves
@@ -162,15 +159,15 @@ class UserProfileV2(BaseModel):
     preferences: Dict[str, Any] = {}
     created_at: datetime
     updated_at: Optional[datetime] = None
-    
+
     @classmethod
     def from_v1(cls, profile_v1: UserProfileV1):
         """
         Migrate from UserProfileV1 to UserProfileV2.
-        
+
         Args:
             profile_v1: UserProfileV1 instance
-            
+
         Returns:
             UserProfileV2 instance
         """
@@ -178,7 +175,7 @@ class UserProfileV2(BaseModel):
         name_parts = profile_v1.name.split(" ", 1)
         first_name = name_parts[0]
         last_name = name_parts[1] if len(name_parts) > 1 else ""
-        
+
         return cls(
             id=profile_v1.id,
             username=profile_v1.username,
@@ -218,21 +215,21 @@ class UserProfileV3(BaseModel):
     last_login: Optional[datetime] = None
     created_at: datetime
     updated_at: Optional[datetime] = None
-    
+
     @classmethod
     def from_v2(cls, profile_v2: UserProfileV2):
         """
         Migrate from UserProfileV2 to UserProfileV3.
-        
+
         Args:
             profile_v2: UserProfileV2 instance
-            
+
         Returns:
             UserProfileV3 instance
         """
         # Create settings from preferences
         settings = UserSettings()
-        
+
         # Extract known settings from preferences
         if "theme" in profile_v2.preferences:
             settings.theme = profile_v2.preferences["theme"]
@@ -240,7 +237,7 @@ class UserProfileV3(BaseModel):
             settings.email_notifications = profile_v2.preferences["email_notifications"]
         if "language" in profile_v2.preferences:
             settings.language = profile_v2.preferences["language"]
-        
+
         return cls(
             id=profile_v2.id,
             username=profile_v2.username,
@@ -264,26 +261,26 @@ class UserProfileV3(BaseModel):
 
 class SchemaEvolution:
     """Utility for schema evolution and migration."""
-    
+
     @staticmethod
     def migrate_user_profile_v1_to_v2(data: dict) -> dict:
         """
         Migrate user profile data from v1 to v2 format.
-        
+
         Args:
             data: Dictionary with v1 user profile data
-            
+
         Returns:
             Dictionary with v2 user profile data
         """
         # Validate input data against v1 schema
         profile_v1 = UserProfileV1(**data)
-        
+
         # Split name into first_name and last_name
         name_parts = profile_v1.name.split(" ", 1)
         first_name = name_parts[0]
         last_name = name_parts[1] if len(name_parts) > 1 else ""
-        
+
         # Create v2 data
         profile_v2_data = {
             "id": profile_v1.id,
@@ -299,23 +296,23 @@ class SchemaEvolution:
             "social_media": {},
             "preferences": {}
         }
-        
+
         return profile_v2_data
-    
+
     @staticmethod
     def migrate_user_profile_v2_to_v3(data: dict) -> dict:
         """
         Migrate user profile data from v2 to v3 format.
-        
+
         Args:
             data: Dictionary with v2 user profile data
-            
+
         Returns:
             Dictionary with v3 user profile data
         """
         # Validate input data against v2 schema
         profile_v2 = UserProfileV2(**data)
-        
+
         # Create settings from preferences
         settings = {
             "theme": "light",
@@ -324,7 +321,7 @@ class SchemaEvolution:
             "language": "en",
             "timezone": "UTC"
         }
-        
+
         # Extract known settings from preferences
         if "theme" in profile_v2.preferences:
             settings["theme"] = profile_v2.preferences["theme"]
@@ -332,7 +329,7 @@ class SchemaEvolution:
             settings["email_notifications"] = profile_v2.preferences["email_notifications"]
         if "language" in profile_v2.preferences:
             settings["language"] = profile_v2.preferences["language"]
-        
+
         # Create v3 data
         profile_v3_data = {
             "id": profile_v2.id,
@@ -352,39 +349,39 @@ class SchemaEvolution:
             "created_at": profile_v2.created_at,
             "updated_at": profile_v2.updated_at
         }
-        
+
         return profile_v3_data
-    
+
     @staticmethod
     def migrate_user_profile(data: dict, from_version: int, to_version: int) -> dict:
         """
         Migrate user profile data between versions.
-        
+
         Args:
             data: Dictionary with user profile data
             from_version: Source version (1, 2, or 3)
             to_version: Target version (1, 2, or 3)
-            
+
         Returns:
             Dictionary with migrated user profile data
         """
         if from_version == to_version:
             return data
-        
+
         if from_version > to_version:
             raise ValueError("Cannot downgrade schema version")
-        
+
         if from_version == 1 and to_version == 2:
             return SchemaEvolution.migrate_user_profile_v1_to_v2(data)
-        
+
         if from_version == 2 and to_version == 3:
             return SchemaEvolution.migrate_user_profile_v2_to_v3(data)
-        
+
         if from_version == 1 and to_version == 3:
             # Two-step migration
             v2_data = SchemaEvolution.migrate_user_profile_v1_to_v2(data)
             return SchemaEvolution.migrate_user_profile_v2_to_v3(v2_data)
-        
+
         raise ValueError(f"Unsupported migration from v{from_version} to v{to_version}")
 
 
@@ -392,7 +389,7 @@ class SchemaEvolution:
 
 class ConfigModel(BaseModel):
     """Model with custom configuration for JSON Schema generation."""
-    
+
     id: int
     name: str
     description: Optional[str] = Field(
@@ -409,7 +406,7 @@ class ConfigModel(BaseModel):
         default_factory=datetime.now,
         description="When the item was created"
     )
-    
+
     class Config:
         """Configuration for the model."""
         title = "Configured Item"
@@ -429,24 +426,24 @@ class ConfigModel(BaseModel):
 
 class NestedModel(BaseModel):
     """Complex nested model for JSON Schema generation."""
-    
+
     class Status(str, Enum):
         """Status enum for the nested model."""
         ACTIVE = "active"
         INACTIVE = "inactive"
         PENDING = "pending"
-    
+
     class Location(BaseModel):
         """Location submodel."""
         latitude: float
         longitude: float
         name: Optional[str] = None
-    
+
     class Contact(BaseModel):
         """Contact submodel."""
         email: str
         phone: Optional[str] = None
-    
+
     id: int
     name: str
     status: Status = Status.ACTIVE
@@ -460,10 +457,10 @@ class NestedModel(BaseModel):
 def generate_json_schema(model_class):
     """
     Generate JSON schema for a model class.
-    
+
     Args:
         model_class: Pydantic model class
-        
+
     Returns:
         JSON schema as a dictionary
     """
@@ -482,16 +479,16 @@ if __name__ == "__main__":
             avatar_url="https://example.com/avatar.jpg"
         )
     )
-    
+
     tag1 = Tag(id=1, name="Python", slug="python")
     tag2 = Tag(id=2, name="Pydantic", slug="pydantic")
-    
+
     comment = Comment(
         id=1,
         author=CommentAuthor(id=2, username="janedoe", avatar_url="https://example.com/jane.jpg"),
         content="Great post!"
     )
-    
+
     post = BlogPost(
         id=1,
         title="Advanced Pydantic Features",
@@ -503,11 +500,11 @@ if __name__ == "__main__":
         status=PostStatus.PUBLISHED,
         published_at=datetime.now()
     )
-    
+
     print(f"Blog Post: {post.title} by {post.author.profile.display_name}")
     print(f"Tags: {[tag.name for tag in post.tags]}")
     print(f"Comments: {len(post.comments)}")
-    
+
     # Demonstrate schema evolution
     profile_v1_data = {
         "id": 1,
@@ -517,16 +514,16 @@ if __name__ == "__main__":
         "bio": "Tech enthusiast",
         "created_at": datetime.now()
     }
-    
+
     profile_v2_data = SchemaEvolution.migrate_user_profile_v1_to_v2(profile_v1_data)
     profile_v3_data = SchemaEvolution.migrate_user_profile_v2_to_v3(profile_v2_data)
-    
+
     print(f"\nMigrated from v1 to v2: {profile_v2_data}")
     print(f"Migrated from v2 to v3: {profile_v3_data}")
-    
+
     # Demonstrate JSON Schema generation
     config_schema = generate_json_schema(ConfigModel)
     nested_schema = generate_json_schema(NestedModel)
-    
+
     print(f"\nConfigModel JSON Schema: {config_schema}")
     print(f"NestedModel JSON Schema: {nested_schema}")

@@ -32,7 +32,7 @@ class UserProfile(BaseModel):
     email: str
     age: Optional[int] = Field(None, ge=13, lt=120)
     bio: Optional[str] = Field(None, max_length=500)
-    
+
     @field_validator('email')
     def validate_email(cls, v):
         """
@@ -50,7 +50,7 @@ class UserProfileWithSkills(UserProfile):
     """
     skills: List[Skill] = []
     years_experience: Optional[int] = Field(None, ge=0)
-    
+
     @field_validator('skills')
     def validate_skills(cls, skills):
         """Validate that skill names are unique."""
@@ -64,10 +64,10 @@ def validate_user_data(user_data: Dict[str, Any]) -> Dict[str, Any]:
     """
     Exercise 4: Create a function that takes a dictionary of user data,
     validates it against your model, and handles any validation errors gracefully.
-    
+
     Args:
         user_data: Dictionary containing user profile data
-        
+
     Returns:
         Dictionary with validation result and either the validated data or error messages
     """
@@ -100,38 +100,67 @@ def validate_user_data(user_data: Dict[str, Any]) -> Dict[str, Any]:
 def _extract_error_fields(error_message: str) -> List[str]:
     """
     Extract field names from a Pydantic validation error message.
-    
+
     Args:
         error_message: The error message string
-        
+
     Returns:
         List of field names that had validation errors
     """
     # This is a simple implementation - in a real application,
     # you would parse the ValidationError object directly
     fields = []
-    
+
     # Common patterns in error messages
     if "validation error for" in error_message.lower():
         # Extract field name after "validation error for"
         parts = error_message.split("validation error for ")
         if len(parts) > 1:
-            field_part = parts[1].split(" ")[0]
+            field_part = parts[1].split("\n")[0]  # Get everything up to the newline
+            # Extract just the field name without the model name
+            if field_part.strip().endswith(':'):
+                field_part = field_part.strip()[:-1]  # Remove the colon
+
+            # If it contains a model name, extract just the field
+            if '\n' in field_part:
+                field_part = field_part.split('\n')[0]
+
+            # Clean up any remaining model name
+            if ' ' in field_part:
+                field_part = field_part.split(' ')[-1]
+
             fields.append(field_part.strip())
-    
+
     # Look for field names in brackets
     import re
     bracket_fields = re.findall(r'\[\'([^\']+)\'\]', error_message)
     fields.extend(bracket_fields)
-    
+
     # If we couldn't extract specific fields, check for common field names
     if not fields:
         common_fields = ["name", "email", "age", "bio", "skills", "proficiency"]
         for field in common_fields:
             if field in error_message.lower():
                 fields.append(field)
-    
-    return list(set(fields))  # Remove duplicates
+
+    # Clean up field names - remove any model prefixes
+    cleaned_fields = []
+    for field in fields:
+        if '\n' in field:
+            parts = field.split('\n')
+            cleaned_fields.append(parts[-1])
+        else:
+            cleaned_fields.append(field)
+
+    # Further clean up to handle "UserProfile\nname" format
+    final_fields = []
+    for field in cleaned_fields:
+        if '\\n' in field:
+            final_fields.append(field.split('\\n')[-1])
+        else:
+            final_fields.append(field)
+
+    return list(set(final_fields))  # Remove duplicates
 
 
 if __name__ == "__main__":
@@ -146,7 +175,7 @@ if __name__ == "__main__":
         print(f"Valid user profile: {user}")
     except Exception as e:
         print(f"Validation error: {e}")
-    
+
     # Test the UserProfileWithSkills model
     try:
         user_with_skills = UserProfileWithSkills(
@@ -164,7 +193,7 @@ if __name__ == "__main__":
         print(f"Valid user profile with skills: {user_with_skills}")
     except Exception as e:
         print(f"Validation error: {e}")
-    
+
     # Test the validate_user_data function
     valid_data = {
         "name": "Alice Johnson",
@@ -172,10 +201,10 @@ if __name__ == "__main__":
         "age": 35,
         "bio": "Data scientist and machine learning enthusiast."
     }
-    
+
     result = validate_user_data(valid_data)
     print(f"Validation result for valid data: {result}")
-    
+
     # Test with invalid data
     invalid_data = {
         "name": "B",  # Too short
@@ -186,6 +215,6 @@ if __name__ == "__main__":
             {"name": "python", "proficiency": "beginner"}  # Duplicate skill name
         ]
     }
-    
+
     result = validate_user_data(invalid_data)
     print(f"Validation result for invalid data: {result}")
