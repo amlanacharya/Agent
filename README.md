@@ -6,7 +6,7 @@
 
 ## 📋 Overview
 
-This structured learning path breaks down the journey to mastering agentic AI. Each module follows a consistent pattern:
+My structured learning path breaks down the journey to mastering agentic AI. Each module follows a consistent pattern:
 - Clear learning objectives
 - Implementation tasks with deliverables
 - Recommended tools and technologies
