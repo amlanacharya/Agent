@@ -1,6 +1,4 @@
-# 🚀 Module 1: Agent Fundamentals - Lesson 4 📋
-
-![Task Manager](https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy.gif)
+# 🚀 Module 1: Agent Fundamentals - Lesson 4: Building a Complete Agent 📋
 
 ## 🎯 Lesson Objectives
 
@@ -13,8 +11,6 @@ By the end of this lesson, you will:
 ---
 
 ## 📚 Introduction to the Mini-Project
-
-![Project Planning](https://media.giphy.com/media/3o7btNa0RUYa5E7iiQ/giphy.gif)
 
 In this final lesson of Module 1, we'll bring together everything we've learned to build a complete Personal Task Manager agent. This project will demonstrate how the core concepts of agent development work together in a real-world application.
 
@@ -625,9 +621,26 @@ With these implementations, we now have a complete TaskManagerAgent that can han
 
 ---
 
-## 🧪 Testing Our Task Manager
+## 💪 Practice Exercises
 
-![Testing](https://media.giphy.com/media/3o7btNa0RUYa5E7iiQ/giphy.gif)
+1. **Extend the Task Manager**:
+   - Add support for recurring tasks (daily, weekly, monthly)
+   - Implement a notification system for upcoming deadlines
+   - Create a visualization component for task distribution
+
+2. **Improve Natural Language Processing**:
+   - Enhance the intent detection with more sophisticated patterns
+   - Add more robust entity extraction for dates and priorities
+   - Implement fuzzy matching for task identification
+
+3. **Add Multi-user Support**:
+   - Modify the state management to support multiple users
+   - Implement user authentication and authorization
+   - Add the ability to share tasks between users
+
+---
+
+## 🧪 Testing Our Task Manager
 
 Now that we've built our task manager, let's create a test script to verify that it works correctly:
 
@@ -772,9 +785,17 @@ As you continue to develop your agent, keep these best practices in mind:
 
 ---
 
-## 🎯 Mini-Project Completion
+## 🔍 Key Concepts to Remember
 
-![Completion](https://media.giphy.com/media/3o7btNa0RUYa5E7iiQ/giphy.gif)
+1. **Component Integration**: Building a complete agent requires careful integration of all components
+2. **Architecture Design**: A well-designed architecture makes agent development more manageable
+3. **Intent Detection**: Accurately identifying user intent is crucial for appropriate agent responses
+4. **Entity Extraction**: Extracting relevant entities from user input enables meaningful actions
+5. **Testing Strategy**: Comprehensive testing ensures your agent behaves as expected in various scenarios
+
+---
+
+## 🎯 Mini-Project Progress: Personal Task Manager
 
 Congratulations! You've completed the Personal Task Manager mini-project. This project has demonstrated how to:
 
@@ -784,7 +805,21 @@ Congratulations! You've completed the Personal Task Manager mini-project. This p
 - Handle natural language inputs and generate appropriate responses
 - Test and validate agent functionality
 
+In this module, we've built a complete Personal Task Manager by:
+- Creating the core agent architecture with the sense-think-act loop
+- Implementing task management functionality (create, update, delete, query)
+- Adding user preference management
+- Building comprehensive testing and validation
+
 You now have a solid foundation in agent fundamentals that you can build upon in future modules.
+
+---
+
+> 💡 **Note on LLM Integration**: This module uses simulated agent responses for demonstration purposes. In a real implementation, the agent would typically leverage a Large Language Model for more sophisticated natural language understanding and generation capabilities.
+
+---
+
+Happy coding! 🚀
 
 ---
 

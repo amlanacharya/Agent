@@ -1,6 +1,4 @@
-# 🤖 Module 1: Agent Fundamentals - Lesson 1 🧠
-
-![Agent Thinking](https://media.giphy.com/media/3o7TKsQ8Xb3gcGEgZW/giphy.gif)
+# 🚀 Module 1: Agent Fundamentals - Lesson 1: The Sense-Think-Act Loop 🧠
 
 ## 🎯 Lesson Objectives
 
@@ -12,8 +10,6 @@ By the end of this lesson, you will:
 ---
 
 ## 📚 Introduction to Agent Fundamentals
-
-![Robot Learning](https://media.giphy.com/media/LMcB8XospGZO8UQq87/giphy.gif)
 
 Agentic AI systems represent a paradigm shift from traditional AI models. While conventional AI focuses on specific tasks like classification or generation, **agents** are designed to:
 
@@ -119,14 +115,14 @@ Here's a minimal implementation:
 class SimpleAgent:
     def __init__(self):
         self.state = {}  # Internal memory
-    
+
     def sense(self, user_input):
         """Process user input"""
         return {
             'text': user_input,
             'timestamp': time.time()
         }
-    
+
     def think(self, processed_input):
         """Decide how to respond"""
         if "hello" in processed_input['text'].lower():
@@ -144,15 +140,15 @@ class SimpleAgent:
                 'response_type': 'default',
                 'content': 'I received your message: ' + processed_input['text']
             }
-    
+
     def act(self, action_plan):
         """Execute the planned action"""
         # Update internal state
         self.state['last_response'] = action_plan['content']
-        
+
         # Return the response to be shown to the user
         return action_plan['content']
-    
+
     def agent_loop(self, user_input):
         """Run the full sense-think-act cycle"""
         sensed_data = self.sense(user_input)
@@ -174,14 +170,14 @@ from simple_agent import SimpleAgent
 
 def test_agent():
     agent = SimpleAgent()
-    
+
     # Test with different inputs
     inputs = [
         "Hello there!",
         "What's your name?",
         "Goodbye!"
     ]
-    
+
     for user_input in inputs:
         print(f"User: {user_input}")
         response = agent.agent_loop(user_input)
@@ -207,16 +203,13 @@ Agent: Goodbye! Have a great day!
 
 ---
 
-## 🔍 Key Concepts to Understand
+## 🔍 Key Concepts to Remember
 
-![Lightbulb](https://media.giphy.com/media/3o6Zt6ML6BklcajjsA/giphy.gif)
-
-As you build your first agent, keep these important concepts in mind:
-
-1. **State Management**: How does your agent maintain information between interactions?
-2. **Decision Logic**: What determines how your agent responds to different inputs?
-3. **Action Space**: What actions can your agent take in response to input?
-4. **Feedback Loop**: How does your agent learn from previous interactions?
+1. **Sense-Think-Act Loop**: The fundamental cycle that drives agent behavior
+2. **State Management**: How your agent maintains information between interactions
+3. **Decision Logic**: What determines how your agent responds to different inputs
+4. **Action Space**: The range of actions your agent can take in response to input
+5. **Feedback Loop**: How your agent learns from previous interactions
 
 ---
 
@@ -230,10 +223,12 @@ As you build your first agent, keep these important concepts in mind:
 2. **State Tracking**:
    - Modify the agent to keep track of the conversation history
    - Make the agent respond differently based on previous interactions
+   - Implement a method to summarize past interactions
 
 3. **Input Processing**:
    - Enhance the sense function to extract more information from user input
    - Implement basic intent recognition (questions, commands, statements)
+   - Add error handling for malformed inputs
 
 ---
 
@@ -254,9 +249,7 @@ In the next lesson, we'll explore:
 
 ---
 
-## 🎯 Mini-Project Preview: Personal Task Manager
-
-![Task Manager](https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy.gif)
+## 🎯 Mini-Project Progress: Personal Task Manager
 
 Throughout this module, we'll be building a Personal Task Manager agent that can:
 - Accept natural language commands to create, update, and delete tasks
@@ -264,7 +257,21 @@ Throughout this module, we'll be building a Personal Task Manager agent that can
 - Respond to queries about task status
 - Provide daily summaries of pending tasks
 
+In this lesson, we've made progress on our Personal Task Manager by:
+- Implementing the core Sense-Think-Act loop
+- Creating a basic agent architecture
+- Establishing the foundation for processing user commands
+
+In the next lesson, we'll continue by:
+- Adding more sophisticated prompt engineering
+- Implementing structured state management
+- Enhancing the agent's response capabilities
+
 Start thinking about how you would implement these features using the sense-think-act loop!
+
+---
+
+> 💡 **Note on LLM Integration**: This lesson uses simulated agent responses for demonstration purposes. In a real implementation, the thinking phase would typically leverage a Large Language Model to generate more sophisticated responses based on the input.
 
 ---
 

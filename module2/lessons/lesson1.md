@@ -1,6 +1,4 @@
-# 🧠 Module 2: Memory Systems - Lesson 1 💾
-
-![Memory Types](https://media.giphy.com/media/l0HlQXlQ3nHyLMvte/giphy.gif)
+# 🚀 Module 2: Memory Systems - Lesson 1: Memory Fundamentals 💾
 
 ## 🎯 Lesson Objectives
 
@@ -14,8 +12,6 @@ By the end of this lesson, you will:
 ---
 
 ## 📚 Introduction to Memory Systems for AI Agents
-
-![Brain Memory](https://media.giphy.com/media/3o7TKsQ8Xb3gcGEgZW/giphy.gif)
 
 Memory is a fundamental component of intelligent agents. Without memory, agents would be stateless, responding to each input as if it were the first interaction. Memory systems allow agents to:
 
@@ -48,15 +44,15 @@ Just as human memory has different systems (working memory, short-term memory, l
 class WorkingMemory:
     def __init__(self):
         self.current_context = None
-    
+
     def set_context(self, context):
         """Set the current working context"""
         self.current_context = context
-    
+
     def get_context(self):
         """Retrieve the current working context"""
         return self.current_context
-    
+
     def clear(self):
         """Clear the working memory"""
         self.current_context = None
@@ -80,20 +76,20 @@ class ShortTermMemory:
     def __init__(self, capacity=10):
         self.capacity = capacity
         self.memory = []
-    
+
     def add(self, item):
         """Add an item to short-term memory"""
         self.memory.append(item)
         # Keep only the most recent items within capacity
         if len(self.memory) > self.capacity:
             self.memory = self.memory[-self.capacity:]
-    
+
     def get_recent(self, n=None):
         """Get the n most recent items (or all if n is None)"""
         if n is None or n > len(self.memory):
             return self.memory
         return self.memory[-n:]
-    
+
     def clear(self):
         """Clear the short-term memory"""
         self.memory = []
@@ -120,7 +116,7 @@ class LongTermMemory:
     def __init__(self, file_path="long_term_memory.json"):
         self.file_path = file_path
         self.memory = self._load_memory()
-    
+
     def _load_memory(self):
         """Load memory from persistent storage"""
         if os.path.exists(self.file_path):
@@ -130,27 +126,27 @@ class LongTermMemory:
             except json.JSONDecodeError:
                 return {}
         return {}
-    
+
     def _save_memory(self):
         """Save memory to persistent storage"""
         with open(self.file_path, 'w') as f:
             json.dump(self.memory, f)
-    
+
     def store(self, key, value):
         """Store information in long-term memory"""
         self.memory[key] = value
         self._save_memory()
-    
+
     def retrieve(self, key):
         """Retrieve information from long-term memory"""
         return self.memory.get(key)
-    
+
     def forget(self, key):
         """Remove information from long-term memory"""
         if key in self.memory:
             del self.memory[key]
             self._save_memory()
-    
+
     def clear(self):
         """Clear all long-term memory"""
         self.memory = {}
@@ -176,7 +172,7 @@ import time
 class EpisodicMemory:
     def __init__(self):
         self.episodes = []
-    
+
     def record_episode(self, episode_type, content, metadata=None):
         """Record a new episode"""
         episode = {
@@ -187,27 +183,27 @@ class EpisodicMemory:
         }
         self.episodes.append(episode)
         return len(self.episodes) - 1  # Return episode ID
-    
+
     def get_episode(self, episode_id):
         """Retrieve a specific episode by ID"""
         if 0 <= episode_id < len(self.episodes):
             return self.episodes[episode_id]
         return None
-    
+
     def get_episodes_by_type(self, episode_type):
         """Retrieve all episodes of a specific type"""
         return [ep for ep in self.episodes if ep["type"] == episode_type]
-    
+
     def get_episodes_in_timeframe(self, start_time, end_time=None):
         """Retrieve episodes within a specific timeframe"""
         if end_time is None:
             end_time = time.time()
-        
+
         return [
-            ep for ep in self.episodes 
+            ep for ep in self.episodes
             if start_time <= ep["timestamp"] <= end_time
         ]
-    
+
     def clear(self):
         """Clear all episodes"""
         self.episodes = []
@@ -226,13 +222,13 @@ class AgentMemorySystem:
     def __init__(self, storage_dir="agent_memory"):
         """Initialize the memory system"""
         os.makedirs(storage_dir, exist_ok=True)
-        
+
         # Initialize memory components
         self.working = WorkingMemory()
         self.short_term = ShortTermMemory(capacity=20)
         self.long_term = LongTermMemory(os.path.join(storage_dir, "long_term_memory.json"))
         self.episodic = EpisodicMemory()
-    
+
     def process_interaction(self, user_input, agent_response):
         """Process a new interaction"""
         # Update working memory with current context
@@ -240,14 +236,14 @@ class AgentMemorySystem:
             "user_input": user_input,
             "agent_response": agent_response
         })
-        
+
         # Add to short-term memory
         self.short_term.add({
             "timestamp": time.time(),
             "user_input": user_input,
             "agent_response": agent_response
         })
-        
+
         # Record as an episode
         self.episodic.record_episode(
             episode_type="conversation",
@@ -256,25 +252,25 @@ class AgentMemorySystem:
                 "agent_response": agent_response
             }
         )
-    
+
     def get_conversation_context(self, n_turns=5):
         """Get recent conversation context"""
         return self.short_term.get_recent(n_turns)
-    
+
     def store_fact(self, key, value):
         """Store a fact in long-term memory"""
         self.long_term.store(key, value)
-    
+
     def retrieve_fact(self, key):
         """Retrieve a fact from long-term memory"""
         return self.long_term.retrieve(key)
-    
+
     def save_user_preference(self, preference_name, preference_value):
         """Save a user preference"""
         preferences = self.long_term.retrieve("user_preferences") or {}
         preferences[preference_name] = preference_value
         self.long_term.store("user_preferences", preferences)
-    
+
     def get_user_preferences(self):
         """Get all user preferences"""
         return self.long_term.retrieve("user_preferences") or {}
@@ -283,8 +279,6 @@ class AgentMemorySystem:
 ---
 
 ## 💪 Practice Exercises
-
-![Practice](https://media.giphy.com/media/3oKIPrc2ngFZ6BTyww/giphy.gif)
 
 1. **Implement a Conversation History System**:
    - Create a memory system that tracks conversation history
@@ -304,8 +298,6 @@ class AgentMemorySystem:
 ---
 
 ## 🔍 Key Concepts to Remember
-
-![Key Concepts](https://media.giphy.com/media/3o7btZ1Gm7ZL25pLMs/giphy.gif)
 
 1. **Memory Hierarchy**: Different memory types serve different purposes
 2. **Persistence vs. Speed**: Trade-offs between persistence and access speed
@@ -334,9 +326,7 @@ In the next lesson, we'll explore:
 
 ---
 
-## 🎯 Mini-Project Preview: Knowledge Base Assistant
-
-![Knowledge Base](https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy.gif)
+## 🎯 Mini-Project Progress: Knowledge Base Assistant
 
 Throughout this module, we'll be building a Knowledge Base Assistant that can:
 - Store and retrieve information from a knowledge base
@@ -345,7 +335,22 @@ Throughout this module, we'll be building a Knowledge Base Assistant that can:
 - Identify when it doesn't know something
 - Provide citations for its answers
 
+In this lesson, we've made progress on our Knowledge Base Assistant by:
+- Implementing the core memory architecture
+- Creating working memory for immediate context
+- Building short-term memory for conversation history
+- Developing long-term memory for persistent knowledge
+
+In the next lesson, we'll continue by:
+- Adding vector database capabilities
+- Implementing semantic search functionality
+- Creating more sophisticated retrieval mechanisms
+
 Start thinking about how you would implement these features using the memory systems we've discussed!
+
+---
+
+> 💡 **Note on LLM Integration**: This lesson uses simulated agent responses for demonstration purposes. In a real implementation, these memory systems would be integrated with an LLM to generate responses based on the retrieved context. For LLM integration, see the Module 2-LLM version.
 
 ---
 

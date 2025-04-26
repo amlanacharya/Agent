@@ -1,6 +1,4 @@
-# 🧙‍♂️ Module 1: Agent Fundamentals - Lesson 2 📝
-
-![Prompt Engineering](https://media.giphy.com/media/l0HlHFRbmaZtBRhXG/giphy.gif)
+# 🚀 Module 1: Agent Fundamentals - Lesson 2: Prompt Engineering 📝
 
 ## 🎯 Lesson Objectives
 
@@ -13,8 +11,6 @@ By the end of this lesson, you will:
 ---
 
 ## 📚 Introduction to Prompt Engineering
-
-![Magic Words](https://media.giphy.com/media/3o84U6421OOWegpQhq/giphy.gif)
 
 Prompt engineering is the art and science of crafting inputs to AI models to elicit desired outputs. It's like learning to communicate with an alien intelligence that has its own way of understanding and responding to language.
 
@@ -79,18 +75,18 @@ class PromptTemplate:
     def __init__(self, template_text):
         """Initialize with a template string containing {placeholders}"""
         self.template = template_text
-    
+
     def format(self, **kwargs):
         """Fill in the template with provided values"""
         try:
             return self.template.format(**kwargs)
         except KeyError as e:
             raise ValueError(f"Missing required placeholder: {e}")
-    
+
     @classmethod
     def from_examples(cls, instructions, examples, input_placeholder="input"):
         """Create a few-shot prompt template from examples"""
-        examples_text = "\n".join([f"Example {i+1}:\nInput: {ex['input']}\nOutput: {ex['output']}" 
+        examples_text = "\n".join([f"Example {i+1}:\nInput: {ex['input']}\nOutput: {ex['output']}"
                                   for i, ex in enumerate(examples)])
         template = f"{instructions}\n\n{examples_text}\n\nInput: {{{input_placeholder}}}\nOutput:"
         return cls(template)
@@ -106,13 +102,13 @@ from prompt_template import PromptTemplate
 class PromptDrivenAgent:
     def __init__(self):
         self.state = {}
-        
+
         # Define prompt templates
         self.greeting_template = PromptTemplate(
             "You are a helpful assistant named {assistant_name}. "
             "Greet the user named {user_name} in a {tone} tone."
         )
-        
+
         self.task_parser_template = PromptTemplate.from_examples(
             instructions="Extract task details from the user input.",
             examples=[
@@ -126,7 +122,7 @@ class PromptDrivenAgent:
                 }
             ]
         )
-    
+
     def generate_greeting(self, user_name, tone="friendly"):
         """Generate a greeting using the template"""
         prompt = self.greeting_template.format(
@@ -142,7 +138,7 @@ class PromptDrivenAgent:
             return f"Good day, {user_name}. How may I be of assistance?"
         else:
             return f"Hey {user_name}! What's up?"
-    
+
     def parse_task(self, user_input):
         """Parse task details from user input using the template"""
         prompt = self.task_parser_template.format(input=user_input)
@@ -182,7 +178,7 @@ User query: "I need to schedule a meeting with the marketing team next Tuesday a
 Assigning a specific role to the agent can shape its behavior and responses:
 
 ```
-You are an expert project manager with 15 years of experience in agile methodologies. 
+You are an expert project manager with 15 years of experience in agile methodologies.
 Your communication style is concise, clear, and focused on actionable insights.
 Your goal is to help the user organize their tasks effectively.
 
@@ -215,7 +211,7 @@ class PromptLibrary:
                 "You are a {assistant_type} assistant named {assistant_name}. "
                 "Greet the user named {user_name} in a {tone} tone."
             ),
-            
+
             "task_creation": PromptTemplate(
                 "Create a new task with the following details:\n"
                 "Description: {description}\n"
@@ -223,30 +219,30 @@ class PromptLibrary:
                 "Priority: {priority}\n"
                 "Return a confirmation message in a {tone} tone."
             ),
-            
+
             "task_query": PromptTemplate(
                 "The user wants to know about their tasks. "
                 "Current tasks in the system: {task_list}\n"
                 "User query: {query}\n"
                 "Provide a helpful response addressing their query."
             ),
-            
+
             "error_handling": PromptTemplate(
                 "The user request resulted in an error: {error_message}\n"
                 "Explain the issue to the user in a {tone} tone and provide suggestions to resolve it."
             )
         }
-    
+
     def get_template(self, template_name):
         """Retrieve a template by name"""
         if template_name not in self.templates:
             raise ValueError(f"Template '{template_name}' not found in library")
         return self.templates[template_name]
-    
+
     def add_template(self, name, template):
         """Add a new template to the library"""
         self.templates[name] = template
-        
+
     def format_prompt(self, template_name, **kwargs):
         """Format a specific template with provided values"""
         template = self.get_template(template_name)
@@ -256,8 +252,6 @@ class PromptLibrary:
 ---
 
 ## 💪 Practice Exercises
-
-![Practice](https://media.giphy.com/media/3oKIPrc2ngFZ6BTyww/giphy.gif)
 
 1. **Create a Task Parser Template**:
    - Design a prompt template that extracts task details from natural language input
@@ -277,8 +271,6 @@ class PromptLibrary:
 ---
 
 ## 🔍 Key Concepts to Remember
-
-![Key Concepts](https://media.giphy.com/media/3o7btZ1Gm7ZL25pLMs/giphy.gif)
 
 1. **Context Matters**: Always provide sufficient context in your prompts
 2. **Be Specific**: Clear, specific instructions yield better results
@@ -320,4 +312,8 @@ In the next lesson, we'll implement state management to actually store and track
 
 ---
 
-Happy prompting! 🚀
+> 💡 **Note on LLM Integration**: This lesson uses simulated LLM responses for demonstration purposes. In a real implementation, the prompt templates would be sent to an actual LLM API for processing.
+
+---
+
+Happy coding! 🚀

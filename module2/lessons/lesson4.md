@@ -1,6 +1,4 @@
-# 🧠 Module 2: Memory Systems - Lesson 4 📚
-
-![Knowledge Base](https://media.giphy.com/media/l0HlQXlQ3nHyLMvte/giphy.gif)
+# 🚀 Module 2: Memory Systems - Lesson 4: Building a Knowledge Base Assistant 📚
 
 ## 🎯 Lesson Objectives
 
@@ -14,8 +12,6 @@ By the end of this lesson, you will:
 ---
 
 ## 📚 Introduction to Knowledge Base Assistants
-
-![Knowledge Management](https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy.gif)
 
 A Knowledge Base Assistant is an AI agent that can store, retrieve, and reason with structured knowledge. Unlike simple chatbots, knowledge base assistants can:
 
@@ -83,21 +79,21 @@ class KnowledgeBase:
         """Initialize the knowledge base"""
         # Initialize vector store for semantic search
         self.vector_store = VectorStore(vector_db_path)
-        
+
         # Metadata storage for knowledge entries
         self.metadata = {}
-        
+
         # Knowledge graph for relationships
         self.relationships = {}
-    
+
     def add_knowledge(self, knowledge_text, metadata=None):
         """Add a new piece of knowledge to the base"""
         # Generate a unique ID for this knowledge
         knowledge_id = str(uuid.uuid4())
-        
+
         # Store the text in the vector database for semantic search
         self.vector_store.add_text(knowledge_id, knowledge_text)
-        
+
         # Store metadata (source, timestamp, confidence, etc.)
         self.metadata[knowledge_id] = {
             "text": knowledge_text,
@@ -106,21 +102,21 @@ class KnowledgeBase:
             "confidence": metadata.get("confidence", 1.0),
             "last_accessed": time.time()
         }
-        
+
         return knowledge_id
-    
+
     def retrieve_knowledge(self, query, top_k=5):
         """Retrieve knowledge relevant to the query"""
         # Find semantically similar knowledge entries
         results = self.vector_store.search(query, top_k=top_k)
-        
+
         # Enhance results with metadata
         enhanced_results = []
         for knowledge_id, similarity in results:
             if knowledge_id in self.metadata:
                 # Update last accessed time
                 self.metadata[knowledge_id]["last_accessed"] = time.time()
-                
+
                 # Add metadata to result
                 enhanced_results.append({
                     "id": knowledge_id,
@@ -130,24 +126,24 @@ class KnowledgeBase:
                     "confidence": self.metadata[knowledge_id]["confidence"],
                     "timestamp": self.metadata[knowledge_id]["timestamp"]
                 })
-        
+
         return enhanced_results
-    
+
     def add_relationship(self, source_id, target_id, relationship_type):
         """Add a relationship between knowledge entries"""
         if source_id not in self.relationships:
             self.relationships[source_id] = []
-        
+
         self.relationships[source_id].append({
             "target": target_id,
             "type": relationship_type
         })
-    
+
     def get_related_knowledge(self, knowledge_id):
         """Get knowledge related to a specific entry"""
         if knowledge_id not in self.relationships:
             return []
-        
+
         related = []
         for relation in self.relationships[knowledge_id]:
             target_id = relation["target"]
@@ -158,31 +154,31 @@ class KnowledgeBase:
                     "relationship": relation["type"],
                     "source": self.metadata[target_id]["source"]
                 })
-        
+
         return related
-    
+
     def save(self, file_path="knowledge_base.json"):
         """Save the knowledge base to disk"""
         data = {
             "metadata": self.metadata,
             "relationships": self.relationships
         }
-        
+
         with open(file_path, 'w') as f:
             json.dump(data, f)
-        
+
         # Save vector store separately
         self.vector_store.save()
-    
+
     def load(self, file_path="knowledge_base.json"):
         """Load the knowledge base from disk"""
         if os.path.exists(file_path):
             with open(file_path, 'r') as f:
                 data = json.load(f)
-            
+
             self.metadata = data.get("metadata", {})
             self.relationships = data.get("relationships", {})
-            
+
             # Load vector store separately
             self.vector_store.load()
 ```
@@ -201,18 +197,18 @@ class KnowledgeBaseAssistant:
         """Initialize the knowledge base assistant"""
         self.knowledge_base = knowledge_base or KnowledgeBase()
         self.conversation_memory = ShortTermMemory(capacity=20)
-        
+
         # Confidence threshold for answering questions
         self.confidence_threshold = 0.7
-    
+
     def answer_question(self, question):
         """Answer a question using the knowledge base"""
         # Add question to conversation memory
         self.conversation_memory.add({"role": "user", "content": question})
-        
+
         # Retrieve relevant knowledge
         knowledge_results = self.knowledge_base.retrieve_knowledge(question, top_k=5)
-        
+
         if not knowledge_results:
             # No relevant knowledge found
             response = self._handle_unknown(question)
@@ -225,69 +221,69 @@ class KnowledgeBaseAssistant:
             else:
                 # Not confident enough
                 response = self._handle_uncertain(question, knowledge_results)
-        
+
         # Add response to conversation memory
         self.conversation_memory.add({"role": "assistant", "content": response})
-        
+
         return response
-    
+
     def _generate_answer(self, question, knowledge_results):
         """Generate an answer based on retrieved knowledge"""
         # In a real implementation, this would use an LLM to generate a coherent answer
         # For this example, we'll use a simple template
-        
+
         answer = f"Based on my knowledge, I can tell you that {knowledge_results[0]['text']}"
-        
+
         # Add citation
         source = knowledge_results[0]["source"]
         if source != "unknown":
             answer += f" (Source: {source})"
-        
+
         # Add related information if available
         if len(knowledge_results) > 1:
             answer += f"\n\nAdditionally, you might want to know that {knowledge_results[1]['text']}"
-        
+
         return answer
-    
+
     def _handle_unknown(self, question):
         """Handle case where no knowledge is available"""
         return "I don't have information about that in my knowledge base. Would you like to teach me about this topic?"
-    
+
     def _handle_uncertain(self, question, knowledge_results):
         """Handle case where confidence is low"""
         return f"I'm not entirely sure, but I think {knowledge_results[0]['text']}. Please note that my confidence in this answer is low."
-    
+
     def learn_from_statement(self, statement, source="user"):
         """Learn new information from a statement"""
         # Add statement to conversation memory
         self.conversation_memory.add({"role": "user", "content": statement})
-        
+
         # Extract knowledge from the statement
         # In a real implementation, this would use an LLM or information extraction system
         # For this example, we'll just use the statement directly
-        
+
         # Add to knowledge base
         knowledge_id = self.knowledge_base.add_knowledge(statement, {
             "source": source,
             "confidence": 0.8  # Lower confidence for user-provided information
         })
-        
+
         response = "Thank you for sharing that information. I've added it to my knowledge base."
-        
+
         # Add response to conversation memory
         self.conversation_memory.add({"role": "assistant", "content": response})
-        
+
         return response
-    
+
     def save(self, directory="assistant_data"):
         """Save the assistant state"""
         os.makedirs(directory, exist_ok=True)
-        
+
         # Save knowledge base
         self.knowledge_base.save(os.path.join(directory, "knowledge_base.json"))
-        
+
         return "Assistant state saved successfully."
-    
+
     def load(self, directory="assistant_data"):
         """Load the assistant state"""
         kb_path = os.path.join(directory, "knowledge_base.json")
@@ -311,50 +307,50 @@ class CitationManager:
     def __init__(self, knowledge_base):
         """Initialize the citation manager"""
         self.knowledge_base = knowledge_base
-    
+
     def format_citation(self, knowledge_entry, citation_style="standard"):
         """Format a citation for a knowledge entry"""
         if citation_style == "standard":
             source = knowledge_entry["source"]
             if source == "unknown":
                 return "No source available"
-            
+
             timestamp = datetime.fromtimestamp(knowledge_entry["timestamp"])
             date_str = timestamp.strftime("%Y-%m-%d")
-            
+
             return f"{source} ({date_str})"
-        
+
         elif citation_style == "academic":
             source = knowledge_entry["source"]
             if source == "unknown":
                 return "Unknown source"
-            
+
             timestamp = datetime.fromtimestamp(knowledge_entry["timestamp"])
             year = timestamp.year
-            
+
             return f"{source}, {year}"
-        
+
         elif citation_style == "url":
             source = knowledge_entry["source"]
             if source.startswith("http"):
                 return f"[Source]({source})"
             else:
                 return source
-        
+
         return knowledge_entry["source"]
-    
+
     def add_citations_to_response(self, response, knowledge_entries, citation_style="standard"):
         """Add citations to a response"""
         if not knowledge_entries:
             return response
-        
+
         # Add citations section
         response += "\n\nSources:"
-        
+
         for i, entry in enumerate(knowledge_entries):
             citation = self.format_citation(entry, citation_style)
             response += f"\n[{i+1}] {citation}"
-        
+
         return response
 ```
 
@@ -371,20 +367,20 @@ class UncertaintyHandler:
     def __init__(self, confidence_threshold=0.7):
         """Initialize the uncertainty handler"""
         self.confidence_threshold = confidence_threshold
-    
+
     def evaluate_confidence(self, knowledge_results):
         """Evaluate confidence in the knowledge results"""
         if not knowledge_results:
             return 0.0
-        
+
         # Calculate overall confidence based on similarity and stored confidence
         top_result = knowledge_results[0]
         return top_result["similarity"] * top_result["confidence"]
-    
+
     def generate_response(self, question, knowledge_results):
         """Generate a response with appropriate uncertainty markers"""
         confidence = self.evaluate_confidence(knowledge_results)
-        
+
         if confidence >= self.confidence_threshold:
             # High confidence response
             prefix = "Based on my knowledge, "
@@ -400,37 +396,35 @@ class UncertaintyHandler:
         else:
             # Very low confidence
             return "I don't have enough reliable information to answer that question confidently."
-        
+
         if knowledge_results:
             answer = prefix + knowledge_results[0]["text"] + suffix
             return answer
         else:
             return "I don't have information about that in my knowledge base."
-    
+
     def should_ask_clarification(self, question, knowledge_results):
         """Determine if clarification is needed"""
         confidence = self.evaluate_confidence(knowledge_results)
-        
+
         # If confidence is low but not extremely low, ask for clarification
         return 0.3 <= confidence < self.confidence_threshold * 0.7
-    
+
     def generate_clarification_request(self, question, knowledge_results):
         """Generate a request for clarification"""
         if not knowledge_results:
             return "Could you provide more details about what you're asking? I don't have information on this topic."
-        
+
         # Extract key terms from the question
         # In a real implementation, this would use NLP techniques
         # For this example, we'll use a simple approach
-        
+
         return f"I'm not sure I understand your question about '{question}'. Could you rephrase or provide more context?"
 ```
 
 ---
 
 ## 💪 Practice Exercises
-
-![Practice](https://media.giphy.com/media/3oKIPrc2ngFZ6BTyww/giphy.gif)
 
 1. **Implement a Knowledge Extraction System**:
    - Create a system that extracts structured knowledge from text
@@ -451,8 +445,6 @@ class UncertaintyHandler:
 
 ## 🔍 Key Concepts to Remember
 
-![Key Concepts](https://media.giphy.com/media/3o7btZ1Gm7ZL25pLMs/giphy.gif)
-
 1. **Knowledge Structure**: Organize knowledge for efficient retrieval
 2. **Citation Importance**: Always provide sources for information
 3. **Uncertainty Communication**: Clearly express confidence levels
@@ -461,9 +453,7 @@ class UncertaintyHandler:
 
 ---
 
-## 🚀 Completing the Mini-Project
-
-![Completion](https://media.giphy.com/media/3o7btNa0RUYa5E7iiQ/giphy.gif)
+## 🎯 Mini-Project Completion: Knowledge Base Assistant
 
 Now that we've covered all the components, you can complete the Knowledge Base Assistant mini-project by:
 
@@ -474,6 +464,13 @@ Now that we've covered all the components, you can complete the Knowledge Base A
 5. Refining the system based on feedback
 
 The complete implementation will demonstrate your understanding of memory systems, vector databases, retrieval patterns, and knowledge management.
+
+In this module, we've built a complete Knowledge Base Assistant by:
+- Creating the core memory architecture with different memory types
+- Implementing vector databases for semantic search
+- Building advanced retrieval patterns for contextual understanding
+- Developing a citation system for knowledge sources
+- Adding uncertainty handling for unknown information
 
 ---
 
@@ -488,8 +485,6 @@ The complete implementation will demonstrate your understanding of memory system
 
 ## 🎓 Module Completion
 
-![Completion](https://media.giphy.com/media/3o7btZ1Gm7ZL25pLMs/giphy.gif)
-
 Congratulations on completing Module 2: Memory Systems! You've learned about:
 
 - Different memory types for AI agents
@@ -500,6 +495,10 @@ Congratulations on completing Module 2: Memory Systems! You've learned about:
 These skills form the foundation for creating sophisticated AI agents that can maintain context, learn from interactions, and provide reliable information with appropriate citations.
 
 In the next module, we'll explore planning and reasoning systems that build on these memory capabilities to create even more powerful agents.
+
+---
+
+> 💡 **Note on LLM Integration**: This lesson uses simulated knowledge processing functions for demonstration purposes. In a real implementation, you would integrate these knowledge systems with LLMs to generate more sophisticated responses based on the retrieved information. For LLM integration, see the Module 2-LLM version.
 
 ---
 

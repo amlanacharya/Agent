@@ -1,6 +1,4 @@
-# 🧠 Module 1: Agent Fundamentals - Lesson 3 🗃️
-
-![State Management](https://media.giphy.com/media/l0HlQXlQ3nHyLMvte/giphy.gif)
+# 🚀 Module 1: Agent Fundamentals - Lesson 3: State Management 🗃️
 
 ## 🎯 Lesson Objectives
 
@@ -13,8 +11,6 @@ By the end of this lesson, you will:
 ---
 
 ## 📚 Introduction to State Management
-
-![Memory Concept](https://media.giphy.com/media/3o7btZ1Gm7ZL25pLMs/giphy.gif)
 
 State management is the backbone of intelligent agent systems. Without state, an agent is just a function that maps inputs to outputs without any memory or context awareness.
 
@@ -142,23 +138,23 @@ class AgentStateManager:
         self.state = {
             # Conversation memory
             "conversation": [],
-            
+
             # User profile
             "user": {
                 "name": None,
                 "preferences": {}
             },
-            
+
             # Application state (for a task manager)
             "tasks": [],
             "categories": ["work", "personal", "health", "finance"],
-            
+
             # Agent internal state
             "current_context": None,
             "last_action": None,
             "session_start_time": time.time()
         }
-    
+
     def update_conversation(self, role, content):
         """Add a new message to the conversation history"""
         self.state["conversation"].append({
@@ -166,13 +162,13 @@ class AgentStateManager:
             "content": content,
             "timestamp": time.time()
         })
-    
+
     def get_conversation_history(self, max_messages=None):
         """Retrieve conversation history, optionally limited to the most recent messages"""
         if max_messages:
             return self.state["conversation"][-max_messages:]
         return self.state["conversation"]
-    
+
     def update_user_profile(self, **kwargs):
         """Update user profile with provided key-value pairs"""
         for key, value in kwargs.items():
@@ -180,19 +176,19 @@ class AgentStateManager:
                 self.state["user"]["preferences"].update(value)
             else:
                 self.state["user"][key] = value
-    
+
     def add_task(self, task):
         """Add a new task to the task list"""
         # Generate a unique ID if not provided
         if "id" not in task:
             task["id"] = f"task-{len(self.state['tasks']) + 1:03d}"
-        
+
         # Add creation timestamp
         task["created_at"] = time.time()
-        
+
         self.state["tasks"].append(task)
         return task["id"]
-    
+
     def update_task(self, task_id, **updates):
         """Update an existing task"""
         for i, task in enumerate(self.state["tasks"]):
@@ -200,28 +196,28 @@ class AgentStateManager:
                 self.state["tasks"][i].update(updates)
                 return True
         return False
-    
+
     def get_tasks(self, filters=None):
         """Retrieve tasks, optionally filtered by criteria"""
         if not filters:
             return self.state["tasks"]
-        
+
         filtered_tasks = self.state["tasks"]
-        
+
         for key, value in filters.items():
             filtered_tasks = [task for task in filtered_tasks if task.get(key) == value]
-        
+
         return filtered_tasks
-    
+
     def set_context(self, context):
         """Set the current context of the agent"""
         self.state["current_context"] = context
-    
+
     def save_state(self, filepath):
         """Save the current state to a file"""
         with open(filepath, 'w') as f:
             json.dump(self.state, f, indent=2)
-    
+
     def load_state(self, filepath):
         """Load state from a file"""
         try:
@@ -250,19 +246,19 @@ class ShortTermMemory:
     def __init__(self, capacity=10):
         self.capacity = capacity
         self.memory = []
-    
+
     def add(self, item):
         """Add an item to short-term memory, removing oldest if at capacity"""
         if len(self.memory) >= self.capacity:
             self.memory.pop(0)  # Remove oldest item
         self.memory.append(item)
-    
+
     def get_recent(self, n=None):
         """Get the n most recent items (or all if n is None)"""
         if n is None or n > len(self.memory):
             return self.memory
         return self.memory[-n:]
-    
+
     def clear(self):
         """Clear the short-term memory"""
         self.memory = []
@@ -277,7 +273,7 @@ class LongTermMemory:
     def __init__(self, storage_path="agent_memory.json"):
         self.storage_path = storage_path
         self.memory = self._load_or_initialize()
-    
+
     def _load_or_initialize(self):
         """Load existing memory or initialize a new one"""
         try:
@@ -290,14 +286,14 @@ class LongTermMemory:
                 "learned_preferences": {},
                 "frequent_tasks": {}
             }
-    
+
     def store(self, category, key, value):
         """Store information in a specific category"""
         if category not in self.memory:
             self.memory[category] = {}
         self.memory[category][key] = value
         self._save()
-    
+
     def retrieve(self, category, key=None):
         """Retrieve information from memory"""
         if category not in self.memory:
@@ -305,7 +301,7 @@ class LongTermMemory:
         if key is None:
             return self.memory[category]
         return self.memory[category].get(key)
-    
+
     def _save(self):
         """Save memory to persistent storage"""
         with open(self.storage_path, 'w') as f:
@@ -326,7 +322,7 @@ class EpisodicMemory:
             "interactions": [],
             "summary": None
         }
-    
+
     def add_interaction(self, user_input, agent_response):
         """Add an interaction to the current session"""
         self.current_session["interactions"].append({
@@ -334,14 +330,14 @@ class EpisodicMemory:
             "user_input": user_input,
             "agent_response": agent_response
         })
-    
+
     def end_session(self, summary=None):
         """End the current session and store it"""
         self.current_session["end_time"] = time.time()
         self.current_session["duration"] = self.current_session["end_time"] - self.current_session["start_time"]
         self.current_session["summary"] = summary
         self.sessions.append(self.current_session)
-        
+
         # Start a new session
         self.current_session = {
             "id": str(uuid.uuid4()),
@@ -349,14 +345,14 @@ class EpisodicMemory:
             "interactions": [],
             "summary": None
         }
-    
+
     def get_session(self, session_id):
         """Retrieve a specific session by ID"""
         for session in self.sessions:
             if session["id"] == session_id:
                 return session
         return None
-    
+
     def get_recent_sessions(self, n=5):
         """Get the n most recent sessions"""
         return sorted(self.sessions, key=lambda s: s["start_time"], reverse=True)[:n]
@@ -379,7 +375,7 @@ def update_immutable_state(state, updates):
     """Create a new state object with updates applied"""
     # Create a deep copy of the current state
     new_state = copy.deepcopy(state)
-    
+
     # Apply updates
     for key, value in updates.items():
         if isinstance(value, dict) and key in new_state and isinstance(new_state[key], dict):
@@ -388,7 +384,7 @@ def update_immutable_state(state, updates):
         else:
             # Direct update for non-dict values
             new_state[key] = value
-    
+
     return new_state
 ```
 
@@ -401,19 +397,19 @@ class EventDrivenStateManager:
     def __init__(self):
         self.state = {}
         self.event_handlers = {}
-    
+
     def register_handler(self, event_type, handler_function):
         """Register a handler for a specific event type"""
         if event_type not in self.event_handlers:
             self.event_handlers[event_type] = []
         self.event_handlers[event_type].append(handler_function)
-    
+
     def dispatch_event(self, event_type, event_data):
         """Dispatch an event to all registered handlers"""
         if event_type in self.event_handlers:
             for handler in self.event_handlers[event_type]:
                 handler(self.state, event_data)
-    
+
     def get_state(self):
         """Get the current state"""
         return self.state
@@ -428,26 +424,26 @@ class TransactionStateManager:
     def __init__(self, initial_state=None):
         self.state = initial_state or {}
         self.transaction = None
-    
+
     def begin_transaction(self):
         """Start a new transaction"""
         if self.transaction is not None:
             raise ValueError("Transaction already in progress")
         self.transaction = copy.deepcopy(self.state)
-    
+
     def update(self, key, value):
         """Update a value within the current transaction"""
         if self.transaction is None:
             raise ValueError("No transaction in progress")
         self.transaction[key] = value
-    
+
     def commit(self):
         """Commit the current transaction"""
         if self.transaction is None:
             raise ValueError("No transaction in progress")
         self.state = self.transaction
         self.transaction = None
-    
+
     def rollback(self):
         """Rollback the current transaction"""
         if self.transaction is None:
@@ -470,14 +466,14 @@ class StatefulAgent:
         self.short_term_memory = ShortTermMemory(capacity=20)
         self.long_term_memory = LongTermMemory()
         self.episodic_memory = EpisodicMemory()
-        
+
         # Application state
         self.app_state = {
             "tasks": [],
             "user_profile": {},
             "current_context": None
         }
-    
+
     def sense(self, user_input):
         """Process user input and update state"""
         # Record the input in short-term memory
@@ -486,30 +482,30 @@ class StatefulAgent:
             "content": user_input,
             "timestamp": time.time()
         })
-        
+
         # Process the input
         processed_input = {
             "text": user_input,
             "timestamp": time.time(),
             "detected_intent": self._detect_intent(user_input)
         }
-        
+
         # Update episodic memory
         self.episodic_memory.add_interaction(user_input, None)  # Response will be added later
-        
+
         return processed_input
-    
+
     def think(self, processed_input):
         """Generate a response based on input and state"""
         # Get recent conversation context
         recent_context = self.short_term_memory.get_recent(5)
-        
+
         # Determine how to respond based on intent and state
         if processed_input["detected_intent"] == "add_task":
             # Extract task details and add to state
             task = self._extract_task_details(processed_input["text"])
             task_id = self._add_task(task)
-            
+
             response = {
                 "type": "task_confirmation",
                 "content": f"I've added your task: {task['description']}",
@@ -518,7 +514,7 @@ class StatefulAgent:
         elif processed_input["detected_intent"] == "query_tasks":
             # Retrieve relevant tasks
             tasks = self._get_relevant_tasks(processed_input["text"])
-            
+
             response = {
                 "type": "task_list",
                 "content": self._format_task_list(tasks),
@@ -530,16 +526,16 @@ class StatefulAgent:
                 "type": "general",
                 "content": "I'm here to help you manage your tasks. You can add tasks or ask about existing ones."
             }
-        
+
         # Record the reasoning in short-term memory
         self.short_term_memory.add({
             "type": "reasoning",
             "intent": processed_input["detected_intent"],
             "timestamp": time.time()
         })
-        
+
         return response
-    
+
     def act(self, response):
         """Execute the response and update state"""
         # Record the response in short-term memory
@@ -548,28 +544,28 @@ class StatefulAgent:
             "content": response["content"],
             "timestamp": time.time()
         })
-        
+
         # Update episodic memory with the response
         self.episodic_memory.current_session["interactions"][-1]["agent_response"] = response
-        
+
         # If this is a task-related response, update long-term memory
         if response["type"] in ["task_confirmation", "task_list"]:
             self.long_term_memory.store(
-                "frequent_actions", 
-                "task_management", 
+                "frequent_actions",
+                "task_management",
                 self.long_term_memory.retrieve("frequent_actions", "task_management", 0) + 1
             )
-        
+
         # Return the response content
         return response["content"]
-    
+
     def agent_loop(self, user_input):
         """Run the full sense-think-act cycle with state management"""
         processed_input = self.sense(user_input)
         response = self.think(processed_input)
         output = self.act(response)
         return output
-    
+
     def save_state(self):
         """Save the agent's state to persistent storage"""
         state_bundle = {
@@ -579,24 +575,24 @@ class StatefulAgent:
                 "current_session": self.episodic_memory.current_session
             }
         }
-        
+
         with open("agent_state.json", "w") as f:
             json.dump(state_bundle, f, indent=2)
-    
+
     def load_state(self):
         """Load the agent's state from persistent storage"""
         try:
             with open("agent_state.json", "r") as f:
                 state_bundle = json.load(f)
-            
+
             self.app_state = state_bundle["app_state"]
             self.episodic_memory.sessions = state_bundle["episodic_memory"]["sessions"]
             self.episodic_memory.current_session = state_bundle["episodic_memory"]["current_session"]
-            
+
             return True
         except (FileNotFoundError, json.JSONDecodeError):
             return False
-    
+
     # Helper methods
     def _detect_intent(self, text):
         """Detect the user's intent from input text"""
@@ -607,54 +603,52 @@ class StatefulAgent:
             return "query_tasks"
         else:
             return "general"
-    
+
     def _extract_task_details(self, text):
         """Extract task details from user input"""
         # In a real implementation, this would use more sophisticated NLP
         # For now, we'll use a simple implementation
         description = text
         priority = "medium"
-        
+
         if "urgent" in text.lower() or "important" in text.lower():
             priority = "high"
-        
+
         return {
             "description": description,
             "created_at": time.time(),
             "priority": priority,
             "status": "pending"
         }
-    
+
     def _add_task(self, task):
         """Add a task to the application state"""
         task_id = f"task-{len(self.app_state['tasks']) + 1}"
         task["id"] = task_id
         self.app_state["tasks"].append(task)
         return task_id
-    
+
     def _get_relevant_tasks(self, text):
         """Get tasks relevant to the user's query"""
         # In a real implementation, this would use more sophisticated filtering
         # For now, return all pending tasks
         return [task for task in self.app_state["tasks"] if task["status"] == "pending"]
-    
+
     def _format_task_list(self, tasks):
         """Format a list of tasks for display"""
         if not tasks:
             return "You don't have any tasks yet."
-        
+
         task_list = "Here are your tasks:\n"
         for i, task in enumerate(tasks):
             task_list += f"{i+1}. {task['description']} (Priority: {task['priority']})\n"
-        
+
         return task_list
 ```
 
 ---
 
 ## 💪 Practice Exercises
-
-![Practice](https://media.giphy.com/media/3oKIPrc2ngFZ6BTyww/giphy.gif)
 
 1. **Implement a Conversation Memory System**:
    - Create a class that stores and retrieves conversation history
@@ -674,8 +668,6 @@ class StatefulAgent:
 ---
 
 ## 🔍 Key Concepts to Remember
-
-![Key Concepts](https://media.giphy.com/media/3o7btZ1Gm7ZL25pLMs/giphy.gif)
 
 1. **State Separation**: Divide state into logical components (conversation, user, application, etc.)
 2. **Immutability**: Prefer creating new state objects over modifying existing ones
@@ -714,6 +706,10 @@ In this lesson, we've learned how to implement state management systems that wil
 - Persist data between sessions
 
 In the next lesson, we'll complete our Personal Task Manager by integrating all the components we've learned about!
+
+---
+
+> 💡 **Note on LLM Integration**: This lesson uses simulated agent responses for demonstration purposes. In a real implementation, the state management patterns would be integrated with an LLM to generate more sophisticated responses based on the maintained state.
 
 ---
 

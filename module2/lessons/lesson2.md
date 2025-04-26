@@ -1,6 +1,4 @@
-# 🧠 Module 2: Memory Systems - Lesson 2 🔍
-
-![Vector Database](https://media.giphy.com/media/l0HlHFRbmaZtBRhXG/giphy.gif)
+# 🚀 Module 2: Memory Systems - Lesson 2: Vector Databases 🔍
 
 ## 🎯 Lesson Objectives
 
@@ -14,8 +12,6 @@ By the end of this lesson, you will:
 ---
 
 ## 📚 Introduction to Vector Databases
-
-![Vector Space](https://media.giphy.com/media/26ufoAcuAQKjkVZHW/giphy.gif)
 
 Traditional memory systems store information as key-value pairs, making it easy to retrieve exact matches but difficult to find semantically similar content. Vector databases solve this problem by:
 
@@ -74,20 +70,20 @@ def simple_embedding(text, dimensions=100):
     """
     Create a simple embedding vector for text.
     This is a very simplified version for demonstration purposes.
-    
+
     Args:
         text (str): The text to embed
         dimensions (int): The number of dimensions for the vector
-        
+
     Returns:
         np.ndarray: The embedding vector
     """
     # Normalize text
     text = text.lower()
-    
+
     # Create a counter of words
     word_counts = Counter(text.split())
-    
+
     # Use a simple hash function to map words to vector positions
     vector = np.zeros(dimensions)
     for word, count in word_counts.items():
@@ -95,12 +91,12 @@ def simple_embedding(text, dimensions=100):
         word_hash = hash(word) % dimensions
         # Use the count and a secondary hash to determine the value
         vector[word_hash] = count * (hash(word + 'salt') % 10 + 1) / 10
-    
+
     # Normalize the vector
     norm = np.linalg.norm(vector)
     if norm > 0:
         vector = vector / norm
-    
+
     return vector
 ```
 
@@ -143,17 +139,17 @@ class SimpleVectorDB:
     def __init__(self, embedding_function=None):
         """
         Initialize a simple vector database
-        
+
         Args:
             embedding_function: Function to convert text to vectors
         """
         self.items = []  # Will store (id, text, vector) tuples
         self.embedding_function = embedding_function or simple_embedding
-    
+
     def add_item(self, item_id, text):
         """
         Add an item to the database
-        
+
         Args:
             item_id: Unique identifier for the item
             text: The text content to store
@@ -161,49 +157,49 @@ class SimpleVectorDB:
         vector = self.embedding_function(text)
         self.items.append((item_id, text, vector))
         return len(self.items) - 1  # Return the index
-    
+
     def similarity(self, vector1, vector2):
         """
         Calculate cosine similarity between two vectors
-        
+
         Args:
             vector1: First vector
             vector2: Second vector
-            
+
         Returns:
             float: Cosine similarity (between -1 and 1)
         """
         dot_product = np.dot(vector1, vector2)
         norm1 = np.linalg.norm(vector1)
         norm2 = np.linalg.norm(vector2)
-        
+
         if norm1 == 0 or norm2 == 0:
             return 0  # Handle zero vectors
-        
+
         return dot_product / (norm1 * norm2)
-    
+
     def search(self, query, top_k=3):
         """
         Search for items similar to the query
-        
+
         Args:
             query (str): The search query
             top_k (int): Number of results to return
-            
+
         Returns:
             list: Top k similar items with similarity scores
         """
         query_vector = self.embedding_function(query)
-        
+
         # Calculate similarity for all items
         similarities = [
             (item_id, text, self.similarity(query_vector, vector))
             for item_id, text, vector in self.items
         ]
-        
+
         # Sort by similarity (highest first)
         similarities.sort(key=lambda x: x[2], reverse=True)
-        
+
         # Return top k results
         return similarities[:top_k]
 ```
@@ -260,52 +256,52 @@ class RetrievalMemory:
     def __init__(self, embedding_function=None):
         """
         Initialize a retrieval-based memory system
-        
+
         Args:
             embedding_function: Function to convert text to vectors
         """
         self.vector_db = SimpleVectorDB(embedding_function)
         self.next_id = 0
-    
+
     def store(self, text, metadata=None):
         """
         Store information in memory
-        
+
         Args:
             text (str): The text to store
             metadata (dict, optional): Additional metadata
-            
+
         Returns:
             int: The ID of the stored item
         """
         item_id = f"item_{self.next_id}"
         self.next_id += 1
-        
+
         # Store the item in the vector database
         self.vector_db.add_item(item_id, text)
-        
+
         return item_id
-    
+
     def retrieve(self, query, top_k=3):
         """
         Retrieve information similar to the query
-        
+
         Args:
             query (str): The search query
             top_k (int): Number of results to return
-            
+
         Returns:
             list: Top k similar items with similarity scores
         """
         return self.vector_db.search(query, top_k)
-    
+
     def retrieve_most_similar(self, query):
         """
         Retrieve the most similar item to the query
-        
+
         Args:
             query (str): The search query
-            
+
         Returns:
             tuple: (item_id, text, similarity) or None if no items
         """
@@ -316,8 +312,6 @@ class RetrievalMemory:
 ---
 
 ## 💪 Practice Exercises
-
-![Practice](https://media.giphy.com/media/3oKIPrc2ngFZ6BTyww/giphy.gif)
 
 1. **Implement a Persistent Vector Database**:
    - Extend the SimpleVectorDB to save and load vectors from disk
@@ -337,8 +331,6 @@ class RetrievalMemory:
 ---
 
 ## 🔍 Key Concepts to Remember
-
-![Key Concepts](https://media.giphy.com/media/3o7btZ1Gm7ZL25pLMs/giphy.gif)
 
 1. **Vector Embeddings**: Numerical representations that capture semantic meaning
 2. **Similarity Metrics**: Different ways to measure distance between vectors
@@ -378,6 +370,10 @@ In this lesson, we've learned about vector databases and similarity search, whic
 - Retrieve information based on meaning rather than exact matches
 
 In the next lesson, we'll explore how to use these capabilities to build a more sophisticated retrieval system for our Knowledge Base Assistant.
+
+---
+
+> 💡 **Note on LLM Integration**: This lesson uses simulated embedding functions for demonstration purposes. In a real implementation, you would use a dedicated embedding model from providers like OpenAI, Hugging Face, or open-source alternatives. For LLM integration, see the Module 2-LLM version.
 
 ---
 

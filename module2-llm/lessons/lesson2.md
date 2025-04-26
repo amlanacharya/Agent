@@ -1,6 +1,4 @@
-# 🧠 Module 2 LLM Version: Memory Systems - Lesson 2 🔍
-
-![Vector Database](https://media.giphy.com/media/l0HlHFRbmaZtBRhXG/giphy.gif)
+# 🚀 Module 2-LLM: Memory Systems - Lesson 2: Vector Databases with Groq 🔍
 
 ## 🎯 Lesson Objectives
 
@@ -14,8 +12,6 @@ By the end of this lesson, you will:
 ---
 
 ## 📚 Introduction to Vector Databases with Real Embeddings
-
-![Vector Space](https://media.giphy.com/media/26ufoAcuAQKjkVZHW/giphy.gif)
 
 Vector databases are a fundamental component of modern AI memory systems. They allow us to store and retrieve information based on semantic meaning rather than exact keyword matches. In this lesson, we'll explore how to implement a vector database with real embeddings from the Groq API.
 
@@ -57,34 +53,34 @@ Let's look at how to convert text to vectors using the Groq API:
 def get_embeddings(self, texts, model=None):
     """
     Get embeddings for text using the Groq API
-    
+
     Args:
         texts (str or list): Text or list of texts to get embeddings for
         model (str, optional): The embedding model to use
-        
+
     Returns:
         list: List of embedding vectors
     """
     model = model or self.default_embedding_model
-    
+
     # Convert single text to list
     if isinstance(texts, str):
         texts = [texts]
-    
+
     payload = {
         "model": model,
         "input": texts
     }
-    
+
     response = requests.post(
         f"{self.base_url}/embeddings",
         headers=self.headers,
         json=payload
     )
-    
+
     if response.status_code != 200:
         raise Exception(f"Error getting embeddings: {response.text}")
-    
+
     result = response.json()
     return [item["embedding"] for item in result["data"]]
 ```
@@ -120,20 +116,20 @@ Now let's look at how to implement a vector database that uses these real embedd
 ```python
 class SimpleVectorDB:
     """A simple vector database implementation with real embeddings from Groq API."""
-    
+
     def __init__(self, embedding_function=None):
         """Initialize the vector database"""
         self.items = []
         self.groq_client = GroqClient()
         self.embedding_function = embedding_function or self._get_groq_embedding
-    
+
     def add(self, text, metadata=None):
         """Add an item to the vector database"""
         item_id = str(uuid.uuid4())
-        
+
         # Get embedding for the text
         embedding = self.embedding_function(text)
-        
+
         # Add the item
         self.items.append({
             'id': item_id,
@@ -142,7 +138,7 @@ class SimpleVectorDB:
             'metadata': metadata or {},
             'timestamp': time.time()
         })
-        
+
         return item_id
 ```
 
@@ -157,7 +153,7 @@ def add_batch(self, texts, metadatas=None):
     """Add multiple items to the vector database"""
     if metadatas is None:
         metadatas = [{} for _ in texts]
-    
+
     # Get embeddings for all texts
     try:
         # Try to get embeddings in batch
@@ -165,7 +161,7 @@ def add_batch(self, texts, metadatas=None):
     except Exception:
         # Fall back to getting embeddings one by one
         all_embeddings = [self.embedding_function(text) for text in texts]
-    
+
     # Add all items
     item_ids = []
     for text, embedding, metadata in zip(texts, all_embeddings, metadatas):
@@ -178,7 +174,7 @@ def add_batch(self, texts, metadatas=None):
             'timestamp': time.time()
         })
         item_ids.append(item_id)
-    
+
     return item_ids
 ```
 
@@ -197,20 +193,20 @@ def search(self, query, top_k=5, filter_func=None):
     """Search the vector database for items similar to the query"""
     if not self.items:
         return []
-    
+
     # Get embedding for the query
     query_embedding = self.embedding_function(query)
-    
+
     # Calculate similarity scores
     results = []
     for item in self.items:
         # Apply filter if provided
         if filter_func and not filter_func(item):
             continue
-        
+
         # Calculate cosine similarity
         similarity = self._cosine_similarity(query_embedding, item['embedding'])
-        
+
         # Add to results
         results.append({
             'id': item['id'],
@@ -218,10 +214,10 @@ def search(self, query, top_k=5, filter_func=None):
             'metadata': item['metadata'],
             'similarity': similarity
         })
-    
+
     # Sort by similarity (highest first)
     results.sort(key=lambda x: x['similarity'], reverse=True)
-    
+
     # Return top k results
     return results[:top_k]
 ```
@@ -242,14 +238,14 @@ def _cosine_similarity(self, vec1, vec2):
     # Convert to numpy arrays for efficient calculation
     vec1 = np.array(vec1)
     vec2 = np.array(vec2)
-    
+
     # Calculate dot product
     dot_product = np.dot(vec1, vec2)
-    
+
     # Calculate magnitudes
     magnitude1 = np.linalg.norm(vec1)
     magnitude2 = np.linalg.norm(vec2)
-    
+
     # Calculate cosine similarity
     if magnitude1 > 0 and magnitude2 > 0:
         return dot_product / (magnitude1 * magnitude2)
@@ -275,28 +271,28 @@ We can further enhance our vector database with LLM-powered query expansion:
 ```python
 class EnhancedVectorDB(SimpleVectorDB):
     """Enhanced vector database with additional features like query expansion."""
-    
+
     def expand_query(self, query):
         """Expand a query using LLM to improve search results"""
         prompt = f"""
         Generate 3 alternative phrasings of the following search query to improve search results.
         Make sure to preserve the original meaning but use different words and phrasings.
-        
+
         Original query: "{query}"
-        
+
         Return only the alternative phrasings, one per line, without numbering or additional text.
         """
-        
+
         try:
             response = self.groq_client.generate_text(prompt, max_tokens=150)
             expanded = self.groq_client.extract_text_from_response(response)
-            
+
             # Parse the response
             expansions = [line.strip() for line in expanded.split('\n') if line.strip()]
-            
+
             # Add the original query
             all_queries = [query] + expansions
-            
+
             # Remove duplicates while preserving order
             seen = set()
             unique_queries = []
@@ -304,7 +300,7 @@ class EnhancedVectorDB(SimpleVectorDB):
                 if q.lower() not in seen:
                     seen.add(q.lower())
                     unique_queries.append(q)
-            
+
             return unique_queries
         except Exception as e:
             # Return just the original query if expansion fails
@@ -323,7 +319,7 @@ def search_with_expansion(self, query, top_k=5, filter_func=None):
     """Search with query expansion for better recall"""
     # Expand the query
     expanded_queries = self.expand_query(query)
-    
+
     # Search with each expanded query
     all_results = []
     for expanded_query in expanded_queries:
@@ -331,7 +327,7 @@ def search_with_expansion(self, query, top_k=5, filter_func=None):
         for result in results:
             result['expanded_query'] = expanded_query
         all_results.extend(results)
-    
+
     # Remove duplicates (same ID)
     seen_ids = set()
     unique_results = []
@@ -339,10 +335,10 @@ def search_with_expansion(self, query, top_k=5, filter_func=None):
         if result['id'] not in seen_ids:
             seen_ids.add(result['id'])
             unique_results.append(result)
-    
+
     # Sort by similarity
     unique_results.sort(key=lambda x: x['similarity'], reverse=True)
-    
+
     # Return top k results
     return unique_results[:top_k]
 ```
@@ -368,25 +364,25 @@ def cluster_items(self, num_clusters=5):
     """Cluster items in the vector database"""
     if not self.items or len(self.items) < num_clusters:
         return {0: self.items}
-    
+
     try:
         # Import sklearn for clustering
         from sklearn.cluster import KMeans
-        
+
         # Extract embeddings
         embeddings = np.array([item['embedding'] for item in self.items])
-        
+
         # Perform clustering
         kmeans = KMeans(n_clusters=min(num_clusters, len(self.items)), random_state=42)
         clusters = kmeans.fit_predict(embeddings)
-        
+
         # Group items by cluster
         clustered_items = {}
         for i, cluster_id in enumerate(clusters):
             if cluster_id not in clustered_items:
                 clustered_items[cluster_id] = []
             clustered_items[cluster_id].append(self.items[i])
-        
+
         return clustered_items
     except Exception as e:
         # Return all items in a single cluster if clustering fails
@@ -404,20 +400,20 @@ We can also use the LLM to automatically generate labels for each cluster:
 def get_cluster_labels(self, clusters):
     """Generate labels for clusters using LLM"""
     labels = {}
-    
+
     for cluster_id, items in clusters.items():
         # Get text from items
         texts = [item['text'] for item in items[:5]]  # Use up to 5 items per cluster
-        
+
         # Create prompt
         prompt = f"""
         Generate a short, descriptive label (3-5 words) for a cluster of documents with the following content:
-        
+
         {texts}
-        
+
         Return only the label, without quotes or additional text.
         """
-        
+
         try:
             response = self.groq_client.generate_text(prompt, max_tokens=50)
             label = self.groq_client.extract_text_from_response(response).strip()
@@ -425,7 +421,7 @@ def get_cluster_labels(self, clusters):
         except Exception:
             # Use a default label if LLM fails
             labels[cluster_id] = f"Cluster {cluster_id}"
-    
+
     return labels
 ```
 
@@ -434,8 +430,6 @@ This function uses the LLM to analyze the content of each cluster and generate a
 ---
 
 ## 💪 Practice Exercises
-
-![Practice](https://media.giphy.com/media/3oKIPrc2ngFZ6BTyww/giphy.gif)
 
 1. **Implement a Hybrid Search System**:
    - Combine vector search with keyword search for better results
@@ -454,9 +448,17 @@ This function uses the LLM to analyze the content of each cluster and generate a
 
 ---
 
-## 🎯 Mini-Project Progress: Knowledge Base Assistant with Groq
+## 🔍 Key Concepts to Remember
 
-![Knowledge Base](https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy.gif)
+1. **Vector Embeddings**: Numerical representations that capture semantic meaning of text
+2. **Groq API Integration**: Using real LLM APIs to generate high-quality embeddings
+3. **Similarity Search**: Finding semantically similar content using cosine similarity
+4. **Query Expansion**: Enhancing search with LLM-generated alternative phrasings
+5. **Clustering**: Organizing vector data into meaningful groups with LLM-generated labels
+
+---
+
+## 🎯 Mini-Project Progress: Knowledge Base Assistant with Groq
 
 In this lesson, we've learned how to implement a vector database with real embeddings from the Groq API. This is a crucial component of our Knowledge Base Assistant:
 
@@ -469,6 +471,17 @@ In the next lesson, we'll explore retrieval patterns with LLM enhancement, which
 
 ---
 
+## 🚀 Next Steps
+
+In the next lesson, we'll explore:
+- Advanced retrieval patterns with LLM enhancement
+- Context-aware retrieval systems
+- Conversation memory with semantic search
+- Relevance scoring algorithms
+- Building a complete knowledge retrieval system
+
+---
+
 ## 📚 Resources
 
 - [Groq API Documentation](https://console.groq.com/docs/quickstart)
@@ -476,3 +489,11 @@ In the next lesson, we'll explore retrieval patterns with LLM enhancement, which
 - [Vector Database Concepts](https://www.pinecone.io/learn/vector-database/)
 - [Scikit-learn Clustering](https://scikit-learn.org/stable/modules/clustering.html)
 - [Cosine Similarity Explained](https://www.machinelearningplus.com/nlp/cosine-similarity/)
+
+---
+
+> 💡 **Note on LLM Integration**: This lesson demonstrates real integration with the Groq API for generating embeddings and enhancing search capabilities. The code examples show how to handle API calls, manage errors, and implement fallback mechanisms for production systems.
+
+---
+
+Happy coding! 🚀

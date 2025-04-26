@@ -1,6 +1,4 @@
-# 🧠 Module 2 LLM Version: Memory Systems - Lesson 1 💾
-
-![Memory Types](https://media.giphy.com/media/l0HlQXlQ3nHyLMvte/giphy.gif)
+# 🚀 Module 2-LLM: Memory Systems - Lesson 1: Memory Fundamentals 💾
 
 ## 🎯 Lesson Objectives
 
@@ -14,8 +12,6 @@ By the end of this lesson, you will:
 ---
 
 ## 📚 Introduction to Memory Systems with LLM Integration
-
-![Brain Memory](https://media.giphy.com/media/3o7TKsQ8Xb3gcGEgZW/giphy.gif)
 
 Memory is a fundamental component of intelligent agents. Without memory, agents would be stateless, responding to each input in isolation without any context or history. In this lesson, we'll explore how to implement different types of memory systems for AI agents, enhanced with real LLM integration using the Groq API.
 
@@ -59,32 +55,32 @@ class WorkingMemory:
         self.capacity = capacity
         self.items = deque(maxlen=capacity)
         self.groq_client = GroqClient()
-    
+
     def add(self, item):
         self.items.append({
             'content': item,
             'timestamp': time.time()
         })
-    
+
     def summarize(self):
         """Generate a summary of the current working memory using LLM"""
         if not self.items:
             return "Working memory is empty."
-        
+
         # Format the items for the LLM
         items_text = "\n".join([
-            f"{i+1}. {item['content']}" 
+            f"{i+1}. {item['content']}"
             for i, item in enumerate(self.items)
         ])
-        
+
         prompt = f"""
         Summarize the following items currently in working memory:
-        
+
         {items_text}
-        
+
         Provide a concise summary that captures the key information.
         """
-        
+
         response = self.groq_client.generate_text(prompt, max_tokens=150)
         return self.groq_client.extract_text_from_response(response)
 ```
@@ -109,28 +105,28 @@ class ShortTermMemory:
         self.capacity = capacity
         self.items = deque(maxlen=capacity)
         self.groq_client = GroqClient()
-    
+
     def extract_key_information(self, query):
         """Extract key information from short-term memory relevant to a query using LLM"""
         if not self.items:
             return "No information available in short-term memory."
-        
+
         # Format the items for the LLM
         items_text = "\n".join([
-            f"{i+1}. {item['content']}" 
+            f"{i+1}. {item['content']}"
             for i, item in enumerate(self.items)
         ])
-        
+
         prompt = f"""
         Given the following recent conversation history in short-term memory:
-        
+
         {items_text}
-        
+
         Extract key information that is relevant to this query: "{query}"
-        
+
         Provide only the most relevant details that would help answer the query.
         """
-        
+
         response = self.groq_client.generate_text(prompt, max_tokens=200)
         return self.groq_client.extract_text_from_response(response)
 ```
@@ -155,42 +151,42 @@ class LongTermMemory:
         self.storage_path = storage_path
         self.memory = self._load_memory()
         self.groq_client = GroqClient()
-    
+
     def search(self, query):
         """Search long-term memory for relevant information using LLM"""
         # Format the memory for the LLM
         facts_text = "\n".join([
-            f"Fact {i+1}: {fact['content']}" 
+            f"Fact {i+1}: {fact['content']}"
             for i, fact in enumerate(self.memory['facts'])
         ])
-        
+
         concepts_text = "\n".join([
-            f"Concept: {name}\nInfo: {concept['info']}" 
+            f"Concept: {name}\nInfo: {concept['info']}"
             for name, concept in self.memory['concepts'].items()
         ])
-        
+
         memory_text = f"""
         FACTS:
         {facts_text}
-        
+
         CONCEPTS:
         {concepts_text}
         """
-        
+
         prompt = f"""
         Given the following information in long-term memory:
-        
+
         {memory_text}
-        
+
         Find and extract information relevant to this query: "{query}"
-        
+
         Return only the most relevant facts and concepts that directly address the query.
         If nothing is relevant, state that no relevant information was found.
         """
-        
+
         response = self.groq_client.generate_text(prompt, max_tokens=300)
         result = self.groq_client.extract_text_from_response(response)
-        
+
         # Return in a structured format
         return [{
             'content': result,
@@ -218,40 +214,40 @@ class EpisodicMemory:
     def __init__(self):
         self.episodes = []
         self.groq_client = GroqClient()
-    
+
     def search_episodes(self, query):
         """Search episodic memory for relevant episodes using LLM"""
         if not self.episodes:
             return []
-        
+
         # Format the episodes for the LLM
         episodes_text = "\n\n".join([
-            f"Episode {i+1}:\n" + 
+            f"Episode {i+1}:\n" +
             "\n".join([f"{k}: {v}" for k, v in episode.items() if k != 'timestamp'])
             for i, episode in enumerate(self.episodes)
         ])
-        
+
         prompt = f"""
         Given the following episodes in episodic memory:
-        
+
         {episodes_text}
-        
+
         Find and extract episodes relevant to this query: "{query}"
-        
+
         Return only the most relevant episodes that directly address the query.
         If nothing is relevant, state that no relevant episodes were found.
         """
-        
+
         response = self.groq_client.generate_text(prompt, max_tokens=300)
         result = self.groq_client.extract_text_from_response(response)
-        
+
         # Parse the LLM response to identify which episodes were mentioned
         relevant_episodes = []
         for i, episode in enumerate(self.episodes):
             episode_marker = f"Episode {i+1}"
             if episode_marker in result:
                 relevant_episodes.append(episode)
-        
+
         return relevant_episodes
 ```
 
@@ -281,30 +277,30 @@ def _integrate_context(self, query, context):
     """Use LLM to integrate and prioritize context from different memory systems"""
     # Format the context for the LLM
     context_text = ""
-    
+
     if context.get('working_memory'):
         working_memory_text = "\n".join([
             f"- {item['content']}" for item in context['working_memory']
         ])
         context_text += f"WORKING MEMORY:\n{working_memory_text}\n\n"
-    
+
     # [Similar formatting for other memory types]
-    
+
     prompt = f"""
     Given this query: "{query}"
-    
+
     And the following context from different memory systems:
-    
+
     {context_text}
-    
+
     Integrate and prioritize the most relevant information to answer the query.
     Focus on the most important and directly relevant details.
     Organize the information in a coherent way that would be most helpful for responding to the query.
     """
-    
+
     response = self.groq_client.generate_text(prompt, max_tokens=500)
     integrated_context = self.groq_client.extract_text_from_response(response)
-    
+
     return {
         'raw_context': context,
         'integrated_context': integrated_context,
@@ -317,8 +313,6 @@ This method uses the Groq LLM to analyze context from all memory systems, identi
 ---
 
 ## 💪 Practice Exercises
-
-![Practice](https://media.giphy.com/media/3oKIPrc2ngFZ6BTyww/giphy.gif)
 
 1. **Implement a Forgetting Mechanism**:
    - Extend the `ShortTermMemory` class to include a time-based forgetting mechanism
@@ -337,6 +331,16 @@ This method uses the Groq LLM to analyze context from all memory systems, identi
 
 ---
 
+## 🔍 Key Concepts to Remember
+
+1. **Memory Types**: Different memory systems (working, short-term, long-term, episodic) serve distinct purposes in an agent architecture
+2. **LLM Enhancement**: LLMs can significantly improve memory operations through summarization, extraction, and context integration
+3. **Context Integration**: Combining information from multiple memory systems creates a more comprehensive understanding
+4. **Semantic Retrieval**: LLM-powered retrieval goes beyond keyword matching to understand meaning and relevance
+5. **Memory Architecture**: A well-designed memory architecture is crucial for building agents with context awareness and learning capabilities
+
+---
+
 ## 🎯 Mini-Project Progress: Knowledge Base Assistant with Groq
 
 ![Knowledge Base](https://media.giphy.com/media/3o7btPCcdNniyf0ArS/giphy.gif)
@@ -352,9 +356,28 @@ In the next lesson, we'll explore vector databases and embeddings, which will en
 
 ---
 
+## 🚀 Next Steps
+
+In the next lesson, we'll explore:
+- Vector databases for semantic search capabilities
+- Embedding techniques for memory retrieval
+- Advanced memory persistence strategies
+- Memory optimization for large-scale knowledge bases
+- Integration with external knowledge sources
+
+---
+
 ## 📚 Resources
 
 - [Groq API Documentation](https://console.groq.com/docs/quickstart)
 - [Memory Systems in Cognitive Architecture](https://en.wikipedia.org/wiki/Memory_in_cognitive_architecture)
 - [LangChain Memory Types](https://python.langchain.com/docs/modules/memory/)
 - [Working Memory in Cognitive Science](https://www.sciencedirect.com/topics/psychology/working-memory)
+
+---
+
+> 💡 **Note on LLM Integration**: This lesson demonstrates integration with real LLMs through the Groq API. The code examples show how to leverage LLM capabilities for memory operations like summarization, information extraction, and context integration.
+
+---
+
+Happy coding! 🚀
