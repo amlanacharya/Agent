@@ -1,0 +1,33 @@
+# Sample Document for Testing
+
+## Introduction
+
+This is a sample document for testing the document processing pipeline. It contains multiple sections and paragraphs to demonstrate how the text splitter works.
+
+## Document Structure
+
+Each paragraph will be processed and potentially split into chunks depending on the chunk size and overlap settings. The document also includes some formatting elements like:
+
+- Bullet points
+- Headers
+- Multiple paragraphs
+
+## Chunking Demonstration
+
+The purpose of this document is to demonstrate how different text splitting strategies work:
+
+1. Character-based splitting simply divides the text based on character count
+2. Recursive splitting tries to split on larger semantic units first (paragraphs), then falls back to smaller units if needed
+3. Semantic splitting preserves natural language boundaries like paragraphs and sentences
+
+## Long Section for Splitting
+
+This section contains a longer paragraph that might be split into multiple chunks depending on the chunk size setting. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl. Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl. Nullam auctor, nisl eget ultricies tincidunt, nisl nisl aliquam nisl, eget ultricies nisl nisl eget nisl.
+
+Another paragraph in this section continues with more text to ensure we have enough content for multiple chunks. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+
+## Conclusion
+
+This sample document should provide a good test case for the document processing pipeline. It includes various elements that might be encountered in real documents and should help demonstrate how the different components of the pipeline work together.
+
+Thank you for using this sample document!
