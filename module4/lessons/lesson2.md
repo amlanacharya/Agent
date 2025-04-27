@@ -34,21 +34,13 @@ After processing documents, the next critical step in a RAG system is to divide 
 
 ### The Impact of Chunking on RAG Performance
 
-```
-┌─────────────────┐     ┌─────────────┐     ┌────────────┐     ┌──────────┐
-│                 │     │             │     │            │     │          │
-│  Processed      │────▶│  Chunking   │────▶│ Embedding  │────▶│ Indexing │
-│  Documents      │     │  Strategy   │     │ Generation │     │          │
-│                 │     │             │     │            │     │          │
-└─────────────────┘     └─────────────┘     └────────────┘     └──────────┘
-                              │
-                              ▼
-                        ┌─────────────┐
-                        │             │
-                        │  Retrieval  │◀───── Query
-                        │  Quality    │
-                        │             │
-                        └─────────────┘
+```mermaid
+flowchart LR
+    PD[Processed Documents] --> CS[Chunking Strategy]
+    CS --> EG[Embedding Generation]
+    EG --> IX[Indexing]
+    CS --> |affects| RQ[Retrieval Quality]
+    Query --> RQ
 ```
 
 Poor chunking can lead to several problems:
@@ -105,7 +97,7 @@ def delimiter_based_chunking(text, delimiter="\n\n", max_chunk_size=1000):
     chunks = []
     current_chunk = []
     current_size = 0
-    
+
     for section in sections:
         section_size = len(section)
         if current_size + section_size > max_chunk_size and current_chunk:
@@ -115,10 +107,10 @@ def delimiter_based_chunking(text, delimiter="\n\n", max_chunk_size=1000):
         else:
             current_chunk.append(section)
             current_size += section_size
-    
+
     if current_chunk:
         chunks.append(delimiter.join(current_chunk))
-    
+
     return chunks
 ```
 
@@ -147,7 +139,7 @@ def recursive_chunking(text, delimiters=["\n\n", "\n", ". ", " "], max_chunk_siz
     # Base case: text is small enough or we've run out of delimiters
     if len(text) <= max_chunk_size or not delimiters:
         return [text]
-    
+
     # Try splitting with the current delimiter
     delimiter = delimiters[0]
     if delimiter in text:
@@ -155,10 +147,10 @@ def recursive_chunking(text, delimiters=["\n\n", "\n", ". ", " "], max_chunk_siz
         chunks = []
         current_chunk = []
         current_size = 0
-        
+
         for section in sections:
             section_size = len(section)
-            
+
             if current_size + section_size > max_chunk_size and current_chunk:
                 # Current chunk is full, process it recursively with next delimiter
                 combined_text = delimiter.join(current_chunk)
@@ -171,7 +163,7 @@ def recursive_chunking(text, delimiters=["\n\n", "\n", ". ", " "], max_chunk_siz
             else:
                 current_chunk.append(section)
                 current_size += section_size
-        
+
         # Process the final chunk
         if current_chunk:
             combined_text = delimiter.join(current_chunk)
@@ -179,9 +171,9 @@ def recursive_chunking(text, delimiters=["\n\n", "\n", ". ", " "], max_chunk_siz
                 chunks.extend(recursive_chunking(combined_text, delimiters[1:], max_chunk_size))
             else:
                 chunks.append(combined_text)
-        
+
         return chunks
-    
+
     # If current delimiter not found, try the next one
     return recursive_chunking(text, delimiters[1:], max_chunk_size)
 ```
@@ -213,10 +205,10 @@ def semantic_chunking(text, max_chunk_size=1000):
     chunks = []
     current_chunk = []
     current_size = 0
-    
+
     for paragraph in paragraphs:
         paragraph_size = len(paragraph)
-        
+
         # If paragraph fits in current chunk, add it
         if current_size + paragraph_size <= max_chunk_size:
             current_chunk.append(paragraph)
@@ -227,7 +219,7 @@ def semantic_chunking(text, max_chunk_size=1000):
                 sentences = paragraph.split(". ")
                 for sentence in sentences:
                     sentence_size = len(sentence)
-                    
+
                     if current_size + sentence_size <= max_chunk_size:
                         current_chunk.append(sentence)
                         current_size += sentence_size
@@ -235,7 +227,7 @@ def semantic_chunking(text, max_chunk_size=1000):
                         # Finalize current chunk
                         if current_chunk:
                             chunks.append("\n\n".join(current_chunk))
-                        
+
                         # Start new chunk with this sentence
                         if sentence_size > max_chunk_size:
                             # If sentence is still too large, split arbitrarily
@@ -248,15 +240,15 @@ def semantic_chunking(text, max_chunk_size=1000):
                 # Finalize current chunk
                 if current_chunk:
                     chunks.append("\n\n".join(current_chunk))
-                
+
                 # Start new chunk with this paragraph
                 current_chunk = [paragraph]
                 current_size = paragraph_size
-    
+
     # Add the final chunk
     if current_chunk:
         chunks.append("\n\n".join(current_chunk))
-    
+
     return chunks
 ```
 
@@ -286,12 +278,12 @@ def token_aware_chunking(text, tokenizer, max_tokens=500, overlap_tokens=50):
     # a tokenizer like tiktoken, transformers, or spaCy
     tokens = tokenizer.encode(text)
     chunks = []
-    
+
     for i in range(0, len(tokens), max_tokens - overlap_tokens):
         chunk_tokens = tokens[i:i + max_tokens]
         chunk_text = tokenizer.decode(chunk_tokens)
         chunks.append(chunk_text)
-    
+
     return chunks
 ```
 
@@ -374,22 +366,22 @@ class OverlappingChunker:
     def __init__(self, chunk_size=1000, overlap=200):
         self.chunk_size = chunk_size
         self.overlap = overlap
-    
+
     def chunk_text(self, text):
         chunks = []
         start = 0
-        
+
         while start < len(text):
             # Calculate end position
             end = min(start + self.chunk_size, len(text))
-            
+
             # Extract chunk
             chunk = text[start:end]
             chunks.append(chunk)
-            
+
             # Move start position for next chunk, accounting for overlap
             start = end - self.overlap
-        
+
         return chunks
 ```
 
@@ -422,20 +414,20 @@ Instead of arbitrary splitting, semantic chunking identifies natural boundaries:
 def find_semantic_boundaries(text):
     """Identify semantic boundaries in text."""
     boundaries = []
-    
+
     # Section headers (simplified example)
     section_pattern = r"^#+\s+.+$|^.+\n[=\-]+$"
     for match in re.finditer(section_pattern, text, re.MULTILINE):
         boundaries.append(match.start())
-    
+
     # Paragraph boundaries
     for match in re.finditer(r"\n\s*\n", text):
         boundaries.append(match.start())
-    
+
     # Topic shifts (would require more sophisticated NLP in practice)
     # This is a placeholder for where you might use topic modeling or
     # other NLP techniques to identify semantic shifts
-    
+
     return sorted(boundaries)
 
 def semantic_aware_chunking(text, max_chunk_size=1000):
@@ -443,27 +435,27 @@ def semantic_aware_chunking(text, max_chunk_size=1000):
     boundaries = find_semantic_boundaries(text)
     chunks = []
     start = 0
-    
+
     for boundary in boundaries:
         if boundary - start > max_chunk_size:
             # If distance to next boundary exceeds max size,
             # we need to create an intermediate chunk
             chunks.append(text[start:start + max_chunk_size])
             start = start + max_chunk_size
-            
+
             # Continue creating chunks until we reach the boundary
             while boundary - start > max_chunk_size:
                 chunks.append(text[start:start + max_chunk_size])
                 start = start + max_chunk_size
-        
+
         # Add chunk up to this boundary
         chunks.append(text[start:boundary])
         start = boundary
-    
+
     # Add final chunk if needed
     if start < len(text):
         chunks.append(text[start:])
-    
+
     return chunks
 ```
 
@@ -475,7 +467,7 @@ For longer documents, chunking based on topic shifts can improve retrieval relev
 def topic_based_chunking(text, max_chunk_size=1000):
     """
     Split text based on topic changes.
-    
+
     Note: This is a simplified example. A real implementation would use
     topic modeling techniques like LDA, NMF, or embedding-based clustering.
     """
@@ -485,21 +477,21 @@ def topic_based_chunking(text, max_chunk_size=1000):
     # 2. Generate embeddings for each unit
     # 3. Detect shifts in embedding similarity
     # 4. Use these shifts as chunk boundaries
-    
+
     # For this example, we'll use a simple heuristic based on keyword shifts
     paragraphs = text.split("\n\n")
     chunks = []
     current_chunk = []
     current_size = 0
     current_keywords = set()
-    
+
     for paragraph in paragraphs:
         # Extract keywords (simplified)
         words = paragraph.lower().split()
         keywords = set([word for word in words if len(word) > 5 and word.isalpha()])
-        
+
         paragraph_size = len(paragraph)
-        
+
         # Check for topic shift (simplified heuristic)
         if current_keywords and len(keywords.intersection(current_keywords)) < len(keywords) * 0.3:
             # Topic shift detected
@@ -507,22 +499,22 @@ def topic_based_chunking(text, max_chunk_size=1000):
                 chunks.append("\n\n".join(current_chunk))
                 current_chunk = []
                 current_size = 0
-        
+
         # Check size constraints
         if current_size + paragraph_size > max_chunk_size and current_chunk:
             chunks.append("\n\n".join(current_chunk))
             current_chunk = []
             current_size = 0
-        
+
         # Add paragraph to current chunk
         current_chunk.append(paragraph)
         current_size += paragraph_size
         current_keywords = keywords
-    
+
     # Add final chunk
     if current_chunk:
         chunks.append("\n\n".join(current_chunk))
-    
+
     return chunks
 ```
 
@@ -534,7 +526,7 @@ For documents with named entities, keeping related entities together can improve
 def entity_based_chunking(text, max_chunk_size=1000):
     """
     Create chunks that keep mentions of the same entities together.
-    
+
     Note: This is a simplified example. A real implementation would use
     named entity recognition (NER) from libraries like spaCy or Stanza.
     """
@@ -543,21 +535,21 @@ def entity_based_chunking(text, max_chunk_size=1000):
     # 1. Use NER to identify entities in the text
     # 2. Track entity mentions and their locations
     # 3. Try to keep mentions of the same entity in the same chunk
-    
+
     # For this example, we'll use a simple regex-based approach
     paragraphs = text.split("\n\n")
     chunks = []
     current_chunk = []
     current_size = 0
     current_entities = set()
-    
+
     for paragraph in paragraphs:
         # Simple entity detection (looking for capitalized words)
         entity_pattern = r'\b[A-Z][a-z]+\b'
         entities = set(re.findall(entity_pattern, paragraph))
-        
+
         paragraph_size = len(paragraph)
-        
+
         # If this paragraph shares entities with the current chunk, try to keep them together
         if entities.intersection(current_entities) and current_size + paragraph_size <= max_chunk_size * 1.2:
             # Allow slightly larger chunks to keep related entities together
@@ -576,11 +568,11 @@ def entity_based_chunking(text, max_chunk_size=1000):
             current_chunk = [paragraph]
             current_size = paragraph_size
             current_entities = entities
-    
+
     # Add final chunk
     if current_chunk:
         chunks.append("\n\n".join(current_chunk))
-    
+
     return chunks
 ```
 
@@ -592,29 +584,14 @@ Let's put everything together to create a comprehensive chunking pipeline that p
 
 ### Pipeline Architecture
 
-```
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│                 │     │                 │     │                 │
-│ Document        │────▶│ Structure       │────▶│ Chunking        │
-│ Preprocessing   │     │ Analysis        │     │ Strategy        │
-│                 │     │                 │     │ Selection       │
-└─────────────────┘     └─────────────────┘     └─────────────────┘
-                                                        │
-                                                        ▼
-┌─────────────────┐     ┌─────────────────┐     ┌─────────────────┐
-│                 │     │                 │     │                 │
-│ Metadata        │◀────│ Chunk           │◀────│ Chunking        │
-│ Enrichment      │     │ Generation      │     │ Parameters      │
-│                 │     │                 │     │ Optimization    │
-└─────────────────┘     └─────────────────┘     └─────────────────┘
-        │
-        ▼
-┌─────────────────┐
-│                 │
-│ Chunk           │
-│ Validation      │
-│                 │
-└─────────────────┘
+```mermaid
+flowchart TD
+    DP[Document Preprocessing] --> SA[Structure Analysis]
+    SA --> CSS[Chunking Strategy Selection]
+    CSS --> CPO[Chunking Parameters Optimization]
+    CPO --> CG[Chunk Generation]
+    CG --> ME[Metadata Enrichment]
+    ME --> CV[Chunk Validation]
 ```
 
 ### Implementation Example
@@ -622,33 +599,33 @@ Let's put everything together to create a comprehensive chunking pipeline that p
 ```python
 class DocumentChunkingPipeline:
     """Complete pipeline for document chunking with structure preservation."""
-    
+
     def __init__(self, default_chunk_size=1000, default_overlap=200):
         self.default_chunk_size = default_chunk_size
         self.default_overlap = default_overlap
-        
+
     def process_document(self, document):
         """Process a document through the chunking pipeline."""
         # 1. Analyze document structure
         doc_type, structure_info = self._analyze_structure(document)
-        
+
         # 2. Select appropriate chunking strategy
         chunker = self._select_chunking_strategy(doc_type, structure_info)
-        
+
         # 3. Optimize chunking parameters
         chunk_size, overlap = self._optimize_parameters(doc_type, structure_info)
-        
+
         # 4. Generate chunks
         raw_chunks = chunker.chunk_document(document, chunk_size, overlap)
-        
+
         # 5. Enrich chunks with metadata
         enriched_chunks = self._enrich_with_metadata(raw_chunks, document, structure_info)
-        
+
         # 6. Validate chunks
         valid_chunks = self._validate_chunks(enriched_chunks)
-        
+
         return valid_chunks
-    
+
     def _analyze_structure(self, document):
         """Analyze document structure to inform chunking decisions."""
         # Determine document type
@@ -657,7 +634,7 @@ class DocumentChunkingPipeline:
         else:
             # Infer document type from content and structure
             doc_type = self._infer_document_type(document)
-        
+
         # Extract structural information
         structure_info = {
             'has_sections': self._has_sections(document),
@@ -666,9 +643,9 @@ class DocumentChunkingPipeline:
             'avg_paragraph_length': self._get_avg_paragraph_length(document),
             'section_headers': self._extract_section_headers(document)
         }
-        
+
         return doc_type, structure_info
-    
+
     def _select_chunking_strategy(self, doc_type, structure_info):
         """Select the most appropriate chunking strategy based on document analysis."""
         if doc_type == 'code' or structure_info['has_code_blocks']:
@@ -686,36 +663,36 @@ class DocumentChunkingPipeline:
         else:
             # Default to recursive chunking for general documents
             return RecursiveChunker()
-    
+
     def _optimize_parameters(self, doc_type, structure_info):
         """Optimize chunking parameters based on document characteristics."""
         # Base values
         chunk_size = self.default_chunk_size
         overlap = self.default_overlap
-        
+
         # Adjust based on document type
         if doc_type == 'technical':
             chunk_size = 800  # Technical docs benefit from smaller chunks
         elif doc_type == 'narrative':
             chunk_size = 1200  # Narrative content needs more context
-        
+
         # Adjust based on structure
         if structure_info['has_sections']:
             # With clear sections, we can use larger chunks
             chunk_size *= 1.2
-        
+
         if structure_info['avg_paragraph_length'] > 200:
             # Long paragraphs need more overlap
             overlap = int(chunk_size * 0.25)
         else:
             overlap = int(chunk_size * 0.15)
-        
+
         return int(chunk_size), overlap
-    
+
     def _enrich_with_metadata(self, chunks, document, structure_info):
         """Add metadata to chunks to improve retrieval and context."""
         enriched_chunks = []
-        
+
         for i, chunk in enumerate(chunks):
             # Basic metadata
             metadata = {
@@ -725,14 +702,14 @@ class DocumentChunkingPipeline:
                 'document_title': document.get('title', ''),
                 'document_type': document.get('document_type', '')
             }
-            
+
             # Add structural context
             if structure_info['has_sections']:
                 metadata['section'] = self._determine_section(chunk, structure_info['section_headers'])
-            
+
             # Add semantic metadata
             metadata['keywords'] = self._extract_keywords(chunk)
-            
+
             # Add position context
             if i == 0:
                 metadata['position'] = 'beginning'
@@ -740,64 +717,64 @@ class DocumentChunkingPipeline:
                 metadata['position'] = 'end'
             else:
                 metadata['position'] = 'middle'
-            
+
             enriched_chunks.append({
                 'content': chunk,
                 'metadata': metadata
             })
-        
+
         return enriched_chunks
-    
+
     def _validate_chunks(self, chunks):
         """Validate chunks to ensure quality and consistency."""
         valid_chunks = []
-        
+
         for chunk in chunks:
             # Skip empty or very short chunks
             if not chunk['content'] or len(chunk['content']) < 50:
                 continue
-            
+
             # Ensure chunk has minimum semantic value
             if not self._has_semantic_value(chunk['content']):
                 continue
-            
+
             valid_chunks.append(chunk)
-        
+
         return valid_chunks
-    
+
     # Helper methods (simplified implementations)
     def _infer_document_type(self, document):
         # Simplified type inference
         return 'general'
-    
+
     def _has_sections(self, document):
         # Check for section markers
         return True
-    
+
     def _has_tables(self, document):
         # Check for table structures
         return False
-    
+
     def _has_code_blocks(self, document):
         # Check for code blocks
         return False
-    
+
     def _get_avg_paragraph_length(self, document):
         # Calculate average paragraph length
         return 150
-    
+
     def _extract_section_headers(self, document):
         # Extract section headers
         return []
-    
+
     def _determine_section(self, chunk, section_headers):
         # Determine which section a chunk belongs to
         return "Unknown Section"
-    
+
     def _extract_keywords(self, chunk):
         # Extract keywords from chunk
         return []
-    
+
     def _has_semantic_value(self, content):
         # Check if content has semantic value
         return len(content) > 50
