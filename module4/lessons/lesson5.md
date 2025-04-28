@@ -28,7 +28,7 @@ flowchart LR
     R --> S[Synthesis]
     S --> AG[Answer Generation]
     AG --> A[Answer with Sources]
-    
+
     subgraph Document Processing
         D[Documents] --> DL[Document Loading]
         DL --> TS[Text Splitting]
@@ -37,7 +37,7 @@ flowchart LR
         DL --> ME[Metadata Extraction]
         ME --> MDB[Metadata Database]
     end
-    
+
     I --> R
     MDB --> R
 ```
@@ -62,11 +62,11 @@ The core of a Document Q&A system is the Retrieval-Augmented Generation (RAG) co
 ```python
 class SimpleRAGSystem:
     """A simple RAG system with vector database integration."""
-    
+
     def __init__(self, documents, embeddings, vector_store_type="faiss"):
         """
         Initialize the RAG system.
-        
+
         Args:
             documents: List of document chunks
             embeddings: List of embedding vectors for the chunks
@@ -74,7 +74,7 @@ class SimpleRAGSystem:
         """
         self.documents = documents
         self.vector_store_type = vector_store_type
-        
+
         # Initialize vector database
         if vector_store_type == "faiss":
             self.vector_db = self._init_faiss(documents, embeddings)
@@ -82,34 +82,34 @@ class SimpleRAGSystem:
             self.vector_db = self._init_chroma(documents, embeddings)
         else:
             raise ValueError(f"Unsupported vector store type: {vector_store_type}")
-    
+
     def _init_faiss(self, documents, embeddings):
         """Initialize a FAISS vector database."""
         import faiss
         import numpy as np
-        
+
         # Convert embeddings to numpy array
         embeddings_array = np.array(embeddings).astype('float32')
-        
+
         # Create FAISS index
         dimension = embeddings_array.shape[1]
         index = faiss.IndexFlatL2(dimension)
         index.add(embeddings_array)
-        
+
         return {
             "index": index,
             "documents": documents,
             "embeddings": embeddings_array
         }
-    
+
     def _init_chroma(self, documents, embeddings):
         """Initialize a ChromaDB vector database."""
         import chromadb
-        
+
         # Create ChromaDB client
         client = chromadb.Client()
         collection = client.create_collection("documents")
-        
+
         # Add documents to collection
         for i, (doc, embedding) in enumerate(zip(documents, embeddings)):
             collection.add(
@@ -117,7 +117,7 @@ class SimpleRAGSystem:
                 embeddings=[embedding],
                 metadatas=[doc.get("metadata", {})]
             )
-        
+
         return {
             "collection": collection,
             "documents": documents
@@ -132,30 +132,30 @@ The retrieval component finds the most relevant document chunks for a given ques
 def retrieve(self, query, embedding_model, top_k=5, use_hybrid=False):
     """
     Retrieve relevant documents for a query.
-    
+
     Args:
         query: User question
         embedding_model: Model to generate query embedding
         top_k: Number of documents to retrieve
         use_hybrid: Whether to use hybrid retrieval (semantic + keyword)
-        
+
     Returns:
         List of relevant document chunks
     """
     # Generate query embedding
     query_embedding = embedding_model.embed_text(query)
-    
+
     # Semantic search
     if self.vector_store_type == "faiss":
         results = self._faiss_search(query_embedding, top_k)
     else:
         results = self._chroma_search(query_embedding, top_k)
-    
+
     # Hybrid search (combine with keyword search)
     if use_hybrid:
         keyword_results = self._keyword_search(query, top_k)
         results = self._merge_results(results, keyword_results)
-    
+
     return results[:top_k]
 ```
 
@@ -167,20 +167,20 @@ Context augmentation enhances the query with additional information:
 def augment_query(self, query, context=None):
     """
     Augment the query with additional context.
-    
+
     Args:
         query: Original user question
         context: Additional context (e.g., conversation history)
-        
+
     Returns:
         Augmented query
     """
     if not context:
         return query
-    
+
     # Simple augmentation: combine query with context
     augmented_query = f"Context: {context}\n\nQuestion: {query}"
-    
+
     return augmented_query
 ```
 
@@ -192,34 +192,34 @@ The generation component creates answers based on retrieved information:
 def generate_answer(self, query, retrieved_chunks, llm_client):
     """
     Generate an answer based on retrieved chunks.
-    
+
     Args:
         query: User question
         retrieved_chunks: Relevant document chunks
         llm_client: LLM client for text generation
-        
+
     Returns:
         Generated answer
     """
     # Prepare context from retrieved chunks
     context = "\n\n".join([chunk["content"] for chunk in retrieved_chunks])
-    
+
     # Create prompt for the LLM
     prompt = f"""
     Answer the following question based on the provided context.
     If the context doesn't contain relevant information, say "I don't have enough information to answer this question."
-    
+
     Context:
     {context}
-    
+
     Question: {query}
-    
+
     Answer:
     """
-    
+
     # Generate answer
     answer = llm_client.generate_text(prompt)
-    
+
     return answer
 ```
 
@@ -235,10 +235,10 @@ Effective question processing improves retrieval quality:
 def analyze_question(self, question):
     """
     Analyze a question to identify its type and key entities.
-    
+
     Args:
         question: User question
-        
+
     Returns:
         Dictionary with question analysis
     """
@@ -251,20 +251,20 @@ def analyze_question(self, question):
         "why": "reason",
         "how": "process"
     }
-    
+
     question_lower = question.lower()
     question_type = "general"
-    
+
     for q_word, q_type in question_types.items():
         if question_lower.startswith(q_word):
             question_type = q_type
             break
-    
+
     # Extract key entities (simplified)
     words = question_lower.split()
     stop_words = {"what", "who", "when", "where", "why", "how", "is", "are", "the", "a", "an"}
     entities = [word for word in words if word not in stop_words and len(word) > 3]
-    
+
     return {
         "type": question_type,
         "entities": entities,
@@ -278,16 +278,16 @@ def analyze_question(self, question):
 def expand_query(self, question, analysis):
     """
     Expand a query to improve retrieval.
-    
+
     Args:
         question: Original question
         analysis: Question analysis
-        
+
     Returns:
         List of expanded queries
     """
     expanded_queries = [question]  # Start with original question
-    
+
     # Add variations based on question type
     if analysis["type"] == "definition":
         expanded_queries.append(f"definition of {' '.join(analysis['entities'])}")
@@ -295,11 +295,11 @@ def expand_query(self, question, analysis):
     elif analysis["type"] == "process":
         expanded_queries.append(f"steps for {' '.join(analysis['entities'])}")
         expanded_queries.append(f"process of {' '.join(analysis['entities'])}")
-    
+
     # Add entity-focused queries
     for entity in analysis["entities"]:
         expanded_queries.append(entity)
-    
+
     return expanded_queries
 ```
 
@@ -315,19 +315,19 @@ When information is spread across multiple documents, synthesis is crucial:
 def retrieve_from_multiple_documents(self, query, embedding_model, top_k=3, docs_per_source=2):
     """
     Retrieve information from multiple documents.
-    
+
     Args:
         query: User question
         embedding_model: Model to generate query embedding
         top_k: Number of total chunks to retrieve
         docs_per_source: Maximum chunks per document source
-        
+
     Returns:
         List of relevant chunks from different documents
     """
     # Get all relevant chunks
     all_chunks = self.retrieve(query, embedding_model, top_k=top_k*2)
-    
+
     # Group by document source
     chunks_by_source = {}
     for chunk in all_chunks:
@@ -335,12 +335,12 @@ def retrieve_from_multiple_documents(self, query, embedding_model, top_k=3, docs
         if source not in chunks_by_source:
             chunks_by_source[source] = []
         chunks_by_source[source].append(chunk)
-    
+
     # Select top chunks from each source
     balanced_chunks = []
     for source, chunks in chunks_by_source.items():
         balanced_chunks.extend(chunks[:docs_per_source])
-    
+
     # Sort by relevance and limit to top_k
     balanced_chunks.sort(key=lambda x: x.get("score", 0), reverse=True)
     return balanced_chunks[:top_k]
@@ -352,12 +352,12 @@ def retrieve_from_multiple_documents(self, query, embedding_model, top_k=3, docs
 def synthesize_information(self, query, chunks, llm_client):
     """
     Synthesize information from multiple chunks.
-    
+
     Args:
         query: User question
         chunks: Retrieved chunks
         llm_client: LLM client for text generation
-        
+
     Returns:
         Synthesized information
     """
@@ -366,25 +366,25 @@ def synthesize_information(self, query, chunks, llm_client):
     for i, chunk in enumerate(chunks):
         source = chunk.get("metadata", {}).get("source", f"Source {i+1}")
         contexts.append(f"[{source}]: {chunk['content']}")
-    
+
     context_text = "\n\n".join(contexts)
-    
+
     # Create synthesis prompt
     prompt = f"""
     Synthesize information from the following sources to answer the question.
     If the sources contain conflicting information, acknowledge the differences.
-    
+
     Question: {query}
-    
+
     Sources:
     {context_text}
-    
+
     Synthesized Answer:
     """
-    
+
     # Generate synthesized answer
     answer = llm_client.generate_text(prompt)
-    
+
     return answer
 ```
 
@@ -400,31 +400,31 @@ Proper source attribution is essential for trustworthy answers:
 def track_sources(self, chunks):
     """
     Track sources for retrieved chunks.
-    
+
     Args:
         chunks: Retrieved document chunks
-        
+
     Returns:
         Dictionary mapping content to sources
     """
     source_map = {}
-    
+
     for chunk in chunks:
         content = chunk["content"]
         metadata = chunk.get("metadata", {})
-        
+
         source = {
             "document": metadata.get("source", "Unknown"),
             "page": metadata.get("page"),
             "section": metadata.get("section"),
             "score": chunk.get("score", 0)
         }
-        
+
         if content in source_map:
             source_map[content].append(source)
         else:
             source_map[content] = [source]
-    
+
     return source_map
 ```
 
@@ -434,41 +434,41 @@ def track_sources(self, chunks):
 def generate_answer_with_citations(self, query, chunks, llm_client):
     """
     Generate an answer with citations.
-    
+
     Args:
         query: User question
         chunks: Retrieved chunks
         llm_client: LLM client for text generation
-        
+
     Returns:
         Answer with citations
     """
     # Track sources
     source_map = self.track_sources(chunks)
-    
+
     # Prepare context with source identifiers
     contexts = []
     for i, chunk in enumerate(chunks):
         contexts.append(f"[{i+1}] {chunk['content']}")
-    
+
     context_text = "\n\n".join(contexts)
-    
+
     # Create prompt for answer with citations
     prompt = f"""
     Answer the following question based on the provided sources.
     Use citation numbers [1], [2], etc. to indicate which source supports each part of your answer.
-    
+
     Question: {query}
-    
+
     Sources:
     {context_text}
-    
+
     Answer with citations:
     """
-    
+
     # Generate answer
     answer = llm_client.generate_text(prompt)
-    
+
     # Add source details at the end
     sources_text = "\n\nSources:\n"
     for i, chunk in enumerate(chunks):
@@ -477,7 +477,7 @@ def generate_answer_with_citations(self, query, chunks, llm_client):
         page = metadata.get("page", "")
         page_info = f", page {page}" if page else ""
         sources_text += f"[{i+1}] {source}{page_info}\n"
-    
+
     return answer + sources_text
 ```
 
@@ -493,17 +493,17 @@ Not all answers can be given with the same confidence:
 def assess_confidence(self, query, chunks):
     """
     Assess confidence in the answer.
-    
+
     Args:
         query: User question
         chunks: Retrieved chunks
-        
+
     Returns:
         Confidence score (0-1)
     """
     if not chunks:
         return 0.0
-    
+
     # Factors affecting confidence
     factors = {
         "relevance": self._calculate_relevance(query, chunks),
@@ -511,7 +511,7 @@ def assess_confidence(self, query, chunks):
         "coverage": self._calculate_coverage(query, chunks),
         "source_quality": self._calculate_source_quality(chunks)
     }
-    
+
     # Weighted average of factors
     weights = {
         "relevance": 0.4,
@@ -519,9 +519,9 @@ def assess_confidence(self, query, chunks):
         "coverage": 0.3,
         "source_quality": 0.1
     }
-    
+
     confidence = sum(score * weights[factor] for factor, score in factors.items())
-    
+
     return min(1.0, max(0.0, confidence))
 ```
 
@@ -531,13 +531,13 @@ def assess_confidence(self, query, chunks):
 def generate_response_with_uncertainty(self, query, chunks, confidence, llm_client):
     """
     Generate a response that communicates uncertainty appropriately.
-    
+
     Args:
         query: User question
         chunks: Retrieved chunks
         confidence: Confidence score (0-1)
         llm_client: LLM client for text generation
-        
+
     Returns:
         Response with appropriate uncertainty language
     """
@@ -551,10 +551,10 @@ def generate_response_with_uncertainty(self, query, chunks, confidence, llm_clie
     else:
         confidence_level = "low"
         prefix = "I'm not entirely certain, but based on limited information, "
-    
+
     # Generate base answer
     base_answer = self.generate_answer(query, chunks, llm_client)
-    
+
     # Add confidence prefix
     if confidence < 0.3 and "I don't have enough information" not in base_answer:
         response = f"{prefix}{base_answer}\n\nPlease note that the available information on this topic is limited."
@@ -562,7 +562,7 @@ def generate_response_with_uncertainty(self, query, chunks, confidence, llm_clie
         response = f"{prefix}{base_answer}"
     else:
         response = base_answer
-    
+
     return response
 ```
 
@@ -578,22 +578,22 @@ Some questions are about document metadata rather than content:
 def _is_metadata_query(self, question):
     """
     Determine if a question is about document metadata.
-    
+
     Args:
         question: User question
-        
+
     Returns:
         Boolean indicating if this is a metadata query
     """
     metadata_keywords = {
-        "author", "wrote", "written", "published", "publication", 
+        "author", "wrote", "written", "published", "publication",
         "date", "year", "when was", "how old", "recent",
         "title", "called", "named", "file", "document",
         "type", "format", "source", "where from", "origin"
     }
-    
+
     question_lower = question.lower()
-    
+
     return any(keyword in question_lower for keyword in metadata_keywords)
 ```
 
@@ -603,43 +603,43 @@ def _is_metadata_query(self, question):
 def retrieve_metadata(self, query, metadata_fields=None):
     """
     Retrieve document metadata based on a query.
-    
+
     Args:
         query: User question about metadata
         metadata_fields: Specific metadata fields to search
-        
+
     Returns:
         List of relevant metadata entries
     """
     # Default metadata fields to search
     if metadata_fields is None:
         metadata_fields = ["author", "title", "date", "source", "type"]
-    
+
     # Extract key terms from query
     query_terms = set(query.lower().split())
     stop_words = {"what", "who", "when", "where", "why", "how", "is", "are", "the", "a", "an"}
     query_terms = query_terms - stop_words
-    
+
     # Search for documents with matching metadata
     results = []
-    
+
     for i, doc in enumerate(self.documents):
         metadata = doc.get("metadata", {})
-        
+
         # Calculate a simple relevance score
         score = 0
         matched_fields = []
-        
+
         for field in metadata_fields:
             if field in metadata:
                 field_value = str(metadata[field]).lower()
-                
+
                 # Check if any query term is in the metadata value
                 for term in query_terms:
                     if term in field_value:
                         score += 1
                         matched_fields.append(field)
-        
+
         if score > 0:
             results.append({
                 "document_id": i,
@@ -647,10 +647,10 @@ def retrieve_metadata(self, query, metadata_fields=None):
                 "score": score,
                 "matched_fields": matched_fields
             })
-    
+
     # Sort by score
     results.sort(key=lambda x: x["score"], reverse=True)
-    
+
     return results
 ```
 
@@ -660,42 +660,42 @@ def retrieve_metadata(self, query, metadata_fields=None):
 def answer_metadata_query(self, query, metadata_results, llm_client):
     """
     Generate an answer for a metadata query.
-    
+
     Args:
         query: User question about metadata
         metadata_results: Retrieved metadata
         llm_client: LLM client for text generation
-        
+
     Returns:
         Answer about document metadata
     """
     if not metadata_results:
         return "I couldn't find any documents with metadata matching your query."
-    
+
     # Prepare metadata context
     metadata_context = []
     for i, result in enumerate(metadata_results[:5]):  # Limit to top 5
         metadata = result["metadata"]
         metadata_str = ", ".join(f"{k}: {v}" for k, v in metadata.items())
         metadata_context.append(f"Document {i+1}: {metadata_str}")
-    
+
     metadata_text = "\n".join(metadata_context)
-    
+
     # Create prompt for metadata answer
     prompt = f"""
     Answer the following question about document metadata.
-    
+
     Question: {query}
-    
+
     Document Metadata:
     {metadata_text}
-    
+
     Answer:
     """
-    
+
     # Generate answer
     answer = llm_client.generate_text(prompt)
-    
+
     return answer
 ```
 
@@ -708,11 +708,11 @@ Now let's combine all these components into a complete Document Q&A system:
 ```python
 class DocumentQASystem:
     """Complete Document Q&A system."""
-    
+
     def __init__(self, rag_system, embedding_model, llm_client):
         """
         Initialize the Document Q&A system.
-        
+
         Args:
             rag_system: RAG system for retrieval
             embedding_model: Model for generating embeddings
@@ -721,21 +721,21 @@ class DocumentQASystem:
         self.rag_system = rag_system
         self.embedding_model = embedding_model
         self.llm_client = llm_client
-    
+
     def answer_question(self, question, k=5):
         """
         Answer a user question.
-        
+
         Args:
             question: User question
             k: Number of chunks to retrieve
-            
+
         Returns:
             Answer with sources and confidence information
         """
         # Analyze the question
         analysis = self.rag_system.analyze_question(question)
-        
+
         # Handle metadata queries differently
         if analysis["is_metadata_query"]:
             metadata_results = self.rag_system.retrieve_metadata(question)
@@ -748,18 +748,18 @@ class DocumentQASystem:
                 "is_metadata_query": True,
                 "confidence": 0.9 if metadata_results else 0.1
             }
-        
+
         # Expand the query
         expanded_queries = self.rag_system.expand_query(question, analysis)
-        
+
         # Retrieve from multiple documents
         chunks = self.rag_system.retrieve_from_multiple_documents(
             expanded_queries[0], self.embedding_model, top_k=k
         )
-        
+
         # Assess confidence
         confidence = self.rag_system.assess_confidence(question, chunks)
-        
+
         # Generate answer with citations
         if confidence >= 0.5:
             answer = self.rag_system.generate_answer_with_citations(
@@ -770,7 +770,7 @@ class DocumentQASystem:
             answer = self.rag_system.generate_response_with_uncertainty(
                 question, chunks, confidence, self.llm_client
             )
-        
+
         return {
             "answer": answer,
             "sources": [chunk.get("metadata", {}) for chunk in chunks],
@@ -793,6 +793,8 @@ class DocumentQASystem:
 
 5. **Implement Confidence Scoring**: Develop a confidence scoring system that assesses the reliability of answers and communicates uncertainty appropriately.
 
+6. **Refactor to LCEL**: Take the traditional RAG implementation and refactor it to use LangChain Expression Language (LCEL) with the pipe operator. Compare the readability and maintainability of both approaches.
+
 ---
 
 ## 🔍 Key Takeaways
@@ -809,6 +811,8 @@ class DocumentQASystem:
 
 6. **Metadata Handling**: Some questions are about document metadata rather than content and require specialized handling.
 
+7. **Modern Chain Construction**: LangChain Expression Language (LCEL) provides a more readable, maintainable, and functional approach to building RAG pipelines.
+
 ---
 
 ## 📚 Resources
@@ -819,19 +823,170 @@ class DocumentQASystem:
 - [ChromaDB Documentation](https://docs.trychroma.com/)
 - [LlamaIndex RAG Tutorial](https://docs.llamaindex.ai/en/stable/getting_started/concepts.html)
 - [Hugging Face RAG Systems](https://huggingface.co/blog/rag-systems)
+- [LangChain Expression Language (LCEL) Guide](https://python.langchain.com/docs/expression_language/)
+- [LCEL Cookbook](https://python.langchain.com/docs/expression_language/cookbook/)
+- [Building RAG with LCEL](https://python.langchain.com/docs/use_cases/question_answering/quickstart)
+- [LCEL Design Patterns](https://python.langchain.com/docs/expression_language/how_to/)
 
 ---
+
+## 🔗 Introduction to LangChain Expression Language (LCEL)
+
+As we prepare to move into more advanced RAG techniques in Module 5, it's important to introduce a powerful paradigm for building chains: **LangChain Expression Language (LCEL)**.
+
+LCEL is a declarative way to compose chains using the pipe operator (`|`), making your code more readable, maintainable, and efficient. From Module 5 onwards, we'll be using LCEL extensively, so let's get familiar with it now.
+
+### What is LCEL?
+
+LCEL allows you to compose LangChain components in a functional programming style using the pipe operator (`|`). This creates more readable and maintainable chains compared to the traditional nested approach.
+
+### Traditional vs. LCEL Approach
+
+Here's a comparison of the traditional approach and the LCEL approach for a simple RAG pipeline:
+
+**Traditional Approach:**
+```python
+def process_query(query, retriever, llm):
+    # Retrieve documents
+    documents = retriever.get_relevant_documents(query)
+
+    # Format prompt with documents
+    context = "\n\n".join(doc.page_content for doc in documents)
+    prompt = f"""
+    Answer the following question based on the provided context:
+
+    Context:
+    {context}
+
+    Question: {query}
+
+    Answer:
+    """
+
+    # Generate answer
+    response = llm.invoke(prompt)
+
+    return response
+```
+
+**LCEL Approach:**
+```python
+from langchain.schema.runnable import RunnablePassthrough
+from langchain.prompts import ChatPromptTemplate
+
+# Define the prompt template
+prompt_template = ChatPromptTemplate.from_template("""
+Answer the following question based on the provided context:
+
+Context:
+{context}
+
+Question: {question}
+
+Answer:
+""")
+
+# Define the retrieval chain
+def format_docs(docs):
+    return "\n\n".join(doc.page_content for doc in docs)
+
+# Build the chain with the pipe operator
+rag_chain = (
+    {"context": retriever | format_docs, "question": RunnablePassthrough()}
+    | prompt_template
+    | llm
+)
+
+# Use the chain
+response = rag_chain.invoke(query)
+```
+
+### Benefits of LCEL
+
+1. **Readability**: The flow of data is clear and explicit
+2. **Composability**: Easy to add, remove, or rearrange components
+3. **Debugging**: Better tracing and inspection of intermediate results
+4. **Streaming**: Native support for streaming responses
+5. **Parallelism**: Automatic parallelization of independent operations
+6. **Reusability**: Components can be easily reused in different chains
+
+### Simple LCEL RAG Example
+
+Here's a complete example of a RAG system using LCEL:
+
+```python
+from langchain.schema.runnable import RunnablePassthrough
+from langchain.prompts import ChatPromptTemplate
+from langchain.chat_models import ChatGroq
+from langchain.embeddings import HuggingFaceEmbeddings
+from langchain.vectorstores import FAISS
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain.document_loaders import TextLoader
+
+# 1. Load documents
+loader = TextLoader("data.txt")
+documents = loader.load()
+
+# 2. Split text
+text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
+splits = text_splitter.split_documents(documents)
+
+# 3. Create embeddings and vector store
+embedding_model = HuggingFaceEmbeddings(model_name="all-MiniLM-L6-v2")
+vectorstore = FAISS.from_documents(splits, embedding_model)
+retriever = vectorstore.as_retriever(search_kwargs={"k": 4})
+
+# 4. Create LLM
+llm = ChatGroq(temperature=0, model_name="llama2-70b-4096")
+
+# 5. Create prompt template
+prompt = ChatPromptTemplate.from_template("""
+Answer the following question based only on the provided context:
+
+Context:
+{context}
+
+Question: {question}
+
+Answer:
+""")
+
+# 6. Define document formatting function
+def format_docs(docs):
+    return "\n\n".join(doc.page_content for doc in docs)
+
+# 7. Create the RAG chain with LCEL
+rag_chain = (
+    {"context": retriever | format_docs, "question": RunnablePassthrough()}
+    | prompt
+    | llm
+)
+
+# 8. Use the chain
+query = "What is RAG?"
+response = rag_chain.invoke(query)
+print(response.content)
+```
+
+In Module 5, we'll explore more advanced LCEL patterns, including:
+- Adding memory to chains
+- Implementing branching logic
+- Creating parallel retrievers
+- Building reranking pipelines
+- Implementing streaming responses
+- Creating custom runnables
 
 ## 🚀 Next Steps
 
 Congratulations on completing Module 4: Document Processing & RAG Foundations! You now have a solid understanding of how to build document-aware AI systems that can retrieve and use information from external sources.
 
 In the next module, we'll explore advanced RAG techniques, including:
-- Hybrid search strategies
+- Hybrid search strategies with LCEL
 - Contextual compression
 - Reranking mechanisms
 - Self-querying retrieval
 - Multi-hop reasoning
 - Evaluation frameworks for RAG systems
+- Advanced LCEL patterns for complex RAG pipelines
 
-These advanced techniques will help you build even more powerful and effective knowledge-based AI applications.
+These advanced techniques will help you build even more powerful and effective knowledge-based AI applications using modern LangChain patterns.

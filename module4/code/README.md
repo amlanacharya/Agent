@@ -13,6 +13,7 @@ This directory contains all the code examples and implementations for Module 4: 
 - **metadata_extractors.py**: Metadata extraction systems for enhanced retrieval
 - **rag_system.py**: Simple RAG system combining retrieval and generation
 - **document_qa.py**: Complete document Q&A system implementation
+- **lcel_rag_system.py**: RAG system implemented using LangChain Expression Language (LCEL)
 
 ### Test Scripts
 - **test_document_loaders.py**: Tests for document loader implementations
@@ -66,6 +67,14 @@ This directory contains all the code examples and implementations for Module 4: 
 - Confidence scoring for responses
 - Handling of metadata-specific queries
 
+### LCEL RAG System
+- Modern implementation using LangChain Expression Language (LCEL)
+- Declarative chain composition with the pipe operator (`|`)
+- Improved readability and maintainability
+- Functional programming approach to RAG
+- Separation of retrieval, formatting, and generation steps
+- Structured data flow between components
+
 ## 🔄 Integration with Previous Modules
 
 The implementations in this module build upon concepts from previous modules:
@@ -75,7 +84,9 @@ The implementations in this module build upon concepts from previous modules:
 
 ## 🧪 Example Usage
 
-Here's a simple example of how to use the document Q&A system:
+### Traditional RAG System
+
+Here's a simple example of how to use the traditional document Q&A system:
 
 ```python
 from document_loaders import PDFLoader, TextLoader
@@ -116,8 +127,51 @@ response = qa_system.answer_question(
     k=3  # Number of chunks to retrieve
 )
 
-print(response.answer)
-print("Sources:", response.sources)
+print(response["answer"])
+print("Sources:", response["sources"])
+```
+
+### LCEL RAG System
+
+Here's how to use the modern LCEL-based RAG system:
+
+```python
+from document_loaders import PDFLoader, TextLoader
+from text_splitters import RecursiveCharacterTextSplitter
+from embedding_pipelines import SentenceTransformerEmbeddings
+from lcel_rag_system import LCELRagSystem
+
+# Load documents
+pdf_loader = PDFLoader("path/to/document.pdf")
+text_loader = TextLoader("path/to/document.txt")
+documents = pdf_loader.load() + text_loader.load()
+
+# Split into chunks
+text_splitter = RecursiveCharacterTextSplitter(
+    chunk_size=1000,
+    chunk_overlap=200
+)
+chunks = text_splitter.split_documents(documents)
+
+# Create embeddings
+embedding_model = SentenceTransformerEmbeddings("all-MiniLM-L6-v2")
+embeddings = embedding_model.embed_documents(chunks)
+
+# Initialize LCEL RAG system
+rag_system = LCELRagSystem(
+    documents=chunks,
+    embeddings=embeddings,
+    vector_store_type="faiss"
+)
+
+# Ask questions with citations
+answer = rag_system.answer_question(
+    question="What are the main points in the document?",
+    embedding_model=embedding_model,
+    use_citations=True
+)
+
+print(answer)
 ```
 
 ## 🛠️ Advanced Features
@@ -132,6 +186,10 @@ The code examples in this module also demonstrate several advanced features:
 - **Metadata Filtering**: Refine retrieval based on document metadata
 - **Multi-Modal Support**: Handle text, tables, and images in documents
 - **Confidence Scoring**: Assess the reliability of generated answers
+- **LCEL Composition**: Build complex chains with simple, readable syntax
+- **Functional Programming**: Apply functional programming patterns to RAG
+- **Declarative Chains**: Define data flow in a declarative rather than imperative style
+- **Component Reusability**: Create reusable components for different RAG pipelines
 
 ## 🔍 Implementation Notes
 

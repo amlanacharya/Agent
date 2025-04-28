@@ -17,7 +17,9 @@ exercises/
 ├── lesson4_exercises.py                      # Solutions for Lesson 4 exercises (Metadata Extraction)
 ├── test_lesson4_exercises.py                 # Tests for Lesson 4 solutions
 ├── lesson5_exercises.py                      # Solutions for Lesson 5 exercises (RAG System)
-└── test_lesson5_exercises.py                 # Tests for Lesson 5 solutions
+├── test_lesson5_exercises.py                 # Tests for Lesson 5 solutions
+├── lcel_exercises.py                         # Exercises for LangChain Expression Language (LCEL)
+└── test_lcel_exercises.py                    # Tests for LCEL exercises
 ```
 
 ## 🔍 Exercise Descriptions
@@ -62,6 +64,15 @@ exercises/
   - 🧩 Building multi-document retrieval and synthesis
   - 📊 Designing answer generation with source attribution
 
+### LCEL: LangChain Expression Language
+
+- **lcel_exercises.py**: Exercises for practicing with LCEL:
+  - 🔗 Creating basic LCEL chains with the pipe operator
+  - 🔄 Building RAG systems using LCEL
+  - 🧩 Implementing branching logic in chains
+  - 💬 Creating chains with conversation memory
+  - 📊 Building parallel retrieval systems with LCEL
+
 ## ✅ Exercise Checklist
 
 Use this checklist to track your progress through the exercises:
@@ -91,6 +102,12 @@ Use this checklist to track your progress through the exercises:
   - [ ] Question Processing and Reformulation
   - [ ] Multi-Document Retrieval and Synthesis
   - [ ] Answer Generation with Source Attribution
+- [ ] LCEL Exercises
+  - [ ] Basic LCEL Chain Implementation
+  - [ ] LCEL RAG System
+  - [ ] Branching Logic in Chains
+  - [ ] Conversation Memory Chain
+  - [ ] Parallel Retrievers with LCEL
 
 ## 🧠 Learning Outcomes
 
@@ -100,6 +117,8 @@ By completing these exercises, you will:
 - 🔄 Learn how to generate and utilize embeddings for semantic search
 - 📊 Develop skills in extracting and managing metadata for improved retrieval
 - 🛠️ Practice building complete RAG systems for document question answering
+- 🔗 Learn how to use LangChain Expression Language (LCEL) for more readable and maintainable chains
+- 🧪 Understand functional programming patterns for AI application development
 
 ## 🤔 Need Help?
 
