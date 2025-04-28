@@ -173,16 +173,22 @@ The dimensionality of embeddings is a critical factor that affects both performa
 ### Impact of Dimensionality
 
 ```mermaid
-flowchart LR
+fflowchart LR
     D[Dimensionality] --> |Higher| HC[Higher Capacity]
     D --> |Lower| LS[Lower Storage]
-    HC --> |+| PR[Precision]
-    HC --> |+| CM[Complex Meanings]
-    HC --> |-| ST[Storage Requirements]
-    HC --> |-| CS[Computation Speed]
-    LS --> |+| SR[Search Speed]
-    LS --> |+| SS[Storage Efficiency]
-    LS --> |-| EC[Expressive Capacity]
+    HC --> |Increases| PR[Precision]
+    HC --> |Increases| CM[Complex Meanings]
+    HC --> |Increases| ST[Storage Requirements]
+    HC --> |Decreases| CS[Computation Speed]
+    LS --> |Increases| SR[Search Speed]
+    LS --> |Increases| SS[Storage Efficiency]
+    LS --> |Decreases| EC[Expressive Capacity]
+    
+    %% Adding descriptions with styling
+    style D fill:#f9f,stroke:#333,stroke-width:2px
+    style HC fill:#bbf,stroke:#333
+    style LS fill:#bbf,stroke:#333
+    style EC fill:#fbb,stroke:#333
 ```
 
 ### Choosing the Right Dimensionality
