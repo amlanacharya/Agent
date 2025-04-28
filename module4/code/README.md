@@ -14,6 +14,7 @@ This directory contains all the code examples and implementations for Module 4: 
 - **rag_system.py**: Simple RAG system combining retrieval and generation
 - **document_qa.py**: Complete document Q&A system implementation
 - **lcel_rag_system.py**: RAG system implemented using LangChain Expression Language (LCEL)
+- **lcel_patterns.py**: Common design patterns using LangChain Expression Language
 
 ### Test Scripts
 - **test_document_loaders.py**: Tests for document loader implementations
@@ -74,6 +75,14 @@ This directory contains all the code examples and implementations for Module 4: 
 - Functional programming approach to RAG
 - Separation of retrieval, formatting, and generation steps
 - Structured data flow between components
+
+### LCEL Patterns
+- Common design patterns using LangChain Expression Language
+- Basic chains with simple linear flow
+- Transformation chains for input/output processing
+- Branching chains with conditional logic
+- Parallel chains for concurrent processing
+- Memory chains for conversation history
 
 ## 🔄 Integration with Previous Modules
 

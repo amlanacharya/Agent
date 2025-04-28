@@ -41,6 +41,7 @@ module4/
 │   ├── lesson3.md            # Lesson 3: Embedding Selection & Generation
 │   ├── lesson4.md            # Lesson 4: Metadata Extraction & Management
 │   ├── lesson5.md            # Lesson 5: Building a Document Q&A System
+│   ├── lesson5.5.md          # Lesson 5.5: LangChain Expression Language (LCEL)
 │   └── module4_diagrams.md   # Diagrams for Module 4 concepts
 ├── code/                     # Code examples and implementations
 │   ├── README.md             # Code directory documentation
@@ -55,7 +56,9 @@ module4/
 │   ├── rag_system.py         # Simple RAG system implementation
 │   ├── test_rag_system.py    # Test script for RAG system
 │   ├── document_qa.py        # Document Q&A system implementation
-│   └── test_document_qa.py   # Test script for document Q&A system
+│   ├── test_document_qa.py   # Test script for document Q&A system
+│   ├── lcel_rag_system.py    # RAG system using LangChain Expression Language
+│   └── lcel_patterns.py      # Common LCEL design patterns
 ├── exercises/                # Practice exercises and solutions
 │   ├── README.md             # Exercises directory documentation
 │   ├── lesson1_exercises.py  # Solutions for lesson 1 exercises
@@ -67,7 +70,9 @@ module4/
 │   ├── lesson4_exercises.py  # Solutions for lesson 4 exercises
 │   ├── test_lesson4_exercises.py # Tests for lesson 4 solutions
 │   ├── lesson5_exercises.py  # Solutions for lesson 5 exercises
-│   └── test_lesson5_exercises.py # Tests for lesson 5 solutions
+│   ├── test_lesson5_exercises.py # Tests for lesson 5 solutions
+│   ├── lcel_exercises.py     # Exercises for LangChain Expression Language
+│   └── test_lcel_exercises.py # Tests for LCEL exercises
 ├── streamlit_app/            # Interactive Streamlit application
 │   ├── app.py                # Main Streamlit application file
 │   ├── rag_components.py     # RAG system components for the app
@@ -100,6 +105,7 @@ By the end of this module, you will:
    - **lessons/lesson3.md**: Embedding Selection & Generation
    - **lessons/lesson4.md**: Metadata Extraction & Management
    - **lessons/lesson5.md**: Building a Document Q&A System
+   - **lessons/lesson5.5.md**: LangChain Expression Language (LCEL)
 
 2. Examine the code examples for each lesson:
    - Lesson 1: **code/document_loaders.py**
@@ -107,6 +113,7 @@ By the end of this module, you will:
    - Lesson 3: **code/embedding_pipelines.py**
    - Lesson 4: **code/metadata_extractors.py**
    - Lesson 5: **code/rag_system.py** and **code/document_qa.py**
+   - Lesson 5.5: **code/lcel_rag_system.py** and **code/lcel_patterns.py**
 
 3. Complete the practice exercises to reinforce your learning:
    - **exercises/lesson1_exercises.py**: Document processing exercises
@@ -114,6 +121,7 @@ By the end of this module, you will:
    - **exercises/lesson3_exercises.py**: Embedding generation exercises
    - **exercises/lesson4_exercises.py**: Metadata extraction exercises
    - **exercises/lesson5_exercises.py**: RAG system exercises
+   - **exercises/lcel_exercises.py**: LCEL pattern exercises
 
 4. Run the demo scripts to see document processing and Q&A in action:
    - **demo_document_processing.py**: Demonstrates document loading and processing
@@ -163,6 +171,13 @@ By the end of this module, you will:
 - Context augmentation
 - Generation with retrieved context
 - Hybrid retrieval approaches
+
+### LangChain Expression Language (LCEL)
+- Functional programming with the pipe operator
+- Declarative chain composition
+- Branching logic and parallel processing
+- Memory integration in chains
+- Custom runnables and transformations
 
 ## 🔍 Mini-Project: Document Q&A System
 
@@ -216,6 +231,12 @@ These implementations demonstrate your understanding of document processing and 
 - [Vector Database Fundamentals](https://www.pinecone.io/learn/vector-database/)
 - [FAISS Documentation](https://github.com/facebookresearch/faiss/wiki)
 - [ChromaDB Documentation](https://docs.trychroma.com/)
+
+### LangChain Expression Language (LCEL)
+- [LangChain Expression Language Guide](https://python.langchain.com/docs/expression_language/)
+- [LCEL Cookbook](https://python.langchain.com/docs/expression_language/cookbook/)
+- [Building RAG with LCEL](https://python.langchain.com/docs/use_cases/question_answering/quickstart)
+- [LCEL Design Patterns](https://python.langchain.com/docs/expression_language/how_to/)
 
 ### Streamlit
 - [Streamlit Documentation](https://docs.streamlit.io/)
