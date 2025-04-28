@@ -13,6 +13,9 @@ module5/
 │   ├── lesson4.md            # Lesson 4: Self-Querying and Adaptive RAG
 │   ├── lesson5.md            # Lesson 5: Building a Research Literature Assistant
 │   └── module5_diagrams.md   # Diagrams for Module 5 concepts
+├── diagrams/                 # Diagram files and documentation
+│   ├── README.md             # Diagram directory documentation
+│   └── module5_progressive_journey.md # Progressive journey diagrams
 ├── code/                     # Code examples and implementations
 │   ├── README.md             # Code directory documentation
 │   ├── advanced_retrieval.py # Implementation of advanced retrieval strategies
@@ -101,6 +104,25 @@ The culminating project for this module is a Research Literature Assistant that 
 
 This assistant will demonstrate the practical application of all the advanced RAG techniques covered in the module.
 
+## 📊 Diagrams and Visualizations
+
+This module includes comprehensive diagrams to help visualize complex RAG architectures and workflows. The diagrams are organized in two main locations:
+
+1. **`lessons/module5_diagrams.md`** - Contains the complete diagrams for all key concepts
+2. **`diagrams/module5_progressive_journey.md`** - Provides a progressive journey through each concept, breaking down complex architectures into stages
+
+The diagrams cover:
+
+- Advanced retrieval strategies (hybrid search, multi-index, parent document retrieval)
+- Query transformation techniques (expansion, multi-query, HyDE, step-back prompting)
+- Reranking systems (cross-encoder, reciprocal rank fusion, MMR)
+- Self-querying and adaptive RAG (query routing, controlled RAG, multi-hop reasoning)
+- Research Literature Assistant architecture
+- RAG evaluation frameworks (comprehensive metrics, RAGAS)
+- LCEL implementation patterns
+
+These diagrams serve as visual references to help understand the complex architectures and data flows in advanced RAG systems. They are designed to complement the code implementations and provide a high-level overview of how different components interact.
+
 ## 📖 Resources
 
 - [LangChain RAG Documentation](https://python.langchain.com/docs/use_cases/question_answering/)
@@ -110,3 +132,7 @@ This assistant will demonstrate the practical application of all the advanced RA
 - [Hugging Face Rerankers](https://huggingface.co/models?pipeline_tag=text-to-text-generation&sort=downloads)
 - [ChromaDB Documentation](https://docs.trychroma.com/)
 - [FAISS Documentation](https://github.com/facebookresearch/faiss)
+- [LangChain Evaluation Documentation](https://python.langchain.com/docs/guides/evaluation/)
+- [C-RAG: An Empirical Study on Controllable Retrieval-Augmented Generation](https://arxiv.org/abs/2401.17043)
+- [Step-Back Prompting Paper](https://arxiv.org/abs/2310.06117)
+- [Hugging Face Cross-Encoders](https://huggingface.co/cross-encoder)
