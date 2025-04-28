@@ -8,24 +8,91 @@ to support structured output parsing and validation.
 import os
 import json
 import time
+import random
 import requests
-from typing import List, Dict, Any, Optional, Union
+from typing import List, Dict, Any, Optional, Union, Callable
 from dotenv import load_dotenv
 
 # Load environment variables from .env file
 load_dotenv()
+
+def retry_with_exponential_backoff(
+    func: Callable,
+    max_retries: int = 5,
+    initial_delay: float = 1.0,
+    max_delay: float = 60.0,
+    backoff_factor: float = 2.0,
+    retry_on_status_codes: List[int] = [429, 500, 502, 503, 504]
+) -> Callable:
+    """
+    Decorator that retries a function with exponential backoff when specific exceptions occur.
+
+    Args:
+        func: The function to retry
+        max_retries: Maximum number of retries
+        initial_delay: Initial delay between retries in seconds
+        max_delay: Maximum delay between retries in seconds
+        backoff_factor: Factor by which the delay increases
+        retry_on_status_codes: HTTP status codes to retry on
+
+    Returns:
+        Wrapped function with retry logic
+    """
+    def wrapper(*args, **kwargs):
+        delay = initial_delay
+        last_exception = None
+
+        for retry in range(max_retries + 1):
+            try:
+                response = func(*args, **kwargs)
+
+                # Check if this is a requests Response object with status code
+                if hasattr(response, 'status_code') and response.status_code in retry_on_status_codes:
+                    if retry >= max_retries:
+                        return response  # Return the response even with error status on last retry
+
+                    # Get retry-after header if available
+                    retry_after = response.headers.get('Retry-After')
+                    if retry_after and retry_after.isdigit():
+                        delay = min(float(retry_after), max_delay)
+
+                    print(f"Rate limit hit (status {response.status_code}). Retrying in {delay:.2f} seconds...")
+                else:
+                    return response  # Successful response
+
+            except Exception as e:
+                last_exception = e
+                if retry >= max_retries:
+                    raise
+
+                print(f"Error: {str(e)}. Retrying in {delay:.2f} seconds... (Attempt {retry+1}/{max_retries})")
+
+            # Add jitter to avoid thundering herd problem
+            jitter = random.uniform(0, 0.1 * delay)
+            time.sleep(delay + jitter)
+
+            # Increase delay for next retry
+            delay = min(delay * backoff_factor, max_delay)
+
+        # If we get here, all retries failed
+        if last_exception:
+            raise last_exception
+
+    return wrapper
+
 
 class GroqClient:
     """
     Client for interacting with the Groq API for text generation.
     """
 
-    def __init__(self, api_key: Optional[str] = None):
+    def __init__(self, api_key: Optional[str] = None, max_retries: int = 5):
         """
         Initialize the Groq client
 
         Args:
             api_key (str, optional): Groq API key. If not provided, will look for GROQ_API_KEY in environment
+            max_retries (int): Maximum number of retries for API calls
         """
         self.api_key = api_key or os.getenv("GROQ_API_KEY")
         if not self.api_key:
@@ -41,6 +108,9 @@ class GroqClient:
             "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json"
         }
+
+        # Retry settings
+        self.max_retries = max_retries
 
         # Default model settings
         self.default_model = "llama3-8b-8192"  # Default model for text generation
@@ -79,16 +149,34 @@ class GroqClient:
             "stream": stream
         }
 
-        response = requests.post(
-            f"{self.base_url}/chat/completions",
-            headers=self.headers,
-            json=payload
-        )
+        @retry_with_exponential_backoff(max_retries=self.max_retries)
+        def _make_api_call():
+            response = requests.post(
+                f"{self.base_url}/chat/completions",
+                headers=self.headers,
+                json=payload
+            )
 
-        if response.status_code != 200:
-            raise Exception(f"Error generating text: {response.text}")
+            if response.status_code != 200:
+                # Check if this is a rate limit error (429)
+                if response.status_code == 429:
+                    # This will be caught by the retry decorator
+                    print(f"Rate limit exceeded. Response: {response.text}")
+                    return response
+                # For other errors, raise exception
+                raise Exception(f"Error generating text: {response.text}")
 
-        return response.json()
+            return response
+
+        response = _make_api_call()
+
+        # If we got a response object (not JSON), check status and convert
+        if hasattr(response, 'json'):
+            if response.status_code != 200:
+                raise Exception(f"Error generating text after retries: {response.text}")
+            return response.json()
+
+        return response
 
     def chat_completion(
         self,
@@ -124,16 +212,34 @@ class GroqClient:
             "stream": stream
         }
 
-        response = requests.post(
-            f"{self.base_url}/chat/completions",
-            headers=self.headers,
-            json=payload
-        )
+        @retry_with_exponential_backoff(max_retries=self.max_retries)
+        def _make_api_call():
+            response = requests.post(
+                f"{self.base_url}/chat/completions",
+                headers=self.headers,
+                json=payload
+            )
 
-        if response.status_code != 200:
-            raise Exception(f"Error in chat completion: {response.text}")
+            if response.status_code != 200:
+                # Check if this is a rate limit error (429)
+                if response.status_code == 429:
+                    # This will be caught by the retry decorator
+                    print(f"Rate limit exceeded. Response: {response.text}")
+                    return response
+                # For other errors, raise exception
+                raise Exception(f"Error in chat completion: {response.text}")
 
-        return response.json()
+            return response
+
+        response = _make_api_call()
+
+        # If we got a response object (not JSON), check status and convert
+        if hasattr(response, 'json'):
+            if response.status_code != 200:
+                raise Exception(f"Error in chat completion after retries: {response.text}")
+            return response.json()
+
+        return response
 
     def extract_text_from_response(self, response: Dict[str, Any]) -> str:
         """
@@ -172,14 +278,14 @@ class GroqClient:
             str: The generated structured output
         """
         full_prompt = f"{prompt}\n\n{format_instructions}"
-        
+
         response = self.generate_text(
             prompt=full_prompt,
             model=model,
             max_tokens=max_tokens,
             temperature=temperature
         )
-        
+
         return self.extract_text_from_response(response)
 
     def generate_json_output(
@@ -204,15 +310,15 @@ class GroqClient:
             dict: The generated JSON output
         """
         schema_str = json.dumps(schema, indent=2)
-        
+
         format_instructions = f"""
         Please provide your response in valid JSON format according to the following schema:
-        
+
         {schema_str}
-        
+
         Ensure that your response is properly formatted as JSON and follows the schema exactly.
         """
-        
+
         output_text = self.generate_structured_output(
             prompt=prompt,
             format_instructions=format_instructions,
@@ -220,13 +326,13 @@ class GroqClient:
             max_tokens=max_tokens,
             temperature=temperature
         )
-        
+
         # Try to extract JSON from the output
         try:
             # Look for JSON-like structure
             start_idx = output_text.find('{')
             end_idx = output_text.rfind('}')
-            
+
             if start_idx != -1 and end_idx != -1:
                 json_str = output_text[start_idx:end_idx+1]
                 return json.loads(json_str)
@@ -238,7 +344,7 @@ class GroqClient:
                 return json.loads(fixed_json)
             except:
                 pass
-        
+
         # If all parsing attempts fail
         raise ValueError(f"Could not parse LLM output as JSON: {output_text}")
 
@@ -248,13 +354,13 @@ if __name__ == "__main__":
     # Create a client
     try:
         client = GroqClient()
-        
+
         # Test text generation
         response = client.generate_text("Explain what structured output parsing is in simple terms.")
         print("Text Generation Response:")
         print(client.extract_text_from_response(response))
         print("-" * 50)
-        
+
         # Test structured output generation
         person_schema = {
             "type": "object",
@@ -266,12 +372,12 @@ if __name__ == "__main__":
             },
             "required": ["name", "age", "occupation", "skills"]
         }
-        
+
         prompt = "Extract information about John Doe, a 35-year-old software engineer who knows Python, JavaScript, and SQL."
-        
+
         json_output = client.generate_json_output(prompt, person_schema)
         print("JSON Output:")
         print(json.dumps(json_output, indent=2))
-        
+
     except Exception as e:
         print(f"Error: {e}")

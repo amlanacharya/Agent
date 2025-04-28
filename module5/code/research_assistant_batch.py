@@ -17,6 +17,7 @@ from typing import List, Dict, Any, Optional, Tuple, Union, Callable, Set
 import re
 import json
 import os
+import time
 from collections import defaultdict
 from langchain.document_loaders import PyPDFLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
@@ -28,6 +29,14 @@ from langchain.schema.runnable import RunnablePassthrough, RunnableLambda, Runna
 from langchain.prompts import ChatPromptTemplate
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_groq import ChatGroq
+
+# Try to import tqdm for progress bars
+try:
+    from tqdm import tqdm
+    TQDM_AVAILABLE = True
+except ImportError:
+    TQDM_AVAILABLE = False
+    print("tqdm not available. Install with 'pip install tqdm' for progress bars.")
 
 
 class AcademicPaperProcessor:
@@ -882,7 +891,14 @@ class LiteratureReviewGenerator:
         # Process each batch to get partial reviews
         partial_reviews = []
 
-        for i, batch in enumerate(batches):
+        # Create iterator with progress bar if available
+        if TQDM_AVAILABLE:
+            batch_iterator = tqdm(enumerate(batches), total=len(batches), desc="Processing literature review batches")
+        else:
+            batch_iterator = enumerate(batches)
+            print(f"Processing {len(batches)} literature review batches...")
+
+        for i, batch in batch_iterator:
             paper_excerpts = self._format_chunks_for_prompt(batch)
 
             # Create a batch-specific prompt
@@ -906,6 +922,7 @@ class LiteratureReviewGenerator:
             Partial Literature Review:
             """)
 
+            start_time = time.time()
             try:
                 response = self.llm.invoke(
                     batch_prompt.format(
@@ -917,9 +934,20 @@ class LiteratureReviewGenerator:
                     )
                 )
                 partial_reviews.append(response.content)
+
+                # Show processing time if tqdm not available
+                if not TQDM_AVAILABLE:
+                    elapsed = time.time() - start_time
+                    print(f"  Batch {i+1}/{len(batches)} processed in {elapsed:.2f}s")
+
             except Exception as e:
                 # If a batch fails, note the error but continue with other batches
-                partial_reviews.append(f"[Error processing batch {i+1}: {str(e)}]")
+                error_msg = f"[Error processing batch {i+1}: {str(e)}]"
+                partial_reviews.append(error_msg)
+
+                # Show error if tqdm not available
+                if not TQDM_AVAILABLE:
+                    print(f"  Error in batch {i+1}: {str(e)}")
 
         # Combine partial reviews into a final review
         if partial_reviews:
@@ -1055,7 +1083,14 @@ class LiteratureReviewGenerator:
         # Process each batch to get partial summaries
         partial_summaries = []
 
-        for i, batch in enumerate(batches):
+        # Create iterator with progress bar if available
+        if TQDM_AVAILABLE:
+            batch_iterator = tqdm(enumerate(batches), total=len(batches), desc="Processing paper summary batches")
+        else:
+            batch_iterator = enumerate(batches)
+            print(f"Processing {len(batches)} paper summary batches...")
+
+        for i, batch in batch_iterator:
             excerpts = "\n\n".join([chunk.page_content for chunk in batch])
 
             # Create a batch-specific prompt
@@ -1076,6 +1111,7 @@ class LiteratureReviewGenerator:
             Summary:
             """)
 
+            start_time = time.time()
             try:
                 response = self.llm.invoke(
                     batch_prompt.format(
@@ -1088,9 +1124,20 @@ class LiteratureReviewGenerator:
                     )
                 )
                 partial_summaries.append(response.content)
+
+                # Show processing time if tqdm not available
+                if not TQDM_AVAILABLE:
+                    elapsed = time.time() - start_time
+                    print(f"  Batch {i+1}/{len(batches)} processed in {elapsed:.2f}s")
+
             except Exception as e:
                 # If a batch fails, note the error but continue with other batches
-                partial_summaries.append(f"[Error processing batch {i+1}: {str(e)}]")
+                error_msg = f"[Error processing batch {i+1}: {str(e)}]"
+                partial_summaries.append(error_msg)
+
+                # Show error if tqdm not available
+                if not TQDM_AVAILABLE:
+                    print(f"  Error in batch {i+1}: {str(e)}")
 
         # Combine partial summaries into a final summary
         if partial_summaries:
@@ -1293,7 +1340,14 @@ class LiteratureReviewGenerator:
         # Process each batch to get partial analyses
         partial_analyses = []
 
-        for i, batch in enumerate(batches):
+        # Create iterator with progress bar if available
+        if TQDM_AVAILABLE:
+            batch_iterator = tqdm(enumerate(batches), total=len(batches), desc="Processing research gaps batches")
+        else:
+            batch_iterator = enumerate(batches)
+            print(f"Processing {len(batches)} research gaps batches...")
+
+        for i, batch in batch_iterator:
             batch_excerpts = "\n---\n".join(batch)
 
             # Create a batch-specific prompt
@@ -1314,6 +1368,7 @@ class LiteratureReviewGenerator:
             Partial Research Gaps Analysis:
             """)
 
+            start_time = time.time()
             try:
                 response = self.llm.invoke(
                     batch_prompt.format(
@@ -1324,9 +1379,20 @@ class LiteratureReviewGenerator:
                     )
                 )
                 partial_analyses.append(response.content)
+
+                # Show processing time if tqdm not available
+                if not TQDM_AVAILABLE:
+                    elapsed = time.time() - start_time
+                    print(f"  Batch {i+1}/{len(batches)} processed in {elapsed:.2f}s")
+
             except Exception as e:
                 # If a batch fails, note the error but continue with other batches
-                partial_analyses.append(f"[Error processing batch {i+1}: {str(e)}]")
+                error_msg = f"[Error processing batch {i+1}: {str(e)}]"
+                partial_analyses.append(error_msg)
+
+                # Show error if tqdm not available
+                if not TQDM_AVAILABLE:
+                    print(f"  Error in batch {i+1}: {str(e)}")
 
         # Combine partial analyses into a final analysis
         if partial_analyses:

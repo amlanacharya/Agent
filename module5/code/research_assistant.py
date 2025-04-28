@@ -18,14 +18,16 @@ import re
 import json
 import os
 from collections import defaultdict
-from langchain.document_loaders import PyPDFLoader
-from langchain.text_splitter import RecursiveCharacterTextSplitter
-from langchain.schema.document import Document
-from langchain.schema.embeddings import Embeddings
-from langchain.schema.retriever import BaseRetriever
-from langchain.vectorstores import FAISS, Chroma
-from langchain.schema.runnable import RunnablePassthrough, RunnableLambda, RunnableBranch
-from langchain.prompts import ChatPromptTemplate
+
+# Updated LangChain imports
+from langchain_community.document_loaders import PyPDFLoader
+from langchain_text_splitters import RecursiveCharacterTextSplitter
+from langchain_core.documents import Document
+from langchain_core.embeddings import Embeddings
+from langchain_core.retrievers import BaseRetriever
+from langchain_community.vectorstores import FAISS, Chroma
+from langchain_core.runnables import RunnablePassthrough, RunnableLambda, RunnableBranch
+from langchain_core.prompts import ChatPromptTemplate
 from langchain_community.embeddings import HuggingFaceEmbeddings
 from langchain_groq import ChatGroq
 
