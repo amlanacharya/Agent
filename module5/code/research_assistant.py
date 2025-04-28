@@ -779,26 +779,187 @@ class LiteratureReviewGenerator:
         Returns:
             Generated literature review
         """
-        # Format paper excerpts
-        paper_excerpts = self._format_chunks_for_prompt(relevant_chunks)
-
         # Format paper metadata
         paper_metadata_str = self._format_metadata_for_prompt(papers_metadata)
 
-        # Generate the review
-        response = self.llm.invoke(
-            self.review_prompt.format(
-                question=question,
-                paper_excerpts=paper_excerpts,
-                paper_metadata=paper_metadata_str
-            )
-        )
+        # Process chunks in batches to respect token limits
+        review_content = self._process_review_in_batches(question, relevant_chunks, paper_metadata_str)
 
         # Format with citations
         citations_str = self._format_citations_for_prompt(papers_metadata)
-        formatted_review = self.format_with_citations(response.content, citations_str)
+        formatted_review = self.format_with_citations(review_content, citations_str)
 
         return formatted_review
+
+    def _process_review_in_batches(self, question: str, chunks: List[Document], paper_metadata_str: str) -> str:
+        """Process literature review generation in batches to respect token limits.
+
+        Args:
+            question: The research question
+            chunks: List of document chunks
+            paper_metadata_str: Formatted paper metadata
+
+        Returns:
+            Generated review content
+        """
+        # For Groq free tier, limit each batch to ~5000 tokens
+        MAX_BATCH_CHARS = 20000
+
+        # Group chunks by source document
+        source_chunks = {}
+        for chunk in chunks:
+            source = chunk.metadata.get("source", "unknown")
+            if source not in source_chunks:
+                source_chunks[source] = []
+            source_chunks[source].append(chunk)
+
+        # Create batches based on document sources
+        batches = []
+        current_batch = []
+        current_batch_size = 0
+
+        # First, try to keep chunks from the same document together
+        for source, source_chunk_list in source_chunks.items():
+            source_text = self._format_chunks_for_prompt(source_chunk_list)
+            source_size = len(source_text)
+
+            # If this source's chunks would exceed batch size, split it
+            if source_size > MAX_BATCH_CHARS:
+                # Split large sources into smaller batches
+                sub_batches = []
+                sub_batch = []
+                sub_batch_size = 0
+
+                for chunk in source_chunk_list:
+                    chunk_text = f"Excerpt (from {chunk.metadata.get('source', 'Unknown Source')}, section: {chunk.metadata.get('section', 'Unknown Section')}):\n{chunk.page_content}\n"
+                    chunk_size = len(chunk_text)
+
+                    if sub_batch_size + chunk_size > MAX_BATCH_CHARS and sub_batch:
+                        sub_batches.append(sub_batch)
+                        sub_batch = []
+                        sub_batch_size = 0
+
+                    sub_batch.append(chunk)
+                    sub_batch_size += chunk_size
+
+                if sub_batch:
+                    sub_batches.append(sub_batch)
+
+                # Add sub-batches to main batches
+                for sub_batch in sub_batches:
+                    batches.append(sub_batch)
+
+            # If adding this source would exceed the batch size, start a new batch
+            elif current_batch_size + source_size > MAX_BATCH_CHARS and current_batch:
+                batches.append(current_batch)
+                current_batch = source_chunk_list
+                current_batch_size = source_size
+            else:
+                # Add to current batch
+                current_batch.extend(source_chunk_list)
+                current_batch_size += source_size
+
+        # Add the last batch if it's not empty
+        if current_batch:
+            batches.append(current_batch)
+
+        # If we have no batches, return a simple message
+        if not batches:
+            return f"Unable to generate literature review for question: {question}"
+
+        # If we have only one batch, process it directly
+        if len(batches) == 1:
+            paper_excerpts = self._format_chunks_for_prompt(batches[0])
+            response = self.llm.invoke(
+                self.review_prompt.format(
+                    question=question,
+                    paper_excerpts=paper_excerpts,
+                    paper_metadata=paper_metadata_str
+                )
+            )
+            return response.content
+
+        # Process each batch to get partial reviews
+        partial_reviews = []
+
+        for i, batch in enumerate(batches):
+            paper_excerpts = self._format_chunks_for_prompt(batch)
+
+            # Create a batch-specific prompt
+            batch_prompt = ChatPromptTemplate.from_template("""
+            Generate a partial literature review on the following research question:
+
+            Question: {question}
+
+            Based on the following paper excerpts (batch {batch_num} of {total_batches}):
+
+            {paper_excerpts}
+
+            Paper metadata:
+            {paper_metadata}
+
+            Your partial review should:
+            1. Summarize the key findings from these specific excerpts
+            2. Identify methodologies used in these excerpts
+            3. Note any consensus or contradictions in these excerpts
+
+            Partial Literature Review:
+            """)
+
+            try:
+                response = self.llm.invoke(
+                    batch_prompt.format(
+                        question=question,
+                        batch_num=i+1,
+                        total_batches=len(batches),
+                        paper_excerpts=paper_excerpts,
+                        paper_metadata=paper_metadata_str
+                    )
+                )
+                partial_reviews.append(response.content)
+            except Exception as e:
+                # If a batch fails, note the error but continue with other batches
+                partial_reviews.append(f"[Error processing batch {i+1}: {str(e)}]")
+
+        # Combine partial reviews into a final review
+        if partial_reviews:
+            # Create a final review prompt
+            final_prompt = ChatPromptTemplate.from_template("""
+            Generate a comprehensive literature review by synthesizing these partial reviews:
+
+            Question: {question}
+
+            Partial reviews:
+            {reviews}
+
+            Paper metadata:
+            {paper_metadata}
+
+            Your final literature review should:
+            1. Provide an overview of the current state of research
+            2. Compare and contrast different approaches
+            3. Identify key findings and consensus
+            4. Highlight research gaps
+            5. Include proper citations to the source papers
+
+            Final Literature Review:
+            """)
+
+            try:
+                response = self.llm.invoke(
+                    final_prompt.format(
+                        question=question,
+                        reviews="\n\n".join(partial_reviews),
+                        paper_metadata=paper_metadata_str
+                    )
+                )
+                return response.content
+            except Exception as e:
+                # If final review fails, return the concatenated partial reviews
+                return f"Literature Review for: {question}\n\n" + "\n\n".join(partial_reviews)
+
+        # Fallback if something went wrong
+        return f"Unable to generate a complete literature review for question: {question}"
 
     def summarize_paper(self, paper_chunks: List[Document], metadata: Dict[str, Any]) -> str:
         """Summarize a single paper.
@@ -815,20 +976,160 @@ class LiteratureReviewGenerator:
         authors = ", ".join(metadata.get("authors", ["Unknown Author"]))
         year = metadata.get("year", "Unknown Year")
 
-        # Format excerpts
-        excerpts = "\n\n".join([chunk.page_content for chunk in paper_chunks])
+        # Process paper in batches to respect token limits
+        return self._process_paper_in_batches(paper_chunks, title, authors, year)
 
-        # Generate summary
-        response = self.llm.invoke(
-            self.summary_prompt.format(
-                title=title,
-                authors=authors,
-                year=year,
-                excerpts=excerpts
+    def _process_paper_in_batches(self, paper_chunks: List[Document], title: str, authors: str, year: str) -> str:
+        """Process a paper in batches to respect token limits.
+
+        Args:
+            paper_chunks: Chunks from the paper
+            title: Paper title
+            authors: Paper authors
+            year: Publication year
+
+        Returns:
+            Paper summary
+        """
+        # For Groq free tier, limit each batch to ~5000 tokens (approx. 4000 words or ~20,000 chars)
+        MAX_BATCH_CHARS = 20000
+
+        # Prioritize important sections first
+        prioritized_chunks = []
+
+        # First, identify and prioritize abstract, intro, and conclusion
+        for chunk in paper_chunks:
+            section = chunk.metadata.get("section", "").lower()
+            # Give priority score (lower is higher priority)
+            if section == "abstract":
+                chunk.metadata["priority"] = 1
+            elif section == "introduction":
+                chunk.metadata["priority"] = 2
+            elif section in ["conclusion", "discussion"]:
+                chunk.metadata["priority"] = 3
+            else:
+                chunk.metadata["priority"] = 4
+            prioritized_chunks.append(chunk)
+
+        # Sort chunks by priority
+        prioritized_chunks.sort(key=lambda x: x.metadata["priority"])
+
+        # Create batches
+        batches = []
+        current_batch = []
+        current_batch_size = 0
+
+        for chunk in prioritized_chunks:
+            chunk_size = len(chunk.page_content)
+
+            # If adding this chunk would exceed the batch size, start a new batch
+            if current_batch_size + chunk_size > MAX_BATCH_CHARS and current_batch:
+                batches.append(current_batch)
+                current_batch = []
+                current_batch_size = 0
+
+            current_batch.append(chunk)
+            current_batch_size += chunk_size
+
+        # Add the last batch if it's not empty
+        if current_batch:
+            batches.append(current_batch)
+
+        # If we have no batches (unlikely), return a simple message
+        if not batches:
+            return f"Unable to summarize paper: {title} by {authors} ({year})"
+
+        # If we have only one batch, process it directly
+        if len(batches) == 1:
+            excerpts = "\n\n".join([chunk.page_content for chunk in batches[0]])
+            response = self.llm.invoke(
+                self.summary_prompt.format(
+                    title=title,
+                    authors=authors,
+                    year=year,
+                    excerpts=excerpts
+                )
             )
-        )
+            return response.content
 
-        return response.content
+        # Process each batch to get partial summaries
+        partial_summaries = []
+
+        for i, batch in enumerate(batches):
+            excerpts = "\n\n".join([chunk.page_content for chunk in batch])
+
+            # Create a batch-specific prompt
+            batch_prompt = ChatPromptTemplate.from_template("""
+            Summarize the following section of a paper:
+
+            Title: {title}
+            Authors: {authors}
+            Year: {year}
+            Section: Batch {batch_num} of {total_batches}
+
+            Excerpts:
+            {excerpts}
+
+            Provide a concise summary of this section of the paper.
+            Focus on key points, findings, and contributions.
+
+            Summary:
+            """)
+
+            try:
+                response = self.llm.invoke(
+                    batch_prompt.format(
+                        title=title,
+                        authors=authors,
+                        year=year,
+                        batch_num=i+1,
+                        total_batches=len(batches),
+                        excerpts=excerpts
+                    )
+                )
+                partial_summaries.append(response.content)
+            except Exception as e:
+                # If a batch fails, note the error but continue with other batches
+                partial_summaries.append(f"[Error processing batch {i+1}: {str(e)}]")
+
+        # Combine partial summaries into a final summary
+        if partial_summaries:
+            # Create a final summary prompt
+            final_prompt = ChatPromptTemplate.from_template("""
+            Create a comprehensive summary of the following paper based on these partial summaries:
+
+            Title: {title}
+            Authors: {authors}
+            Year: {year}
+
+            Partial summaries:
+            {summaries}
+
+            Provide a 3-5 sentence summary that captures:
+            1. The main research question/objective
+            2. The methodology used
+            3. The key findings
+            4. The significance of the work
+
+            Final Summary:
+            """)
+
+            try:
+                response = self.llm.invoke(
+                    final_prompt.format(
+                        title=title,
+                        authors=authors,
+                        year=year,
+                        summaries="\n\n".join(partial_summaries)
+                    )
+                )
+                return response.content
+            except Exception as e:
+                # If final summary fails, return the concatenated partial summaries
+                return f"Paper: {title} by {authors} ({year})\n\n" + "\n\n".join(partial_summaries)
+
+        # Fallback if something went wrong
+        return f"Unable to generate a complete summary for {title} by {authors} ({year})"
 
     def compare_methodologies(self, papers: List[Dict[str, Any]]) -> str:
         """Compare methodologies across papers.
@@ -898,33 +1199,169 @@ class LiteratureReviewGenerator:
                     relevant_content += section_content + "\n\n"
 
             if relevant_content:
-                paper_excerpts.append(f"Paper: {title} ({authors}, {year})\n\nExcerpts:\n{relevant_content}\n")
+                paper_excerpts.append({
+                    "title": title,
+                    "authors": authors,
+                    "year": year,
+                    "content": relevant_content,
+                    "priority": 1  # Higher priority for conclusion/discussion sections
+                })
+            else:
+                # If no relevant sections found, use abstract and introduction
+                for section_name, section_content in paper.get("sections", {}).items():
+                    if section_name in ["abstract", "introduction"]:
+                        if not relevant_content:  # Only add if we don't have content yet
+                            relevant_content = section_content
 
-        # If no relevant sections found, use all content
-        if not paper_excerpts:
-            for paper in papers:
-                title = paper.get("metadata", {}).get("title", "Unknown Title")
-                authors = ", ".join(paper.get("metadata", {}).get("authors", ["Unknown Author"]))
-                year = paper.get("metadata", {}).get("year", "Unknown Year")
+                if relevant_content:
+                    paper_excerpts.append({
+                        "title": title,
+                        "authors": authors,
+                        "year": year,
+                        "content": relevant_content,
+                        "priority": 2  # Medium priority for abstract/intro
+                    })
+                else:
+                    # If still no content, use a sample of all sections
+                    all_content = "\n\n".join([section[:500] for section in paper.get("sections", {}).values()])
 
-                # Use all available content
-                all_content = "\n\n".join([section for section in paper.get("sections", {}).values()])
+                    if all_content:
+                        paper_excerpts.append({
+                            "title": title,
+                            "authors": authors,
+                            "year": year,
+                            "content": all_content,
+                            "priority": 3  # Lower priority for general content
+                        })
 
-                if all_content:
-                    paper_excerpts.append(f"Paper: {title} ({authors}, {year})\n\nExcerpts:\n{all_content[:1000]}...\n")
+        # Sort by priority
+        paper_excerpts.sort(key=lambda x: x["priority"])
 
-        # Format for prompt
-        paper_excerpts_str = "\n---\n".join(paper_excerpts)
+        # Process in batches to respect token limits
+        return self._process_gaps_in_batches(paper_excerpts, question)
 
-        # Generate gaps analysis
-        response = self.llm.invoke(
-            self.gap_prompt.format(
-                question=question,
-                paper_excerpts=paper_excerpts_str
+    def _process_gaps_in_batches(self, paper_excerpts: List[Dict[str, Any]], question: str) -> str:
+        """Process research gaps analysis in batches to respect token limits.
+
+        Args:
+            paper_excerpts: List of paper excerpts with metadata
+            question: Research question
+
+        Returns:
+            Research gaps analysis
+        """
+        # For Groq free tier, limit each batch to ~5000 tokens
+        MAX_BATCH_CHARS = 20000
+
+        # Create batches
+        batches = []
+        current_batch = []
+        current_batch_size = 0
+
+        for excerpt in paper_excerpts:
+            excerpt_text = f"Paper: {excerpt['title']} ({excerpt['authors']}, {excerpt['year']})\n\nExcerpts:\n{excerpt['content']}\n"
+            excerpt_size = len(excerpt_text)
+
+            # If adding this excerpt would exceed the batch size, start a new batch
+            if current_batch_size + excerpt_size > MAX_BATCH_CHARS and current_batch:
+                batches.append(current_batch)
+                current_batch = []
+                current_batch_size = 0
+
+            current_batch.append(excerpt_text)
+            current_batch_size += excerpt_size
+
+        # Add the last batch if it's not empty
+        if current_batch:
+            batches.append(current_batch)
+
+        # If we have no batches, return a simple message
+        if not batches:
+            return f"Unable to identify research gaps for question: {question}"
+
+        # If we have only one batch, process it directly
+        if len(batches) == 1:
+            paper_excerpts_str = "\n---\n".join(batches[0])
+            response = self.llm.invoke(
+                self.gap_prompt.format(
+                    question=question,
+                    paper_excerpts=paper_excerpts_str
+                )
             )
-        )
+            return response.content
 
-        return response.content
+        # Process each batch to get partial analyses
+        partial_analyses = []
+
+        for i, batch in enumerate(batches):
+            batch_excerpts = "\n---\n".join(batch)
+
+            # Create a batch-specific prompt
+            batch_prompt = ChatPromptTemplate.from_template("""
+            Based on the following paper excerpts and the research question:
+
+            Question: {question}
+
+            Paper excerpts (batch {batch_num} of {total_batches}):
+            {paper_excerpts}
+
+            Identify potential research gaps and future directions by considering:
+            1. What aspects of the question remain unexplored in these papers?
+            2. What limitations exist in the methodologies described?
+            3. What contradictions or inconsistencies exist in these findings?
+            4. What new research directions are suggested by these papers?
+
+            Partial Research Gaps Analysis:
+            """)
+
+            try:
+                response = self.llm.invoke(
+                    batch_prompt.format(
+                        question=question,
+                        batch_num=i+1,
+                        total_batches=len(batches),
+                        paper_excerpts=batch_excerpts
+                    )
+                )
+                partial_analyses.append(response.content)
+            except Exception as e:
+                # If a batch fails, note the error but continue with other batches
+                partial_analyses.append(f"[Error processing batch {i+1}: {str(e)}]")
+
+        # Combine partial analyses into a final analysis
+        if partial_analyses:
+            # Create a final analysis prompt
+            final_prompt = ChatPromptTemplate.from_template("""
+            Create a comprehensive research gaps analysis based on these partial analyses:
+
+            Research Question: {question}
+
+            Partial analyses:
+            {analyses}
+
+            Provide a final research gaps analysis that:
+            1. Identifies the most significant gaps in the literature
+            2. Highlights promising future research directions
+            3. Notes methodological limitations in current research
+            4. Suggests potential approaches to address these gaps
+
+            Final Research Gaps Analysis:
+            """)
+
+            try:
+                response = self.llm.invoke(
+                    final_prompt.format(
+                        question=question,
+                        analyses="\n\n".join(partial_analyses)
+                    )
+                )
+                return response.content
+            except Exception as e:
+                # If final analysis fails, return the concatenated partial analyses
+                return f"Research Gaps for: {question}\n\n" + "\n\n".join(partial_analyses)
+
+        # Fallback if something went wrong
+        return f"Unable to generate a complete research gaps analysis for question: {question}"
 
     def format_with_citations(self, review_text: str, citations: str) -> str:
         """Format review text with proper citations.
