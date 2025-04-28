@@ -11,7 +11,7 @@ import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 # Import the exercises
-from lesson1_exercises import (
+from exercises.lesson1_exercises import (
     exercise1_hybrid_search,
     exercise2_multi_index_retriever,
     exercise3_parent_document_retriever,
@@ -31,31 +31,54 @@ except ImportError:
 
 
 # Simple embedding model for testing
-class SimpleEmbeddings:
+class SimpleEmbeddings(Embeddings):
     """Simple embedding model for testing."""
-    
+
     def embed_documents(self, texts):
         """Return simple embeddings for documents."""
         return [[0.1, 0.2, 0.3] for _ in texts]
-    
+
     def embed_query(self, text):
         """Return simple embedding for query."""
         return [0.1, 0.2, 0.3]
 
 
 # Simple LLM client for testing
-class SimpleLLMClient:
+from langchain_core.language_models.base import LanguageModelInput
+from langchain_core.outputs import Generation, LLMResult
+from langchain_core.language_models.chat_models import BaseChatModel
+from langchain_core.messages import AIMessage, BaseMessage
+
+class SimpleLLMClient(BaseChatModel):
     """Simple LLM client for testing."""
-    
-    def invoke(self, prompt):
-        """Return simple response."""
-        return {"content": f"This is a simulated response to: {prompt}"}
+
+    def __init__(self):
+        super().__init__()
+
+    @property
+    def _llm_type(self) -> str:
+        return "simple-llm-client"
+
+    def _generate(self, messages: list[BaseMessage], **kwargs) -> LLMResult:
+        """Generate responses for multiple messages."""
+        response_text = f"This is a simulated response to a message"
+        generations = [[Generation(text=response_text)]]
+        return LLMResult(generations=generations)
+
+    def invoke(self, input: LanguageModelInput, **kwargs):
+        """Process the input prompt and return a response."""
+        if isinstance(input, str):
+            response_text = f"This is a simulated response to: {input}"
+        else:
+            response_text = f"This is a simulated response to a complex prompt"
+
+        return AIMessage(content=response_text)
 
 
 @unittest.skipIf(not LANGCHAIN_AVAILABLE, "LangChain not available")
 class TestLesson1Exercises(unittest.TestCase):
     """Test cases for Lesson 1 exercises."""
-    
+
     def setUp(self):
         """Set up test documents and embedding model."""
         # Create test documents
@@ -81,35 +104,35 @@ class TestLesson1Exercises(unittest.TestCase):
                 metadata={"type": "technical", "source": "wikipedia.org"}
             )
         ]
-        
+
         # Create embedding model
         self.embedding_model = SimpleEmbeddings()
-        
+
         # Create LLM client
         self.llm = SimpleLLMClient()
-    
+
     def test_exercise1_hybrid_search(self):
         """Test hybrid search implementation."""
         # Create hybrid retriever
         hybrid_retriever = exercise1_hybrid_search(self.documents, self.embedding_model)
-        
+
         # Test retrieval
         results = hybrid_retriever.get_relevant_documents("Python programming")
-        
+
         # Check results
         self.assertIsInstance(results, list)
         self.assertGreater(len(results), 0)
         self.assertIsInstance(results[0], Document)
-    
+
     def test_exercise2_multi_index_retriever(self):
         """Test multi-index retriever implementation."""
         # Create multi-index retriever
         multi_index_retriever = exercise2_multi_index_retriever(self.documents, self.embedding_model)
-        
+
         # Test retrieval with type specification
         results_technical = multi_index_retriever.get_relevant_documents("technical machine learning")
         results_general = multi_index_retriever.get_relevant_documents("general Python")
-        
+
         # Check results
         self.assertIsInstance(results_technical, list)
         self.assertIsInstance(results_general, list)
@@ -117,40 +140,40 @@ class TestLesson1Exercises(unittest.TestCase):
         self.assertGreater(len(results_general), 0)
         self.assertIsInstance(results_technical[0], Document)
         self.assertIsInstance(results_general[0], Document)
-    
+
     def test_exercise3_parent_document_retriever(self):
         """Test parent document retriever implementation."""
         # Create parent document retriever
         parent_retriever = exercise3_parent_document_retriever(self.documents, self.embedding_model)
-        
+
         # Test retrieval
         results = parent_retriever.get_relevant_documents("Python programming")
-        
+
         # Check results
         self.assertIsInstance(results, list)
         self.assertGreater(len(results), 0)
         self.assertIsInstance(results[0], Document)
-        
+
         # Check that parent documents are returned
         for doc in results:
             self.assertIn("parent_id", doc.metadata)
-    
+
     def test_exercise4_contextual_compression(self):
         """Test contextual compression implementation."""
         # Create base retriever
         base_retriever = exercise1_hybrid_search(self.documents, self.embedding_model)
-        
+
         # Create compression retriever
         compression_retriever = exercise4_contextual_compression(base_retriever, self.llm)
-        
+
         # Test retrieval
         results = compression_retriever.get_relevant_documents("Python programming")
-        
+
         # Check results
         self.assertIsInstance(results, list)
         self.assertGreater(len(results), 0)
         self.assertIsInstance(results[0], Document)
-    
+
     def test_exercise5_combined_retrieval_system(self):
         """Test combined retrieval system implementation."""
         # Create combined retrieval system
@@ -159,13 +182,13 @@ class TestLesson1Exercises(unittest.TestCase):
             self.embedding_model,
             self.llm
         )
-        
+
         # Test retrieval with different query types
         results_hybrid = combined_retriever.get_relevant_documents("exact match for Python")
         results_parent = combined_retriever.get_relevant_documents("full document about machine learning")
         results_compression = combined_retriever.get_relevant_documents("extract relevant information about AI")
         results_multi_index = combined_retriever.get_relevant_documents("technical information about programming")
-        
+
         # Check results
         self.assertIsInstance(results_hybrid, list)
         self.assertIsInstance(results_parent, list)
@@ -175,7 +198,7 @@ class TestLesson1Exercises(unittest.TestCase):
         self.assertGreater(len(results_parent), 0)
         self.assertGreater(len(results_compression), 0)
         self.assertGreater(len(results_multi_index), 0)
-    
+
     def test_exercise6_lcel_retrieval_chain(self):
         """Test LCEL retrieval chain implementation."""
         # Create LCEL retrieval chain
@@ -184,13 +207,13 @@ class TestLesson1Exercises(unittest.TestCase):
             self.embedding_model,
             self.llm
         )
-        
+
         # Test retrieval with different query types
         results_hybrid = retrieval_chain.invoke({"query": "exact match for Python"})
         results_parent = retrieval_chain.invoke({"query": "full document about machine learning"})
         results_compression = retrieval_chain.invoke({"query": "extract relevant information about AI"})
         results_multi_index = retrieval_chain.invoke({"query": "technical information about programming"})
-        
+
         # Check results
         self.assertIsInstance(results_hybrid, list)
         self.assertIsInstance(results_parent, list)

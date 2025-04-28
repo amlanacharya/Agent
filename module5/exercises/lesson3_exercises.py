@@ -412,7 +412,10 @@ def exercise6_lcel_reranking(
 
     # Create router function
     def route_query(query):
-        if "diverse" in query.lower() or "variety" in query.lower():
+        if isinstance(query, dict):
+            query = query.get("query", "")
+
+        if isinstance(query, str) and ("diverse" in query.lower() or "variety" in query.lower()):
             return "mmr"
         else:
             return "cross_encoder"
