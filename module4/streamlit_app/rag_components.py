@@ -96,28 +96,61 @@ def process_document(file_path: str, file_name: Optional[str] = None) -> Optiona
 
         # Process based on file type
         if extension == '.txt':
-            return process_text_file(file_path, file_name)
+            try:
+                return process_text_file(file_path, file_name)
+            except Exception as e:
+                logger.error(f"Error processing text file {file_name}: {str(e)}")
+                # Create a minimal document with error message
+                return create_error_document(file_path, file_name, f"Error processing text file: {str(e)}")
+
         elif extension == '.pdf':
             if HAVE_PYPDF2:
-                return process_pdf_file(file_path, file_name)
+                try:
+                    return process_pdf_file(file_path, file_name)
+                except Exception as e:
+                    logger.error(f"Error processing PDF file {file_name}: {str(e)}")
+                    # Create a minimal document with error message
+                    return create_error_document(file_path, file_name, f"Error processing PDF file: {str(e)}")
             else:
                 logger.warning(f"PDF processing requires PyPDF2. Install with 'pip install PyPDF2'")
-                # Fallback to basic text extraction
-                return process_text_file(file_path, file_name)
+                # Try fallback to basic text extraction
+                try:
+                    return process_text_file(file_path, file_name)
+                except:
+                    return create_error_document(file_path, file_name, "PDF processing requires PyPDF2")
+
         elif extension in ['.docx', '.doc']:
             if HAVE_DOCX:
-                return process_docx_file(file_path, file_name)
+                try:
+                    return process_docx_file(file_path, file_name)
+                except Exception as e:
+                    logger.error(f"Error processing DOCX file {file_name}: {str(e)}")
+                    # Create a minimal document with error message
+                    return create_error_document(file_path, file_name, f"Error processing DOCX file: {str(e)}")
             else:
                 logger.warning(f"DOCX processing requires python-docx. Install with 'pip install python-docx'")
-                # Fallback to basic text extraction
-                return process_text_file(file_path, file_name)
+                # Try fallback to basic text extraction
+                try:
+                    return process_text_file(file_path, file_name)
+                except:
+                    return create_error_document(file_path, file_name, "DOCX processing requires python-docx")
+
         elif extension == '.csv':
             if HAVE_CSV:
-                return process_csv_file(file_path, file_name)
+                try:
+                    return process_csv_file(file_path, file_name)
+                except Exception as e:
+                    logger.error(f"Error processing CSV file {file_name}: {str(e)}")
+                    # Create a minimal document with error message
+                    return create_error_document(file_path, file_name, f"Error processing CSV file: {str(e)}")
             else:
                 logger.warning(f"CSV module not available")
-                # Fallback to basic text extraction
-                return process_text_file(file_path, file_name)
+                # Try fallback to basic text extraction
+                try:
+                    return process_text_file(file_path, file_name)
+                except:
+                    return create_error_document(file_path, file_name, "CSV module not available")
+
         else:
             logger.warning(f"Unsupported file type: {extension}")
             # Try to process as text anyway
@@ -133,25 +166,55 @@ def process_document(file_path: str, file_name: Optional[str] = None) -> Optiona
                 if is_binary:
                     logger.warning(f"File {file_name} appears to be binary and cannot be processed as text")
                     # Create a minimal document with just metadata
-                    file_stats = os.stat(file_path)
-                    return {
-                        'content': f"Binary file: {file_name}",
-                        'metadata': {
-                            'source': file_name,
-                            'file_type': 'binary',
-                            'file_size': file_stats.st_size,
-                            'modified_time': datetime.fromtimestamp(file_stats.st_mtime).isoformat()
-                        }
-                    }
+                    return create_error_document(file_path, file_name, "Binary file cannot be processed as text")
                 else:
                     return process_text_file(file_path, file_name)
             except Exception as e:
                 logger.error(f"Failed to process {file_name} as text: {str(e)}")
-                return None
+                return create_error_document(file_path, file_name, f"Failed to process as text: {str(e)}")
 
     except Exception as e:
         logger.error(f"Error processing document {file_name}: {str(e)}")
-        return None
+        # Create a minimal document with error message
+        try:
+            return create_error_document(file_path, file_name, f"Error processing document: {str(e)}")
+        except:
+            # Last resort fallback
+            return {
+                'content': f"Error processing document: {file_name}",
+                'metadata': {
+                    'source': file_name,
+                    'file_type': 'unknown',
+                    'error': str(e)
+                }
+            }
+
+def create_error_document(file_path: str, file_name: str, error_message: str) -> Dict[str, Any]:
+    """Create a minimal document with error information."""
+    try:
+        # Get basic file metadata
+        file_stats = os.stat(file_path)
+        file_size = file_stats.st_size
+        modified_time = datetime.fromtimestamp(file_stats.st_mtime).isoformat()
+    except:
+        file_size = 0
+        modified_time = datetime.now().isoformat()
+
+    # Get file extension
+    extension = os.path.splitext(file_name)[1].lower().lstrip('.')
+    if not extension:
+        extension = 'unknown'
+
+    return {
+        'content': f"[Error processing {file_name}: {error_message}]",
+        'metadata': {
+            'source': file_name,
+            'file_type': extension,
+            'file_size': file_size,
+            'modified_time': modified_time,
+            'error': error_message
+        }
+    }
 
 def process_text_file(file_path: str, file_name: str) -> Dict[str, Any]:
     """Process a text file."""
@@ -197,20 +260,37 @@ def process_pdf_file(file_path: str, file_name: str) -> Dict[str, Any]:
             # Extract text content
             content = ""
             for page_num in range(len(reader.pages)):
-                page = reader.pages[page_num]
-                content += page.extract_text() + "\n\n"
+                try:
+                    page = reader.pages[page_num]
+                    extracted_text = page.extract_text()
+                    if extracted_text:
+                        content += extracted_text + "\n\n"
+                    else:
+                        content += f"[Page {page_num+1} - No extractable text]\n\n"
+                except Exception as e:
+                    logger.warning(f"Error extracting text from page {page_num+1}: {str(e)}")
+                    content += f"[Page {page_num+1} - Error: {str(e)}]\n\n"
+
+            # If no content was extracted, add a placeholder
+            if not content.strip():
+                content = f"[No extractable text content in {file_name}]"
 
             # Extract metadata
             info = reader.metadata
             metadata = {
                 'source': file_name,
                 'file_type': 'pdf',
-                'page_count': len(reader.pages),
-                'title': info.get('/Title', ''),
-                'author': info.get('/Author', ''),
-                'creator': info.get('/Creator', ''),
-                'producer': info.get('/Producer', '')
+                'page_count': len(reader.pages)
             }
+
+            # Add PDF-specific metadata if available
+            if info is not None:
+                metadata.update({
+                    'title': info.get('/Title', ''),
+                    'author': info.get('/Author', ''),
+                    'creator': info.get('/Creator', ''),
+                    'producer': info.get('/Producer', '')
+                })
 
             return {
                 'content': content,
