@@ -559,3 +559,182 @@ graph TD
     style Router fill:#fdd,stroke:#333,stroke-width:1px
     style OutputMerger fill:#fdd,stroke:#333,stroke-width:1px
 ```
+
+## 🔌 From RAG to Tools: The Evolution
+
+### The Information-Action Gap
+
+```mermaid
+graph TD
+    UserQuery[User Query] --> QueryAnalyzer[Query Analyzer]
+
+    QueryAnalyzer -->|Information Need| RAGSystem[RAG System]
+    QueryAnalyzer -->|Action Need| ActionNeeded[Action Needed]
+
+    RAGSystem --> InformationResponse[Information Response]
+    ActionNeeded --> LimitedCapability[Limited Capability]
+
+    InformationResponse --> UserSatisfied[User Satisfied]
+    LimitedCapability --> UserFrustrated[User Frustrated]
+
+    style UserQuery fill:#f9f,stroke:#333,stroke-width:2px
+    style InformationResponse fill:#9f9,stroke:#333,stroke-width:2px
+    style LimitedCapability fill:#f99,stroke:#333,stroke-width:2px
+    style UserSatisfied fill:#9f9,stroke:#333,stroke-width:2px
+    style UserFrustrated fill:#f99,stroke:#333,stroke-width:2px
+```
+
+### Tool Integration Architecture
+
+```mermaid
+graph TD
+    UserRequest[User Request] --> RequestAnalyzer[Request Analyzer]
+
+    RequestAnalyzer -->|Information Need| RAGSystem[RAG System]
+    RequestAnalyzer -->|Action Need| ToolSelector[Tool Selector]
+
+    RAGSystem --> RetrievedInfo[Retrieved Information]
+    ToolSelector --> ToolRegistry[Tool Registry]
+
+    ToolRegistry --> SelectedTool[Selected Tool]
+    SelectedTool --> ParameterExtractor[Parameter Extractor]
+
+    ParameterExtractor --> ToolExecution[Tool Execution]
+    ToolExecution --> ToolResult[Tool Result]
+
+    RetrievedInfo --> ResponseGenerator[Response Generator]
+    ToolResult --> ResponseGenerator
+
+    ResponseGenerator --> FinalResponse[Final Response]
+
+    style UserRequest fill:#f9f,stroke:#333,stroke-width:2px
+    style FinalResponse fill:#bbf,stroke:#333,stroke-width:2px
+    style ToolSelector fill:#fdd,stroke:#333,stroke-width:1px
+    style ToolExecution fill:#fdd,stroke:#333,stroke-width:1px
+    style RAGSystem fill:#dfd,stroke:#333,stroke-width:1px
+    style ResponseGenerator fill:#dfd,stroke:#333,stroke-width:1px
+```
+
+### Function Calling Flow
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant Agent
+    participant LLM
+    participant ToolRegistry
+    participant Tool
+
+    User->>Agent: Request requiring tool use
+    Agent->>LLM: Process request
+    LLM->>ToolRegistry: Query available tools
+    ToolRegistry->>LLM: Return tool schemas
+    LLM->>Agent: Generate function call
+    Agent->>Tool: Execute with parameters
+    Tool->>Agent: Return result
+    Agent->>LLM: Generate response with tool result
+    LLM->>Agent: Final response
+    Agent->>User: Deliver response
+```
+
+### Tool Types and Applications
+
+```mermaid
+graph TD
+    Tools[Tool Categories] --> InfoTools[Information Access Tools]
+    Tools --> CompTools[Computational Tools]
+    Tools --> ContentTools[Content Creation Tools]
+    Tools --> SystemTools[System Interaction Tools]
+    Tools --> DomainTools[Domain-Specific Tools]
+
+    InfoTools --> SearchTool[Search Engine]
+    InfoTools --> APITool[API Client]
+    InfoTools --> DBTool[Database Query]
+
+    CompTools --> CalcTool[Calculator]
+    CompTools --> SpreadsheetTool[Spreadsheet]
+    CompTools --> StatsTool[Statistical Analysis]
+
+    ContentTools --> ImageTool[Image Generator]
+    ContentTools --> CodeTool[Code Generator]
+    ContentTools --> DocTool[Document Creator]
+
+    SystemTools --> FileTool[File System Operations]
+    SystemTools --> AppTool[Application Controller]
+    SystemTools --> DeviceTool[Device Controller]
+
+    DomainTools --> FinanceTool[Financial Calculator]
+    DomainTools --> LegalTool[Legal Document Analyzer]
+    DomainTools --> MedicalTool[Medical Diagnostic Assistant]
+
+    style Tools fill:#f9f,stroke:#333,stroke-width:2px
+    style InfoTools fill:#dfd,stroke:#333,stroke-width:1px
+    style CompTools fill:#dfd,stroke:#333,stroke-width:1px
+    style ContentTools fill:#dfd,stroke:#333,stroke-width:1px
+    style SystemTools fill:#dfd,stroke:#333,stroke-width:1px
+    style DomainTools fill:#dfd,stroke:#333,stroke-width:1px
+```
+
+### RAG-Tool Hybrid System
+
+```mermaid
+graph TD
+    UserQuery[User Query] --> QueryRouter[Query Router]
+
+    QueryRouter -->|Information Need| RAGPipeline[RAG Pipeline]
+    QueryRouter -->|Action Need| ToolPipeline[Tool Pipeline]
+    QueryRouter -->|Hybrid Need| HybridPipeline[Hybrid Pipeline]
+
+    RAGPipeline --> Retriever[Retriever]
+    Retriever --> RetrievedDocs[Retrieved Documents]
+    RetrievedDocs --> RAGProcessor[RAG Processor]
+
+    ToolPipeline --> ToolSelector[Tool Selector]
+    ToolSelector --> SelectedTool[Selected Tool]
+    SelectedTool --> ToolExecutor[Tool Executor]
+    ToolExecutor --> ToolResult[Tool Result]
+
+    HybridPipeline --> Retriever
+    HybridPipeline --> ToolSelector
+    RetrievedDocs --> HybridProcessor[Hybrid Processor]
+    ToolResult --> HybridProcessor
+
+    RAGProcessor --> InfoResponse[Information Response]
+    ToolExecutor --> ActionResponse[Action Response]
+    HybridProcessor --> EnhancedResponse[Enhanced Response]
+
+    InfoResponse --> ResponseAggregator[Response Aggregator]
+    ActionResponse --> ResponseAggregator
+    EnhancedResponse --> ResponseAggregator
+
+    ResponseAggregator --> FinalResponse[Final Response]
+
+    style UserQuery fill:#f9f,stroke:#333,stroke-width:2px
+    style FinalResponse fill:#bbf,stroke:#333,stroke-width:2px
+    style QueryRouter fill:#fdd,stroke:#333,stroke-width:1px
+    style RAGProcessor fill:#dfd,stroke:#333,stroke-width:1px
+    style ToolExecutor fill:#dfd,stroke:#333,stroke-width:1px
+    style HybridProcessor fill:#dfd,stroke:#333,stroke-width:1px
+```
+
+### Progressive Agent Capabilities
+
+```mermaid
+graph LR
+    Basic[Basic LLM] --> Memory[Memory Systems]
+    Memory --> Validation[Structured Validation]
+    Validation --> RAG[RAG Systems]
+    RAG --> AdvancedRAG[Advanced RAG]
+    AdvancedRAG --> Tools[Tool Integration]
+    Tools --> Planning[Planning & Reasoning]
+    Planning --> MultiAgent[Multi-Agent Systems]
+
+    style Basic fill:#f9f,stroke:#333,stroke-width:1px
+    style Memory fill:#f9f,stroke:#333,stroke-width:1px
+    style Validation fill:#f9f,stroke:#333,stroke-width:1px
+    style RAG fill:#f9f,stroke:#333,stroke-width:1px
+    style AdvancedRAG fill:#f9f,stroke:#333,stroke-width:1px
+    style Tools fill:#bbf,stroke:#333,stroke-width:2px
+    style Planning fill:#dfd,stroke:#333,stroke-width:1px
+    style MultiAgent fill:#dfd,stroke:#333,stroke-width:1px
+```
