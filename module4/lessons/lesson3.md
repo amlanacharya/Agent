@@ -173,7 +173,7 @@ The dimensionality of embeddings is a critical factor that affects both performa
 ### Impact of Dimensionality
 
 ```mermaid
-fflowchart LR
+flowchart LR
     D[Dimensionality] --> |Higher| HC[Higher Capacity]
     D --> |Lower| LS[Lower Storage]
     HC --> |Increases| PR[Precision]
