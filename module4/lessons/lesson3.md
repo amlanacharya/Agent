@@ -97,26 +97,7 @@ When choosing an embedding model, consider:
 6. **Deployment Constraints**: On-device vs. cloud, memory limitations, etc.
 7. **Cost**: API costs for hosted models vs. computational costs for self-hosted models.
 
-### Embedding Model Comparison
 
-```mermaid
-quadrantChart
-    title Embedding Model Comparison
-    x-axis Low Quality --> High Quality
-    y-axis Slow --> Fast
-    quadrant-1 "High Quality, Fast"
-    quadrant-2 "Low Quality, Fast"
-    quadrant-3 "Low Quality, Slow"
-    quadrant-4 "High Quality, Slow"
-    "OpenAI text-embedding-3-large": [0.9, 0.4]
-    "OpenAI text-embedding-3-small": [0.8, 0.6]
-    "all-MiniLM-L6-v2": [0.5, 0.9]
-    "all-mpnet-base-v2": [0.7, 0.7]
-    "BGE-large-en": [0.8, 0.5]
-    "E5-large-v2": [0.8, 0.5]
-    "GTE-large": [0.7, 0.6]
-    "Cohere embed-english-v3.0": [0.85, 0.5]
-```
 
 ### Benchmarking Embedding Models
 
