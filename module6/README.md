@@ -65,6 +65,14 @@ python-dotenv
 pydantic
 ```
 
+For enhanced functionality, the following optional dependencies are recommended:
+
+```
+langchain-community  # For GoogleSerperAPIWrapper and other utilities
+langchain-groq       # For Groq integration
+langchain-openai     # For OpenAI integration
+```
+
 ## 🧪 Running Tests
 
 To run the tests for this module:
