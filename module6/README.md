@@ -26,11 +26,11 @@ This module includes implementations of several tools:
 ## 📚 Lessons
 
 1. [Lesson 1: Building an OpenAI Tool](lessons/lesson1_openai_tool.md)
-2. Lesson 2: Building a Groq Tool
-3. Lesson 3: Building a Search Tool
+2. [Lesson 2: Building a Groq Tool](lessons/lesson2_groq_tool.md)
+3. [Lesson 3: Building a Search Tool](lessons/lesson3_search_tool.md)
 4. Lesson 4: Building a Weather Tool
-5. Lesson 5: Building a News Tool
-6. Lesson 6: Creating a Tool Registry
+5. Lesson 5: Building a Finance Tool
+6. [Lesson 6: Creating a Tool Registry](lessons/lesson6.md)
 7. Lesson 7: Implementing a Multi-Tool Agent
 
 ## 🚀 Getting Started
@@ -93,4 +93,5 @@ Check out the example scripts in the `module6/code/examples` directory to see ho
 - `groq_example.py`: Examples of using the Groq tool
 - `search_example.py`: Examples of using the Search tool
 - `weather_example.py`: Examples of using the Weather tool
+- `tool_registry_example.py`: Examples of using the Tool Registry
 - `multi_tool_example.py`: Examples of using multiple tools together
