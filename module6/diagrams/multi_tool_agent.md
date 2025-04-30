@@ -133,14 +133,21 @@ flowchart TD
     K --> L[Response Generation]
     L --> M[User Response]
 
-    style A fill:#f9f,stroke:#333,stroke-width:2px
-    style B fill:#bbf,stroke:#333,stroke-width:2px
-    style C fill:#dfd,stroke:#333,stroke-width:1px
-    style D fill:#fdd,stroke:#333,stroke-width:2px
-    style E,F,G,H fill:#dfd,stroke:#333,stroke-width:1px
-    style I fill:#ffd,stroke:#333,stroke-width:1px
-    style J,K,L fill:#ffd,stroke:#333,stroke-width:1px
-    style M fill:#f9f,stroke:#333,stroke-width:2px
+    classDef userNode fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef agentNode fill:#bbf,stroke:#333,stroke-width:2px;
+    classDef llmNode fill:#dfd,stroke:#333,stroke-width:1px;
+    classDef decisionNode fill:#fdd,stroke:#333,stroke-width:2px;
+    classDef toolNode fill:#dfd,stroke:#333,stroke-width:1px;
+    classDef multiToolNode fill:#ffd,stroke:#333,stroke-width:1px;
+    classDef processNode fill:#ffd,stroke:#333,stroke-width:1px;
+
+    class A,M userNode;
+    class B agentNode;
+    class C llmNode;
+    class D decisionNode;
+    class E,F,G,H toolNode;
+    class I multiToolNode;
+    class J,K,L processNode;
 ```
 
 ## Error Handling Flow
