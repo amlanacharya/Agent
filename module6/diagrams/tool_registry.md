@@ -84,14 +84,17 @@ flowchart TD
     K --> L[Generate Response]
     L --> M[User Response]
 
-    style A fill:#f9f,stroke:#333,stroke-width:2px
-    style B fill:#bbf,stroke:#333,stroke-width:2px
-    style C fill:#fdd,stroke:#333,stroke-width:2px
-    style D,E,F,G fill:#dfd,stroke:#333,stroke-width:1px
-    style H fill:#bbf,stroke:#333,stroke-width:2px
-    style I fill:#dfd,stroke:#333,stroke-width:1px
-    style J,K,L fill:#ffd,stroke:#333,stroke-width:1px
-    style M fill:#f9f,stroke:#333,stroke-width:2px
+    classDef userNode fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef managerNode fill:#bbf,stroke:#333,stroke-width:2px;
+    classDef decisionNode fill:#fdd,stroke:#333,stroke-width:2px;
+    classDef toolNode fill:#dfd,stroke:#333,stroke-width:1px;
+    classDef processNode fill:#ffd,stroke:#333,stroke-width:1px;
+
+    class A,M userNode;
+    class B,H managerNode;
+    class C decisionNode;
+    class D,E,F,G,I toolNode;
+    class J,K,L processNode;
 ```
 
 ## Dynamic Tool Registration
@@ -150,10 +153,15 @@ flowchart TD
     H -->|Calculation Needed| E
     H -->|External Data Needed| F
 
-    style A fill:#bbf,stroke:#333,stroke-width:2px
-    style B fill:#fdd,stroke:#333,stroke-width:1px
-    style C,D,E,F fill:#dfd,stroke:#333,stroke-width:1px
-    style C1,C2,D1,D2,E1,E2,F1,F2 fill:#ffd,stroke:#333,stroke-width:1px
-    style G fill:#bbf,stroke:#333,stroke-width:2px
-    style H fill:#f9f,stroke:#333,stroke-width:2px
+    classDef registryNode fill:#bbf,stroke:#333,stroke-width:2px;
+    classDef categoryNode fill:#fdd,stroke:#333,stroke-width:1px;
+    classDef toolTypeNode fill:#dfd,stroke:#333,stroke-width:1px;
+    classDef toolNode fill:#ffd,stroke:#333,stroke-width:1px;
+    classDef queryNode fill:#f9f,stroke:#333,stroke-width:2px;
+
+    class A,G registryNode;
+    class B categoryNode;
+    class C,D,E,F toolTypeNode;
+    class C1,C2,D1,D2,E1,E2,F1,F2 toolNode;
+    class H queryNode;
 ```

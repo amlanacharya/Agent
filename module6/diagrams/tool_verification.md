@@ -145,13 +145,15 @@ flowchart TD
 
     G --> A
 
-    style A fill:#bbf,stroke:#333,stroke-width:2px
-    style B fill:#dfd,stroke:#333,stroke-width:1px
-    style C,F fill:#fdd,stroke:#333,stroke-width:2px
-    style D fill:#dfd,stroke:#333,stroke-width:1px
-    style E,H fill:#ffd,stroke:#333,stroke-width:1px
-    style G fill:#bbf,stroke:#333,stroke-width:2px
-    style I,J,K,L,M,N fill:#ffd,stroke:#333,stroke-width:1px
+    classDef agentNode fill:#bbf,stroke:#333,stroke-width:2px;
+    classDef toolNode fill:#dfd,stroke:#333,stroke-width:1px;
+    classDef validationNode fill:#fdd,stroke:#333,stroke-width:2px;
+    classDef handlerNode fill:#ffd,stroke:#333,stroke-width:1px;
+
+    class A,G agentNode;
+    class B,D toolNode;
+    class C,F validationNode;
+    class E,H,I,J,K,L,M,N handlerNode;
 ```
 
 ## Schema-Based Validation
@@ -175,15 +177,19 @@ flowchart TD
     E --> J[Tool Response]
     J --> I
 
-    style A fill:#dfd,stroke:#333,stroke-width:1px
-    style B fill:#bbf,stroke:#333,stroke-width:2px
-    style C fill:#f9f,stroke:#333,stroke-width:2px
-    style D fill:#fdd,stroke:#333,stroke-width:2px
-    style E fill:#dfd,stroke:#333,stroke-width:1px
-    style F fill:#ffd,stroke:#333,stroke-width:1px
-    style G,H fill:#ffd,stroke:#333,stroke-width:1px
-    style I fill:#bbf,stroke:#333,stroke-width:2px
-    style J fill:#dfd,stroke:#333,stroke-width:1px
+    classDef schemaNode fill:#dfd,stroke:#333,stroke-width:1px;
+    classDef validatorNode fill:#bbf,stroke:#333,stroke-width:2px;
+    classDef inputNode fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef validationNode fill:#fdd,stroke:#333,stroke-width:2px;
+    classDef errorNode fill:#ffd,stroke:#333,stroke-width:1px;
+    classDef agentNode fill:#bbf,stroke:#333,stroke-width:2px;
+
+    class A,E,J schemaNode;
+    class B validatorNode;
+    class C inputNode;
+    class D validationNode;
+    class F,G,H errorNode;
+    class I agentNode;
 ```
 
 ## Tool Verification Lifecycle

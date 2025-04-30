@@ -238,12 +238,15 @@ flowchart TD
 
     L -->|No| H
 
-    style A fill:#f9f,stroke:#333,stroke-width:2px
-    style B,C fill:#fdd,stroke:#333,stroke-width:2px
-    style D fill:#bbf,stroke:#333,stroke-width:2px
-    style E,F,G,H fill:#dfd,stroke:#333,stroke-width:1px
-    style I fill:#ffd,stroke:#333,stroke-width:1px
-    style J fill:#f9f,stroke:#333,stroke-width:2px
-    style K,L fill:#fdd,stroke:#333,stroke-width:1px
-    style M,N fill:#ffd,stroke:#333,stroke-width:1px
+    classDef userNode fill:#f9f,stroke:#333,stroke-width:2px;
+    classDef decisionNode fill:#fdd,stroke:#333,stroke-width:2px;
+    classDef coreNode fill:#bbf,stroke:#333,stroke-width:2px;
+    classDef toolNode fill:#dfd,stroke:#333,stroke-width:1px;
+    classDef processNode fill:#ffd,stroke:#333,stroke-width:1px;
+
+    class A,J userNode;
+    class B,C,K,L decisionNode;
+    class D coreNode;
+    class E,F,G,H toolNode;
+    class I,M,N processNode;
 ```
