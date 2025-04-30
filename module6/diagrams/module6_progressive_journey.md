@@ -6,11 +6,11 @@ This document illustrates the progressive journey through Module 6, showing how 
 
 ```mermaid
 flowchart TD
-    A[Module 6: Tool Integration & Function Calling] --> B[1. Individual Tools]
-    B --> C[2. Tool Registry]
-    C --> D[3. Function Calling]
-    D --> E[4. Tool Chains]
-    E --> F[5. Multi-Tool Agent]
+    A[Module 6: Tool Integration & Function Calling] --> B[1.Individual Tools]
+    B --> C[2.Tool Registry]
+    C --> D[3.Function Calling]
+    D --> E[4.Tool Chains]
+    E --> F[5.Multi-Tool Agent]
 
     B --> B1[OpenAI Tool]
     B --> B2[Groq Tool]
@@ -77,11 +77,11 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    A[Starting Point] --> B[1. Basic Tool Implementation]
-    B --> C[2. Tool Registry Creation]
-    C --> D[3. Function Calling Integration]
-    D --> E[4. Tool Chain Development]
-    E --> F[5. Multi-Tool Agent]
+    A[Starting Point] --> B[1.Basic Tool Implementation]
+    B --> C[2.Tool Registry Creation]
+    C --> D[3.Function Calling Integration]
+    D --> E[4.Tool Chain Development]
+    E --> F[5.Multi-Tool Agent]
 
     subgraph "Phase 1: Foundation"
     B
