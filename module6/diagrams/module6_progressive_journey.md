@@ -77,11 +77,11 @@ flowchart TD
 
 ```mermaid
 flowchart TD
-    A[Starting Point] --> B[1. Basic Tool Implementation]
-    B --> C[2. Tool Registry Creation]
-    C --> D[3. Function Calling Integration]
-    D --> E[4. Tool Chain Development]
-    E --> F[5. Multi-Tool Agent]
+    A[Starting Point] --> B[1.Basic Tool Implementation]
+    B --> C[2.Tool Registry Creation]
+    C --> D[3.Function Calling Integration]
+    D --> E[4.Tool Chain Development]
+    E --> F[5.Multi-Tool Agent]
 
     subgraph "Phase 1: Foundation"
     B
