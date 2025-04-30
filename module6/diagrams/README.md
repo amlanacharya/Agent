@@ -103,7 +103,7 @@ flowchart TD
 
 For class diagrams, use this style:
 
-```markdown
+
 ```mermaid
 classDiagram
     class BaseTool {
@@ -124,7 +124,7 @@ classDiagram
 
     BaseTool <|-- OpenAITool
 ```
-```
+
 
 ## 🔍 Viewing the Diagrams
 
